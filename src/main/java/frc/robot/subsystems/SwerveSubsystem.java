@@ -69,10 +69,6 @@ public class SwerveSubsystem extends SubsystemBase {
     });
   }
 
-  public Pose2d getPose(){
-    return swerveDrive.getPose();
-  }
-
   public SwerveDrive getSwerveDrive() {
     return swerveDrive;
   }
@@ -90,7 +86,6 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   
-  // TODO: add remaining functions for pathplanner to get information and add pathplanner
   /**
    * Setup AutoBuilder for PathPlanner.
    */
