@@ -8,6 +8,13 @@ import frc.robot.Constants.OperatorConstants;
 
 import frc.robot.subsystems.SwerveSubsystem;
 import swervelib.SwerveInputStream;
+
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 
@@ -26,10 +33,19 @@ public class RobotContainer {
   // create an object for our driver controller
   private final CommandPS5Controller driverController = new CommandPS5Controller(Constants.OperatorConstants.kDriverControllerPort);
 
+
+  private final SendableChooser<Command> autoChooser;
+  // Build an auto chooser. This will use Commands.none() as the default option.
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
+
+    // Shut up
+    DriverStation.silenceJoystickConnectionWarning(true);
+
+    autoChooser = AutoBuilder.buildAutoChooser();
 
     // set the default command for the drivebase to the drive command
     drivebase.setDefaultCommand(driveFieldOrientedAngularVelocity);
@@ -63,6 +79,11 @@ public class RobotContainer {
     driverController.button(1).onTrue(drivebase.zeroGyro()); //zero the gyro when square(?) is pressed
   }
 
+  private void setupAutoChooser(){
+    new PathPlannerAuto("Example Auto");
+
+    Shuffleboard.getTab(OperatorConstants.AUTO_SHUFFLEBOARD).add("Auto", autoChooser);
+  }
 
   public Command getAutonomousCommand() {
     return null; // this should do things, but that's a later issue :)
