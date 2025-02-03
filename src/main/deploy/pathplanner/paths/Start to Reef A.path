@@ -3,25 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.012911184210526,
-        "y": 5.2662006578947365
+        "x": 8.11110197368421,
+        "y": 7.24827302631579
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.042434210526316,
-        "y": 6.95
+        "x": 6.292598684210526,
+        "y": 7.392598684210526
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.6528253424694315,
-        "y": 7.338163527396313
+        "x": 2.0398026315789473,
+        "y": 5.198848684210526
       },
       "prevControl": {
-        "x": 2.7710526315789474,
-        "y": 6.122532894736842
+        "x": 2.2033717105263158,
+        "y": 6.21875
+      },
+      "nextControl": {
+        "x": 1.8660214691131545,
+        "y": 4.115272024129703
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.1174342105263158,
+        "y": 4.1597039473684205
+      },
+      "prevControl": {
+        "x": 2.6459703947368416,
+        "y": 4.130838815789473
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,13 +58,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 126.11934084958018
+    "rotation": 179.127542877098
   },
   "reversed": false,
-  "folder": "JL4 HL4",
+  "folder": "AL4 HL4",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 60.25511870305776
+    "rotation": -178.1221225527146
   },
   "useDefaultConstraints": true
 }
