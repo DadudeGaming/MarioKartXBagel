@@ -82,6 +82,10 @@ public class RobotContainer {
   }
 
   private void setupAutoChooser(){
+    new PathPlannerAuto("Test Auto");
+    new PathPlannerAuto("AL4 HL4");
+    new PathPlannerAuto("JL4 HL4");
+
 
     Shuffleboard.getTab(OperatorConstants.AUTO_SHUFFLEBOARD).add("Auto", autoChooser);
   }
