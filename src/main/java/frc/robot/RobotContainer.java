@@ -82,12 +82,11 @@ public class RobotContainer {
   }
 
   private void setupAutoChooser(){
-    new PathPlannerAuto("Example Auto");
 
     Shuffleboard.getTab(OperatorConstants.AUTO_SHUFFLEBOARD).add("Auto", autoChooser);
   }
 
   public Command getAutonomousCommand() {
-    return null; // this should do things, but that's a later issue :)
+    return autoChooser.getSelected();
   }
 }
