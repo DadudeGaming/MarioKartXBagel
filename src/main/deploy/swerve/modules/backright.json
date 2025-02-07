@@ -24,5 +24,5 @@
     "angle": true
   },
   "absoluteEncoderInverted": false,
-  "useCosineCompensator": true
+  "useConsineCompensator": true
 }

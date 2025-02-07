@@ -58,6 +58,12 @@ public class SwerveSubsystem extends SubsystemBase {
       throw new RuntimeException(e);
     }
 
+
+    swerveDrive.setHeadingCorrection(false); // Heading correction should only be used while controlling the robot via angle.
+    swerveDrive.setCosineCompensator(true);//!SwerveDriveTelemetry.isSimulation); // Disables cosine compensation for simulations since it causes discrepancies not seen in real life.
+    swerveDrive.setAngularVelocityCompensation(true,
+                                               true,
+                                               0.1); //Correct for skew that gets worse as angular velocity increases. Start with a coefficient of 0.1.
     setupPathPlanner();
   }
 
