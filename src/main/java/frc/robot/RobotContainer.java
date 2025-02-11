@@ -64,12 +64,12 @@ public class RobotContainer {
 
 
   SwerveInputStream driveAngularVelocity = SwerveInputStream.of(drivebase.getSwerveDrive(), 
-                                                                () -> driverController.getLeftY() * 1,
-                                                                () -> driverController.getLeftX() * 1)
+                                                                () -> driverController.getLeftY() * -1,
+                                                                () -> driverController.getLeftX() * -1)
                                                                 .withControllerRotationAxis(driverController::getRightX)
                                                                 .deadband(OperatorConstants.DEADBAND)
                                                                 .scaleTranslation(OperatorConstants.TRANSLATION_SCALE)
-                                                                .scaleRotation(OperatorConstants.ROTATION_SCALE)
+                                                                .scaleRotation(-OperatorConstants.ROTATION_SCALE)
                                                                 .allianceRelativeControl(true);
 
   // For the right stick to correspond to the angle we want the robot to face instead of the speed of rotationa

@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.OperatorConstants;
 
 import java.io.File;
 import java.util.function.Supplier;
@@ -26,6 +27,9 @@ import static edu.wpi.first.units.Units.Meter;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import swervelib.parser.SwerveParser;
 import swervelib.SwerveDrive;
 import swervelib.telemetry.SwerveDriveTelemetry;
@@ -38,6 +42,8 @@ public class SwerveSubsystem extends SubsystemBase {
 
   // create a swerveDrive object but don't define it yet becasue it coomplains about not handling potential errors
   SwerveDrive swerveDrive;
+
+  private Field2d m_field = new Field2d();
 
 
   public SwerveSubsystem() {
@@ -65,6 +71,14 @@ public class SwerveSubsystem extends SubsystemBase {
                                                true,
                                                0.1); //Correct for skew that gets worse as angular velocity increases. Start with a coefficient of 0.1.
     setupPathPlanner();
+
+    Shuffleboard.getTab(OperatorConstants.AUTO_SHUFFLEBOARD).add(m_field);
+  }
+
+
+  public void periodic(){
+    m_field.setRobotPose(swerveDrive.getPose());
+    SmartDashboard.putData("Field", m_field);
   }
 
 
@@ -129,9 +143,9 @@ public class SwerveSubsystem extends SubsystemBase {
           // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
           new PPHolonomicDriveController(
               // PPHolonomicController is the built in path following controller for holonomic drive trains
-              new PIDConstants(1.0, 0.0, 0.0),
+              new PIDConstants(3, 0.0, 0.0),
               // Translation PID constants
-              new PIDConstants(0.8, 0.0, 0.0)
+              new PIDConstants(3, 0.0, 0.0)
               // Rotation PID constants
           ),
           config,
