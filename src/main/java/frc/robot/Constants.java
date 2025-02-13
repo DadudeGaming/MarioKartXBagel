@@ -17,7 +17,7 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
 
     // Joystick Deadbands
-    public static final double  DEADBAND           = 0.05;
+    public static final double  DEADBAND           = 0.07;
 
     // Scales for movement and rotation (1 is full speed)
     public static final double  TRANSLATION_SCALE  = 0.8;
