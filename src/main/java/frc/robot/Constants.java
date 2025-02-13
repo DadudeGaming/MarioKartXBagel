@@ -15,5 +15,21 @@ package frc.robot;
 public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
+
+    // Joystick Deadbands
+    public static final double  DEADBAND           = 0.07;
+
+    // Scales for movement and rotation (1 is full speed)
+    public static final double  TRANSLATION_SCALE  = 0.8;
+    public static final double  ROTATION_SCALE     = 0.8;
+
+    // if we want field centric control or not (is forwards on the controller always away from  the driver station or is it forwards for the robot)
+    public static final boolean FIELD_CENTRIC      = true;
+
+    public static final String AUTO_SHUFFLEBOARD = "AUTO";
   }
+
+
+  // max speed of the robot in m/s use Units.feetToMeters to use feet
+  public static final   double  MAX_SPEED = 4.5;
 }

@@ -1,0 +1,31 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Start to Reef A"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Reef A to Coral"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Coral to H"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
