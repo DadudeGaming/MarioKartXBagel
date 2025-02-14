@@ -37,6 +37,8 @@ public class RobotContainer {
   // create a new swerve subsystem object
   private final SwerveSubsystem drivebase = new SwerveSubsystem();
 
+  private final IntakeSubsystem intake = new IntakeSubsystem();
+
   // create an object for our driver controller
   // private final CommandXboxController driverController = new CommandXboxController(Constants.OperatorConstants.kDriverControllerPort);
   private final CommandPS5Controller driverController = new CommandPS5Controller(Constants.OperatorConstants.kDriverControllerPort);
@@ -89,6 +91,7 @@ public class RobotContainer {
   // define what buttons do on the controller
   private void configureBindings() {
     driverController.button(1).onTrue(drivebase.zeroGyro()); //zero the gyro when square(?) is pressed
+    driverController.button(3).onTrue(new IntakeCommand(intake).withTimeout(5)); 
   }
 
   private void setupAutoChooser(){
