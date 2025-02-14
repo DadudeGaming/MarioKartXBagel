@@ -13,8 +13,8 @@ import com.reduxrobotics.sensors.canandcolor.Canandcolor;
 public class IntakeSubsystem extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
   public boolean holding = false;
-  private SparkMax intakeMotor = new SparkMax(12, MotorType.kBrushless);
-  private Canandcolor canandcolor = new Canandcolor(14);
+  private SparkMax intakeMotor = new SparkMax(IntakeConstants.MotorCANID, MotorType.kBrushless);
+  private Canandcolor canandcolor = new Canandcolor(IntakeConstants.ColourCANID);
 
   public IntakeSubsystem() {
       //driverController.button(3).onTrue(declare());

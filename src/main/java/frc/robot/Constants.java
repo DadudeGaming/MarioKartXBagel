@@ -29,6 +29,14 @@ public final class Constants {
     public static final String AUTO_SHUFFLEBOARD = "AUTO";
   }
 
+  public static class IntakeConstants {
+    public static final int MotorCANID = 12;
+    public static final int ColourCANID = 14;
+
+    public static final double speedIn = 0.3;
+    public static final double speedOut = -0.7;
+  }
+
 
   // max speed of the robot in m/s use Units.feetToMeters to use feet
   public static final   double  MAX_SPEED = 4.5;

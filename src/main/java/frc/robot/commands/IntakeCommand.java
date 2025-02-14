@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class IntakeCommand extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final IntakeSubsystem m_subsystem;
-
   /**
    * Creates a new ExampleCommand.
    *
@@ -29,8 +28,11 @@ public class IntakeCommand extends Command {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute(int speed) {
-    IntakeSubsystem.setMotor(speed);
+  public void execute(){
+    if(!holding)
+      IntakeSubsystem.setMotor(IntakeConstants.speedIn);
+    else
+      IntakeSubsystem.setMotor(IntakeConstants.speedOut);
   }
 
   // Called once the command ends or is interrupted.
