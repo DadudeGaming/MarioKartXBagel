@@ -30,11 +30,11 @@ public final class Constants {
   }
 
   public static class IntakeConstants {
-    public static final int MotorCANID = 12;
-    public static final int ColourCANID = 14;
+    public static final int MotorCANID = 14;
+    public static final int ColourCANID = 12;
 
-    public static final double speedIn = 0.3;
-    public static final double speedOut = -0.7;
+    public static final double speedIn = 0.15;
+    public static final double speedOut = -0.3;
   }
 
 

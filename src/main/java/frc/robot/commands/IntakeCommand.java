@@ -49,8 +49,8 @@ public class IntakeCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if((m_subsystem.getDist() < 0.5f && !m_subsystem.holding) || (m_subsystem.getDist() >= 0.5f && m_subsystem.holding))
-      return true;
+    // if((m_subsystem.getDist() < 0.5f && !m_subsystem.holding) || (m_subsystem.getDist() >= 0.5f && m_subsystem.holding))
+      // return true;
     return false;
   }
 }

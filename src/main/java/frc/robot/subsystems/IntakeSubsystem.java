@@ -18,16 +18,16 @@ public class IntakeSubsystem extends SubsystemBase {
   public boolean holding = false;
   private SparkMax intakeMotor = new SparkMax(IntakeConstants.MotorCANID, MotorType.kBrushless);
 
-  private Canandcolor canandcolor = new Canandcolor(IntakeConstants.ColourCANID);
+  // private Canandcolor canandcolor = new Canandcolor(IntakeConstants.ColourCANID);
 
   public IntakeSubsystem() {
       //driverController.button(3).onTrue(declare());
-      intakeMotor.set(0);
+      // intakeMotor.set(0);
   }
 
-  public double getDist(){
-    return canandcolor.getProximity();
-  }
+  // public double getDist(){
+  //   return canandcolor.getProximity();
+  // }
 
   public void setMotor(double input) {
     intakeMotor.set(input);

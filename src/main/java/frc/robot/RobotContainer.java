@@ -92,8 +92,8 @@ public class RobotContainer {
 
   // define what buttons do on the controller
   private void configureBindings() {
-    driverController.button(1).onTrue(drivebase.zeroGyro()); //zero the gyro when square(?) is pressed
-    driverController.button(3).onTrue(new IntakeCommand(intake).withTimeout(5)); 
+    // driverController.button(1).onTrue(drivebase.zeroGyro()); //zero the gyro when square(?) is pressed
+    driverController.button(3).onTrue(new IntakeCommand(intake).withTimeout(1)); 
   }
 
   private void setupAutoChooser(){
