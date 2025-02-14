@@ -12,21 +12,17 @@ import com.reduxrobotics.sensors.canandcolor.Canandcolor;
 
 public class IntakeSubsystem extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
-  public int angle;
+  public double angle;
 
   // Please read here:
   /* This is simply a digital subsystem, it's not intended for actual usage, only for simulatating the arm.*/
 
   public ArmSubsystem() {
-    angle = 0;
+    angle = 0.0;
   }
 
-  public double getDist(){
-    return canandcolor.getProximity();
-  }
-
-  public void setMotor(double input) {
-    intakeMotor.set(input);
+  public void setAngle(double input) {
+    angle += input*0.01;
   }
 
   // public Command declare() {
