@@ -29,7 +29,26 @@ public final class Constants {
     public static final String AUTO_SHUFFLEBOARD = "AUTO";
   }
 
-
+  public static class PivotConstants {
+    public static class PIDConstants {
+      public static final double kP = 0.001;
+      public static final double kI = 0;
+      public static final double kD = 0;
+    }
+    public static class PivotAngles {
+      public static double firstPivotAngle = 0;
+      public static double secondPivotAngle = 20;
+      public static double thirdPivotAngle = 40;
+      public static double fourthPivotAngle = 60;
+      public static double fifthPivotAngle = 80;
+    }
+    public static class CANIDs{
+      public static int forwardMotorCANID = 0;
+      public static int backwardMotorCANID = 1;
+      public static int canandmagCANID = 2;
+    }
+    public static double precisionInDegrees = 1;
+  }
   // max speed of the robot in m/s use Units.feetToMeters to use feet
   public static final   double  MAX_SPEED = 4.5;
 }
