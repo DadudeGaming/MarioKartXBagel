@@ -4,15 +4,22 @@
 
 package frc.robot.commands;
 
+import frc.robot.Constants.OperatorConstants;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
+
+import java.util.function.DoubleSupplier;
+
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /** An example command that uses an example subsystem. */
 public class ArmMoveCommand extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final ArmSubsystem m_subsystem;
+  private DoubleSupplier changeDoubleSupplier;
 
-  private int change;
+  private double change;
   /**
    * Creates a new ExampleCommand.
    * 
@@ -20,11 +27,15 @@ public class ArmMoveCommand extends Command {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public ArmMoveCommand(ArmSubsystem subsystem, int input) {
+  public ArmMoveCommand(ArmSubsystem subsystem, double input) {
     m_subsystem = subsystem;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
-    change = input;
+    m_subsystem.angle = input;
+    // change = input;
+    // changeDoubleSupplier = () -> change;
+    // Shuffleboard.getTab(OperatorConstants.DRIVER_SHUFFLEBOARD).addNumber("Change", changeDoubleSupplier);
+    
   }
 
   // Called when the command is initially scheduled.
@@ -34,8 +45,9 @@ public class ArmMoveCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute(){
-    if((change < 0 && m_subsystem.angle > 0.0) || (change > 0 && && m_subsystem.angle < 90.0))
+    if((change < 0.0 && m_subsystem.angle > 0.0) || (change > 0.0 && m_subsystem.angle < 90.0))
       m_subsystem.changeAngle(change);
+      System.out.println(change);
   }
 
   // Called once the command ends or is interrupted.
