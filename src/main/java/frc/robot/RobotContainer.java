@@ -23,6 +23,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
+import frc.robot.subsystems.*;
+import frc.robot.commands.*;
+
 
 
 /**
@@ -46,7 +49,6 @@ public class RobotContainer {
 
   private final SendableChooser<Command> autoChooser;
   // Build an auto chooser. This will use Commands.none() as the default option.
-
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
 

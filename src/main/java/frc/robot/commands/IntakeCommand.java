@@ -4,8 +4,12 @@
 
 package frc.robot.commands;
 
-import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.Constants.IntakeConstants;
+
+import frc.robot.subsystems.IntakeSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+
+
 
 /** An example command that uses an example subsystem. */
 public class IntakeCommand extends Command {

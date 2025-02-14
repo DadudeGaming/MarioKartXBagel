@@ -4,16 +4,20 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj.SpeedController;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import com.reduxrobotics.sensors.canandcolor.Canandcolor;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+
+import frc.robot.Constants.IntakeConstants;
+
+
 
 public class IntakeSubsystem extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
   public boolean holding = false;
   private SparkMax intakeMotor = new SparkMax(IntakeConstants.MotorCANID, MotorType.kBrushless);
+
   private Canandcolor canandcolor = new Canandcolor(IntakeConstants.ColourCANID);
 
   public IntakeSubsystem() {
