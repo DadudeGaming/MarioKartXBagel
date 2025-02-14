@@ -40,14 +40,22 @@ public class ArmMoveCommand extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    // if((change < 0.0 && m_subsystem.angle > 0.0) || (change > 0.0 && m_subsystem.angle < 90.0))
+    //   m_subsystem.changeAngle(change);
+    //   System.out.println(change);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute(){
-    if((!m_subsystem.up || !m_subsystem.down) && ((change < 0.0 && m_subsystem.angle > 0.0) || (change > 0.0 && && m_subsystem.angle < 90.0)))
+    // if((!m_subsystem.up || !m_subsystem.down) && ((change < 0.0 && m_subsystem.angle > 0.0) || (change > 0.0 && m_subsystem.angle < 90.0)))
+    //   m_subsystem.changeAngle(change);
+    //   System.out.println(change);
+    if((change < 0.0 && m_subsystem.angle > 0.0) || (change > 0.0 && m_subsystem.angle < 90.0))
       m_subsystem.changeAngle(change);
       System.out.println(change);
+
   }
 
   // Called once the command ends or is interrupted.

@@ -91,8 +91,6 @@ public class RobotContainer {
   // define what buttons do on the controller
   private void configureBindings() {
     driverController.button(1).onTrue(drivebase.zeroGyro());
-    driverController.button(5).whileFalse(ArmSubsystem.up = false);
-    driverController.button(7).whileFalse(ArmSubsystem.down = false);
     driverController.button(5).whileTrue(new ArmMoveCommand(armSubsystem, 1.0));
     driverController.button(7).whileTrue(new ArmMoveCommand(armSubsystem, -1.0)); //zero the gyro when square(?) is pressed
   }

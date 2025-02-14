@@ -22,8 +22,6 @@ public class ArmSubsystem extends SubsystemBase {
   public boolean up = false;
   public boolean down = false;
 
-  private final CommandPS5Controller driverController = new CommandPS5Controller(Constants.OperatorConstants.kDriverControllerPort);
-
   // Please read here:
   /* This is simply a digital subsystem, it's not intended for actual usage, only for simulatating the arm.*/
 
@@ -34,7 +32,7 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public void changeAngle(double input) {
-    angle += input*0.01;
+    angle += input*1;
     // Shuffleboard.getTab(OperatorConstants.operatorShuffleboardTab).addBoolean("Speaker Down", speakerDownBoolSupplier);
     // Shuffleboard.getTab(OperatorConstants.operatorShuffleboardTab).addNumber("Pivot Output", outputSupplier);
   }
