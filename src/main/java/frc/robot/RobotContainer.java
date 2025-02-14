@@ -42,7 +42,6 @@ public class RobotContainer {
   // private final CommandXboxController driverController = new CommandXboxController(Constants.OperatorConstants.kDriverControllerPort);
   private final CommandPS5Controller driverController = new CommandPS5Controller(Constants.OperatorConstants.kDriverControllerPort);
 
-
   private final SendableChooser<Command> autoChooser;
   // Build an auto chooser. This will use Commands.none() as the default option.
 
@@ -90,8 +89,10 @@ public class RobotContainer {
   // define what buttons do on the controller
   private void configureBindings() {
     driverController.button(1).onTrue(drivebase.zeroGyro());
-    driverController.button(8).onTrue(new ArmMoveCommand(armSubsystem, 1));
-    driverController.button(9).onTrue(new ArmMoveCommand(armSubsystem, -1)); //zero the gyro when square(?) is pressed
+    driverController.button(4).whileFalse(ArmSubsystem.up = false);
+    driverController.button(6).whileFalse(ArmSubsystem.down = false);
+    driverController.button(4).whileTrue(new ArmMoveCommand(armSubsystem, 1.0));
+    driverController.button(6).whileTrue(new ArmMoveCommand(armSubsystem, -1.0)); //zero the gyro when square(?) is pressed
   }
 
   private void setupAutoChooser(){

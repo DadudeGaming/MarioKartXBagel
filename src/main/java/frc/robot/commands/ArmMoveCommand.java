@@ -12,7 +12,7 @@ public class ArmMoveCommand extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final ArmSubsystem m_subsystem;
 
-  private int change;
+  private double change;
   /**
    * Creates a new ExampleCommand.
    * 
@@ -20,11 +20,15 @@ public class ArmMoveCommand extends Command {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public ArmMoveCommand(ArmSubsystem subsystem, int input) {
+  public ArmMoveCommand(ArmSubsystem subsystem, double input) {
     m_subsystem = subsystem;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
     change = input;
+    if(change > 0)
+      m_subsystem.up = true;
+    else if(change < 0)
+      m_subsystem.down = true;
   }
 
   // Called when the command is initially scheduled.
@@ -34,7 +38,7 @@ public class ArmMoveCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute(){
-    if((change < 0 && m_subsystem.angle > 0.0) || (change > 0 && && m_subsystem.angle < 90.0))
+    if((!m_subsystem.up || !m_subsystem.down) && ((change < 0.0 && m_subsystem.angle > 0.0) || (change > 0.0 && && m_subsystem.angle < 90.0)))
       m_subsystem.changeAngle(change);
   }
 
