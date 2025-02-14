@@ -8,11 +8,11 @@ import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /** An example command that uses an example subsystem. */
-public class IntakeCommand extends Command {
+public class ArmMoveCommand extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final IntakeSubsystem m_subsystem;
+  private final ArmSubsystem m_subsystem;
 
-  private double speed;
+  private int change;
   /**
    * Creates a new ExampleCommand.
    * 
@@ -20,11 +20,11 @@ public class IntakeCommand extends Command {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public ArmUpCommand(IntakeSubsystem subsystem, double input) {
+  public ArmMoveCommand(ArmSubsystem subsystem, int input) {
     m_subsystem = subsystem;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
-    speed = input;
+    change = input;
   }
 
   // Called when the command is initially scheduled.
@@ -34,24 +34,18 @@ public class IntakeCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute(){
-    if(!m_subsystem.hanging)
-      m_subsystem.setMotor(speed);
-    else
-      m_subsystem.setMotor(-speed);
+    if((change < 0 && m_subsystem.angle > 0.0) || (change > 0 && && m_subsystem.angle < 90.0))
+      m_subsystem.changeAngle(change);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_subsystem.hanging = !m_subsystem.hanging;
-    m_subsystem.setMotor(0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(/*motor at 90 degrees*/)
-      return true;
     return false;
   }
 }

@@ -21,7 +21,7 @@ public class IntakeSubsystem extends SubsystemBase {
     angle = 0.0;
   }
 
-  public void setAngle(double input) {
+  public void changeAngle(double input) {
     angle += input*0.01;
   }
 
