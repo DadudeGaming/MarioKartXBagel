@@ -29,23 +29,23 @@ public class IntakeCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute(){
-    if(!holding)
-      IntakeSubsystem.setMotor(IntakeConstants.speedIn);
+    if(!m_subsystem.holding)
+      m_subsystem.setMotor(IntakeConstants.speedIn);
     else
-      IntakeSubsystem.setMotor(IntakeConstants.speedOut);
+      m_subsystem.setMotor(IntakeConstants.speedOut);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    IntakeSubsystem.holding = !IntakeSubsystem.holding;
-    IntakeSubsystem.setMotor(0);
+    m_subsystem.holding = !m_subsystem.holding;
+    m_subsystem.setMotor(0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if((IntakeSubsystem.getDist() < 0.5f && !IntakeSubsystem.holding) || (IntakeSubsystem.getDist() >= 0.5f && IntakeSubsystem.holding))
+    if((m_subsystem.getDist() < 0.5f && !m_subsystem.holding) || (m_subsystem.getDist() >= 0.5f && m_subsystem.holding))
       return true;
     return false;
   }
