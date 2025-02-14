@@ -18,11 +18,11 @@ public final class Constants {
     public static final int kOperatorControllerPort = 1;
 
     // Joystick Deadbands
-    public static final double  DEADBAND           = 0.07;
+    public static final double  DEADBAND           = 0.05;
 
     // Scales for movement and rotation (1 is full speed)
-    public static final double  TRANSLATION_SCALE  = 0.8;
-    public static final double  ROTATION_SCALE     = 0.8;
+    public static final double  TRANSLATION_SCALE  = 0.45;
+    public static final double  ROTATION_SCALE     = 0.7;
 
     // if we want field centric control or not (is forwards on the controller always away from  the driver station or is it forwards for the robot)
     public static final boolean FIELD_CENTRIC      = true;
