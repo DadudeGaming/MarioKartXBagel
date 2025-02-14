@@ -15,6 +15,7 @@ package frc.robot;
 public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
+    public static final int kOperatorControllerPort = 1;
 
     // Joystick Deadbands
     public static final double  DEADBAND           = 0.07;
@@ -27,6 +28,7 @@ public final class Constants {
     public static final boolean FIELD_CENTRIC      = true;
 
     public static final String AUTO_SHUFFLEBOARD = "AUTO";
+    public static final String DRIVER_SHUFFLEBOARD = "DRIVE";
   }
 
 

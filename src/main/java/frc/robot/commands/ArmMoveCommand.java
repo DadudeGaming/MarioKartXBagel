@@ -4,13 +4,20 @@
 
 package frc.robot.commands;
 
+import frc.robot.Constants.OperatorConstants;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
+
+import java.util.function.DoubleSupplier;
+
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /** An example command that uses an example subsystem. */
 public class ArmMoveCommand extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final ArmSubsystem m_subsystem;
+  private DoubleSupplier changeDoubleSupplier;
 
   private double change;
   /**
@@ -40,6 +47,7 @@ public class ArmMoveCommand extends Command {
   public void execute(){
     if((!m_subsystem.up || !m_subsystem.down) && ((change < 0.0 && m_subsystem.angle > 0.0) || (change > 0.0 && && m_subsystem.angle < 90.0)))
       m_subsystem.changeAngle(change);
+      System.out.println(change);
   }
 
   // Called once the command ends or is interrupted.
