@@ -11,8 +11,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class IntakeCommand extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final IntakeSubsystem m_subsystem;
-
-  private double speed;
   /**
    * Creates a new ExampleCommand.
    * 
@@ -20,11 +18,10 @@ public class IntakeCommand extends Command {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public IntakeCommand(IntakeSubsystem subsystem, double input) {
+  public IntakeCommand(IntakeSubsystem subsystem) {
     m_subsystem = subsystem;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
-    speed = input;
   }
 
   // Called when the command is initially scheduled.
@@ -34,10 +31,13 @@ public class IntakeCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute(){
-    if(!m_subsystem.hanging)
-      m_subsystem.setMotor(speed);
-    else
-      m_subsystem.setMotor(-speed);
+    while(/*motor not at 90 degrees*/)
+    {
+
+      if(!m_subsystem.hanging)
+        m_subsystem.setMotor((Constants.ClimbConstants.climbAngle - BargeSubsystem.angle) * Constants.ClimbConstants.PIDConstants.kP);
+      else
+        m_subsystem.setMotor((Constants.ClimbConstants.stowAngle - BargeSubsystem.angle) * Constants.ClimbConstants.PIDConstants.kP);
   }
 
   // Called once the command ends or is interrupted.

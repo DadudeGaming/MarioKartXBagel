@@ -12,8 +12,11 @@ import com.reduxrobotics.sensors.canandcolor.Canandcolor;
 
 public class BargeSubsystem extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
-  public boolean hanging = false;
+  public boolean hanging = false; 
+  public double angle = 0.0;
   private SparkMax intakeMotor = new SparkMax(12, MotorType.kBrushless);
+
+  private PIDController
 
   public BargeSubsystem() {
       //driverController.button(3).onTrue(declare());

@@ -29,6 +29,17 @@ public final class Constants {
     public static final String AUTO_SHUFFLEBOARD = "AUTO";
   }
 
+  public static class ClimbConstants {
+    public static class PIDConstants {
+      public static final double kP = 0.005; // 0.1111 for 99%
+      public static final double kI = 0;
+      public static final double kD = 0;
+    }
+
+    public static final double climbAngle = 0;
+    public static final double stowAngle = 90;
+  }
+
 
   // max speed of the robot in m/s use Units.feetToMeters to use feet
   public static final   double  MAX_SPEED = 4.5;
