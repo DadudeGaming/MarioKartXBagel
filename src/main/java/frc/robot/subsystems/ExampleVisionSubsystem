@@ -11,7 +11,10 @@ public class ExampleVisionSubsystem extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
   
   // Change this to match the name of your camera (please do this)
-    PhotonCamera camera = new PhotonCamera("photonvision");
+  private PhotonCamera camera = new PhotonCamera("photonvision");
+
+  // Determines if there are any targets in view
+  private boolean hasTargets;
 
   public ExampleVisionSubsystem() {}
 
@@ -20,15 +23,23 @@ public class ExampleVisionSubsystem extends SubsystemBase {
    *
    * @return a command
    */
-  public Command exampleMethodCommand() {
+  public Command checkTargets() {
     // Inline construction of command goes here.
-    // Subsystem::RunOnce implicitly requires `this` subsystem.
-    return runOnce(
-        () -> {
-          /* one-time action goes here */
-        });
+    hasTargets = result.hasTargets();
   }
 
+  public Command estimatePos(){
+    // Correct pose estimate with vision measurements
+    var visionEst = vision.getEstimatedGlobalPose();
+    visionEst.ifPresent(
+            est -> {
+                // Change our trust in the measurement based on the tags we can see
+                var estStdDevs = vision.getEstimationStdDevs();
+
+                drivetrain.addVisionMeasurement(
+                        est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
+            });
+  }
   /**
    * An example method querying a boolean state of the subsystem (for example, a digital sensor).
    *
