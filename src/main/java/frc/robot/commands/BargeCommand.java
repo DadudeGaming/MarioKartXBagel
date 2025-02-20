@@ -4,13 +4,15 @@
 
 package frc.robot.commands;
 
+import frc.robot.subsystems.BargeSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.Constants;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /** An example command that uses an example subsystem. */
-public class IntakeCommand extends Command {
+public class BargeCommand extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final IntakeSubsystem m_subsystem;
+  private final BargeSubsystem m_subsystem;
   /**
    * Creates a new ExampleCommand.
    * 
@@ -18,7 +20,7 @@ public class IntakeCommand extends Command {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public IntakeCommand(IntakeSubsystem subsystem) {
+  public BargeCommand(BargeSubsystem subsystem) {
     m_subsystem = subsystem;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
@@ -31,13 +33,13 @@ public class IntakeCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute(){
-    while(/*motor not at 90 degrees*/)
+    while(true)
     {
-
       if(!m_subsystem.hanging)
-        m_subsystem.setMotor((Constants.ClimbConstants.climbAngle - BargeSubsystem.angle) * Constants.ClimbConstants.PIDConstants.kP);
+        m_subsystem.setMotor((Constants.ClimbConstants.climbAngle /*- encode*/) * Constants.ClimbConstants.PIDConstants.kP);
       else
-        m_subsystem.setMotor((Constants.ClimbConstants.stowAngle - BargeSubsystem.angle) * Constants.ClimbConstants.PIDConstants.kP);
+        m_subsystem.setMotor((Constants.ClimbConstants.stowAngle /*- encode*/) * Constants.ClimbConstants.PIDConstants.kP);
+    }
   }
 
   // Called once the command ends or is interrupted.
@@ -50,7 +52,7 @@ public class IntakeCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(/*motor at 90 degrees*/)
+    if(true/*motor at 90 degrees*/)
       return true;
     return false;
   }
