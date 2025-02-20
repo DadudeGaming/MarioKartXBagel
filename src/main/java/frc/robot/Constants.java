@@ -35,7 +35,7 @@ public final class Constants {
       public static final double kI = 0;
       public static final double kD = 0;
     }
-
+    public static final int encoderId = 14;
     public static final double climbAngle = 0;
     public static final double stowAngle = 90;
   }

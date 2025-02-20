@@ -33,13 +33,10 @@ public class BargeCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute(){
-    while(true)
-    {
-      if(!m_subsystem.hanging)
-        m_subsystem.setMotor((Constants.ClimbConstants.climbAngle /*- encode*/) * Constants.ClimbConstants.PIDConstants.kP);
-      else
-        m_subsystem.setMotor((Constants.ClimbConstants.stowAngle /*- encode*/) * Constants.ClimbConstants.PIDConstants.kP);
-    }
+    if(!m_subsystem.hanging)
+      m_subsystem.setClimbAngle(Constants.ClimbConstants.climbAngle);
+    else
+      m_subsystem.setClimbAngle(Constants.ClimbConstants.stowAngle);
   }
 
   // Called once the command ends or is interrupted.
@@ -52,8 +49,6 @@ public class BargeCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(true/*motor at 90 degrees*/)
-      return true;
-    return false;
+    return true;
   }
 }

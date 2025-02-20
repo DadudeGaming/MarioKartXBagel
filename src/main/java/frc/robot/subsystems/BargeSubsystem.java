@@ -6,29 +6,53 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj.SpeedController;
+import edu.wpi.first.math.controller.PIDController;
+//import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.Constants.ClimbConstants;
+
+import com.reduxrobotics.sensors.canandcolor.Canandcolor;
+import com.reduxrobotics.sensors.canandmag.Canandmag;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkMax;
 import com.reduxrobotics.sensors.canandcolor.Canandcolor;
 
 public class BargeSubsystem extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
   public boolean hanging = false; 
   public double angle = 0.0;
-  private SparkMax intakeMotor = new SparkMax(12, MotorType.kBrushless);
+  private double output = 0.0;
+  private SparkMax bargeMotor = new SparkMax(12, MotorType.kBrushless);
 
-  private PIDController
+  private final PIDController forwardController = new PIDController(ClimbConstants.PIDConstants.kP, ClimbConstants.PIDConstants.kI, ClimbConstants.PIDConstants.kD);
+  private Canandmag canandmag = new Canandmag(ClimbConstants.encoderId);
 
   public BargeSubsystem() {
-      //driverController.button(3).onTrue(declare());
-      intakeMotor.set(0);
+    //driverController.button(3).onTrue(declare());
+    bargeMotor.set(0);
   }
 
-  /*public double getDist(){
-    return canandcolor.getProximity();
-  }*/
+  public double encoderInDegrees(){
+    return canandmag.getAbsPosition() * 360;
+  }
+
+  public void runPID() {
+      output = forwardController.calculate(encoderInDegrees());
+
+      bargeMotor.set(output);
+  }
+  public void setClimbAngle(double input) {
+    forwardController.setSetpoint(input);
+ }
 
   public void setMotor(double input) {
-    intakeMotor.set(input);
+    bargeMotor.set(input);
+  }
+  
+  @Override
+  public void periodic()
+  {
+    runPID();
   }
 
   // public Command declare() {
