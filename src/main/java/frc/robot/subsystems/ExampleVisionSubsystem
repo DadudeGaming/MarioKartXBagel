@@ -9,6 +9,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ExampleVisionSubsystem extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
+  
+  // Change this to match the name of your camera (please do this)
+    PhotonCamera camera = new PhotonCamera("photonvision");
+
   public ExampleVisionSubsystem() {}
 
   /**
