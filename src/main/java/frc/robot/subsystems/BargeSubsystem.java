@@ -14,6 +14,8 @@ import frc.robot.Constants.ClimbConstants;
 import com.reduxrobotics.sensors.canandcolor.Canandcolor;
 import com.reduxrobotics.sensors.canandmag.Canandmag;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkAbsoluteEncoder;
+import com.revrobotics.spark.SparkAnalogSensor;
 import com.revrobotics.spark.SparkMax;
 import com.reduxrobotics.sensors.canandcolor.Canandcolor;
 
@@ -24,25 +26,28 @@ public class BargeSubsystem extends SubsystemBase {
   private double output = 0.0;
   private SparkMax bargeMotor = new SparkMax(12, MotorType.kBrushless);
 
-  private final PIDController forwardController = new PIDController(ClimbConstants.PIDConstants.kP, ClimbConstants.PIDConstants.kI, ClimbConstants.PIDConstants.kD);
-  private Canandmag canandmag = new Canandmag(ClimbConstants.encoderId);
+  private final PIDController climbPIDController = new PIDController(ClimbConstants.PIDConstants.kP, ClimbConstants.PIDConstants.kI, ClimbConstants.PIDConstants.kD);
+  
+  private final SparkAnalogSensor climbEncoder = bargeMotor.getAnalog();
 
   public BargeSubsystem() {
     //driverController.button(3).onTrue(declare());
-    bargeMotor.set(0);
+    // bargeMotor.set(0);
+    
+
   }
 
   public double encoderInDegrees(){
-    return canandmag.getAbsPosition() * 360;
+    return climbEncoder.getPosition() * 107.68770565360455;
   }
 
   public void runPID() {
-      output = forwardController.calculate(encoderInDegrees());
+      output = climbPIDController.calculate(encoderInDegrees());
 
       bargeMotor.set(output);
   }
   public void setClimbAngle(double input) {
-    forwardController.setSetpoint(input);
+    climbPIDController.setSetpoint(input);
  }
 
   public void setMotor(double input) {
