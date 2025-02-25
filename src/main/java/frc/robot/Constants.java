@@ -44,8 +44,8 @@ public final class Constants {
 
       public static class CANIDs {
         public static int zMotor = 16;
-        public static int yMotor = 17;
-        public static int xMotor = 18;
+        public static int yMotor = 1;
+        public static int xMotor = 3;
       }
   
     
