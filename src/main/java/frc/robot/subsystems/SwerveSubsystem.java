@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.Vision;
 import frc.robot.Constants;
 import frc.robot.Constants.OperatorConstants;
 
@@ -43,7 +44,7 @@ public class SwerveSubsystem extends SubsystemBase {
   // create a swerveDrive object but don't define it yet becasue it coomplains about not handling potential errors
   SwerveDrive swerveDrive;
 
-  private Field2d m_field = new Field2d();
+  private Vision vision;
 
 
   public SwerveSubsystem() {
@@ -70,15 +71,23 @@ public class SwerveSubsystem extends SubsystemBase {
     swerveDrive.setAngularVelocityCompensation(true,
                                                true,
                                                0.1); //Correct for skew that gets worse as angular velocity increases. Start with a coefficient of 0.1.
-    setupPathPlanner();
+    setupPathPlanner();  
 
-    Shuffleboard.getTab(OperatorConstants.AUTO_SHUFFLEBOARD).add(m_field);
+    setupPhotonVision();
+
+    Shuffleboard.getTab(OperatorConstants.AUTO_SHUFFLEBOARD).add(swerveDrive.field);
+  }
+
+
+  private void setupPhotonVision(){
+    vision = new Vision(swerveDrive::getPose, swerveDrive.field);
   }
 
 
   public void periodic(){
-    m_field.setRobotPose(swerveDrive.getPose());
-    SmartDashboard.putData("Field", m_field);
+    SmartDashboard.putData("Field", swerveDrive.field);
+    swerveDrive.updateOdometry();
+    vision.updatePoseEstimation(swerveDrive);
   }
 
 
