@@ -5,8 +5,6 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.ArmMoveCommand;
-import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import swervelib.SwerveInputStream;
 
@@ -38,8 +36,7 @@ public class RobotContainer {
 
   // create a new swerve subsystem object
   private final SwerveSubsystem drivebase = new SwerveSubsystem();
-  private final ArmSubsystem armSubsystem = new ArmSubsystem();
-
+ 
   // create an object for our driver controller
   // private final CommandXboxController driverController = new CommandXboxController(Constants.OperatorConstants.kDriverControllerPort);
   private final CommandPS5Controller driverController = new CommandPS5Controller(Constants.OperatorConstants.kDriverControllerPort);
@@ -93,9 +90,7 @@ public class RobotContainer {
 
   // define what buttons do on the controller
   private void configureBindings() {
-    driverController.button(1).whileTrue(drivebase.zeroGyro());
-    operatorController.button(5).whileTrue(new ArmMoveCommand(armSubsystem, 1.0));
-    operatorController.button(7).whileTrue(new ArmMoveCommand(armSubsystem, -1.0)); //zero the gyro when square(?) is pressed
+    driverController.button(1).whileTrue(drivebase.zeroGyro()); //zero the gyro when square(?) is pressed
 
 
     driverController.triangle()
