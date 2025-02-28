@@ -82,11 +82,11 @@ public class Wrist extends SubsystemBase {
   }
 
   public double getXaxis(){
-    return ((xMotor.getEncoder().getPosition())* 1/25 * 1/1.20833 *360);
+    return ((xMotor.getEncoder().getPosition() + yMotor.getEncoder().getPosition())* 1/25 * 1/1.20833 *360);
   }
 
   public double getYaxis(){
-    return ((yMotor.getEncoder().getPosition()) * 1/25 * 1/1.5  *360);
+    return ((yMotor.getEncoder().getPosition() - yMotor.getEncoder().getPosition()) * 1/25 * 1/1.5  *360);
   }
 
   private double convertSparkAnalogToDegree(double input) {
