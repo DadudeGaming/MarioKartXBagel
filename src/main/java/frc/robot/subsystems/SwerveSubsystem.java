@@ -59,12 +59,13 @@ public class SwerveSubsystem extends SubsystemBase {
                                                                   new Pose2d(new Translation2d(Meter.of(1),
                                                                                                Meter.of(4)),
                                                                              Rotation2d.fromDegrees(0)));
+                                                                      
     } catch (Exception e)
     {
       throw new RuntimeException(e);
     }
-
-
+    
+    swerveDrive.setMotorIdleMode(false);
     swerveDrive.setHeadingCorrection(false); // Heading correction should only be used while controlling the robot via angle.
     swerveDrive.setCosineCompensator(true);//!SwerveDriveTelemetry.isSimulation); // Disables cosine compensation for simulations since it causes discrepancies not seen in real life.
     swerveDrive.setAngularVelocityCompensation(true,

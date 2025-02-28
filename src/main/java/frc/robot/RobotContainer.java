@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
@@ -62,6 +63,7 @@ public class RobotContainer {
     setupAutoChooser();
 
     // set the default command for the drivebase to the drive command
+    // drivebase.setDefaultCommand(driveFieldOrientedAngularVelocity);
     drivebase.setDefaultCommand(driveFieldOrientedAngularVelocity);
   }
 
@@ -76,8 +78,9 @@ public class RobotContainer {
                                                                 .allianceRelativeControl(true);
 
   // For the right stick to correspond to the angle we want the robot to face instead of the speed of rotationa
-  SwerveInputStream driveDirectAngle = driveAngularVelocity.copy().withControllerHeadingAxis(driverController::getRightX,
-                                                                                             driverController::getRightY)
+  SwerveInputStream driveDirectAngle = driveAngularVelocity.copy().withControllerHeadingAxis(
+                                                                                            () -> driverController.getRightX() * -1,
+                                                                                            () -> driverController.getRightY() *-1)
                                                                                              .headingWhile(true);
   
 
@@ -90,9 +93,16 @@ public class RobotContainer {
 
   // define what buttons do on the controller
   private void configureBindings() {
-    driverController.button(1).onTrue(drivebase.zeroGyro());
+    driverController.button(1).whileTrue(drivebase.zeroGyro());
     operatorController.button(5).whileTrue(new ArmMoveCommand(armSubsystem, 1.0));
     operatorController.button(7).whileTrue(new ArmMoveCommand(armSubsystem, -1.0)); //zero the gyro when square(?) is pressed
+
+
+    driverController.triangle()
+                              .toggleOnFalse(driveFieldOrientedDirectAngle);
+                              
+
+    driverController.circle().whileTrue(Commands.none());
   }
 
   private void setupAutoChooser(){
