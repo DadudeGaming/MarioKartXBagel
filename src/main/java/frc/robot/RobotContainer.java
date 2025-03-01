@@ -5,6 +5,7 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import swervelib.SwerveInputStream;
 
@@ -36,6 +37,7 @@ public class RobotContainer {
 
   // create a new swerve subsystem object
   private final SwerveSubsystem drivebase = new SwerveSubsystem();
+  private final ClimbSubsystem climb = new ClimbSubsystem();
  
   // create an object for our driver controller
   // private final CommandXboxController driverController = new CommandXboxController(Constants.OperatorConstants.kDriverControllerPort);
@@ -98,6 +100,10 @@ public class RobotContainer {
                               
 
     driverController.circle().whileTrue(Commands.none());
+
+    driverController.povDown().whileTrue(climb.outake());
+
+    driverController.povUp().whileTrue(climb.intake());
   }
 
   private void setupAutoChooser(){
