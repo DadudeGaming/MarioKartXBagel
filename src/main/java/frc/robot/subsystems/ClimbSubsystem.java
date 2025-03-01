@@ -34,7 +34,7 @@ public class ClimbSubsystem extends SubsystemBase {
     // then the second part is what is called when it ends (in this case by timing out), eg. stopping the motors so they don't continue running
     return runEnd(
       () -> {
-        motor1.set(0.12); // set the motor to 100% speed in
+        motor1.set(0.20); // set the motor to 100% speed in
       }, () -> {
         intakeMode = false; // set the intake mode to false (we need to outake next)
         motor1.set(0); // stop the motor, otherewise it would continue running forever
@@ -45,7 +45,7 @@ public class ClimbSubsystem extends SubsystemBase {
   public Command outake(){
     return runEnd(
       () -> {
-        motor1.set(-0.12); // set the motor to 100% speed out
+        motor1.set(-0.20); // set the motor to 100% speed out
       }, () -> {
         intakeMode = true; // set the intake mode to false (we need to intake next)
         motor1.set(0);// stop the motor, otherewise it would continue running forever
