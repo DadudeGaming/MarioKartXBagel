@@ -5,6 +5,8 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.PivotCommand;
+import frc.robot.subsystems.PivotSubsystem;
 import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import swervelib.SwerveInputStream;
@@ -22,7 +24,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+//import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 
 
@@ -37,6 +39,10 @@ public class RobotContainer {
 
   // create a new swerve subsystem object
   private final SwerveSubsystem drivebase = new SwerveSubsystem();
+  
+  // create a new pivot subystem object
+  private final PivotSubsystem pivotSubsystem = new PivotSubsystem();
+
   private final ClimbSubsystem climb = new ClimbSubsystem();
  
   // create an object for our driver controller
@@ -92,6 +98,13 @@ public class RobotContainer {
 
   // define what buttons do on the controller
   private void configureBindings() {
+
+    /** Set up the commands to change the pivot position */
+    driverController.button(5).onTrue(new PivotCommand(pivotSubsystem, 0));
+    driverController.button(6).onTrue(new PivotCommand(pivotSubsystem, 1));
+    driverController.button(7).onTrue(new PivotCommand(pivotSubsystem, 2));
+    driverController.button(8).onTrue(new PivotCommand(pivotSubsystem, 3));
+    driverController.button(9).onTrue(new PivotCommand(pivotSubsystem, 4));
     driverController.button(1).whileTrue(drivebase.zeroGyro()); //zero the gyro when square(?) is pressed
 
 
