@@ -5,7 +5,7 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
-
+import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import swervelib.SwerveInputStream;
 
@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
@@ -36,11 +37,12 @@ public class RobotContainer {
 
   // create a new swerve subsystem object
   private final SwerveSubsystem drivebase = new SwerveSubsystem();
-
+  private final ClimbSubsystem climb = new ClimbSubsystem();
+ 
   // create an object for our driver controller
   // private final CommandXboxController driverController = new CommandXboxController(Constants.OperatorConstants.kDriverControllerPort);
   private final CommandPS5Controller driverController = new CommandPS5Controller(Constants.OperatorConstants.kDriverControllerPort);
-
+  private final CommandPS5Controller operatorController = new CommandPS5Controller(Constants.OperatorConstants.kOperatorControllerPort);
 
   private final SendableChooser<Command> autoChooser;
   // Build an auto chooser. This will use Commands.none() as the default option.
@@ -60,6 +62,7 @@ public class RobotContainer {
     setupAutoChooser();
 
     // set the default command for the drivebase to the drive command
+    // drivebase.setDefaultCommand(driveFieldOrientedAngularVelocity);
     drivebase.setDefaultCommand(driveFieldOrientedAngularVelocity);
   }
 
@@ -74,8 +77,9 @@ public class RobotContainer {
                                                                 .allianceRelativeControl(true);
 
   // For the right stick to correspond to the angle we want the robot to face instead of the speed of rotationa
-  SwerveInputStream driveDirectAngle = driveAngularVelocity.copy().withControllerHeadingAxis(driverController::getRightX,
-                                                                                             driverController::getRightY)
+  SwerveInputStream driveDirectAngle = driveAngularVelocity.copy().withControllerHeadingAxis(
+                                                                                            () -> driverController.getRightX() * -1,
+                                                                                            () -> driverController.getRightY() *-1)
                                                                                              .headingWhile(true);
   
 
@@ -88,13 +92,26 @@ public class RobotContainer {
 
   // define what buttons do on the controller
   private void configureBindings() {
-    driverController.button(1).onTrue(drivebase.zeroGyro()); //zero the gyro when square(?) is pressed
+    driverController.button(1).whileTrue(drivebase.zeroGyro()); //zero the gyro when square(?) is pressed
+
+
+    driverController.triangle()
+                              .toggleOnFalse(driveFieldOrientedDirectAngle);
+                              
+
+    driverController.circle().whileTrue(Commands.none());
+
+    driverController.povDown().whileTrue(climb.outake());
+
+    driverController.povUp().whileTrue(climb.intake());
   }
 
   private void setupAutoChooser(){
     new PathPlannerAuto("Test Auto");
     new PathPlannerAuto("AL4 HL4");
     new PathPlannerAuto("JL4 HL4");
+    new PathPlannerAuto("Just Leave");
+
 
 
     Shuffleboard.getTab(OperatorConstants.AUTO_SHUFFLEBOARD).add("Auto", autoChooser);
