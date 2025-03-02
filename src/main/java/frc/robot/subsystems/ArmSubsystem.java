@@ -14,17 +14,18 @@ import com.reduxrobotics.sensors.canandmag.Canandmag;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.PivotConstants;
+import frc.robot.Constants.ArmConstants;
 
-public class PivotSubsystem extends SubsystemBase {
+public class ArmSubsystem extends SubsystemBase {
 
-  private final TalonFX m_forwardMotor = new TalonFX(PivotConstants.CANIDs.forwardMotorCANID);
-  private final TalonFX m_backwardMotor = new TalonFX(PivotConstants.CANIDs.backwardMotorCANID);
+  private final TalonFX m_forwardMotor = new TalonFX(ArmConstants.CANIDs.frontMotorCANID);
+  private final TalonFX m_backwardMotor = new TalonFX(ArmConstants.CANIDs.backMotorCANID);
 
   private final DutyCycleOut m_forwardOut = new DutyCycleOut(0);
-  Canandmag canandmag = new Canandmag(PivotConstants.CANIDs.canandmagCANID);
-  /** Creates a new PivotSubsystem. */
-  public PivotSubsystem() {
+  Canandmag canandmag = new Canandmag(ArmConstants.CANIDs.canandmagCANID);
+  
+  /** Creates a new ArmSubsystem. */
+  public ArmSubsystem() {
     // start with factory-default configs
     var currentConfigs = new MotorOutputConfigs();
 
@@ -41,7 +42,7 @@ public class PivotSubsystem extends SubsystemBase {
    *
    * @return a command
    */
-  public final PIDController forwardController = new PIDController(PivotConstants.PIDConstants.kP, PivotConstants.PIDConstants.kI, PivotConstants.PIDConstants.kD);
+  public final PIDController forwardController = new PIDController(ArmConstants.PIDConstants.kP, ArmConstants.PIDConstants.kI, ArmConstants.PIDConstants.kD);
   
   private double output;
   
@@ -70,8 +71,8 @@ public class PivotSubsystem extends SubsystemBase {
     runPID();
   }
 
-  public void setPivotAngle(double input) {
-    // if (encoderInDegrees() > PivotConstants.positions.minPos && encoderInDegrees() < PivotConstants.positions.maxPos) {
+  public void setArmAngle(double input) {
+    // if (encoderInDegrees() > ArmConstants.positions.minPos && encoderInDegrees() < ArmConstants.positions.maxPos) {
          // Should be (encoderValue, then setpoint)
          forwardController.setSetpoint(input);
          

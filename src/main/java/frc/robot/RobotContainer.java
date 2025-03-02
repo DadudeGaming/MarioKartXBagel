@@ -5,8 +5,8 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.PivotCommand;
-import frc.robot.subsystems.PivotSubsystem;
+import frc.robot.commands.ArmCommand;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import swervelib.SwerveInputStream;
@@ -41,7 +41,7 @@ public class RobotContainer {
   private final SwerveSubsystem drivebase = new SwerveSubsystem();
   
   // create a new pivot subystem object
-  private final PivotSubsystem pivotSubsystem = new PivotSubsystem();
+  private final ArmSubsystem pivotSubsystem = new ArmSubsystem();
 
   private final ClimbSubsystem climb = new ClimbSubsystem();
  
@@ -100,11 +100,11 @@ public class RobotContainer {
   private void configureBindings() {
 
     /** Set up the commands to change the pivot position */
-    driverController.button(5).onTrue(new PivotCommand(pivotSubsystem, 0));
-    driverController.button(6).onTrue(new PivotCommand(pivotSubsystem, 1));
-    driverController.button(7).onTrue(new PivotCommand(pivotSubsystem, 2));
-    driverController.button(8).onTrue(new PivotCommand(pivotSubsystem, 3));
-    driverController.button(9).onTrue(new PivotCommand(pivotSubsystem, 4));
+    driverController.button(5).onTrue(new ArmCommand(pivotSubsystem, 0));
+    driverController.button(6).onTrue(new ArmCommand(pivotSubsystem, 1));
+    driverController.button(7).onTrue(new ArmCommand(pivotSubsystem, 2));
+    driverController.button(8).onTrue(new ArmCommand(pivotSubsystem, 3));
+    driverController.button(9).onTrue(new ArmCommand(pivotSubsystem, 4));
     driverController.button(1).whileTrue(drivebase.zeroGyro()); //zero the gyro when square(?) is pressed
 
 
