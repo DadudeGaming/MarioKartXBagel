@@ -103,8 +103,8 @@ public class RobotContainer {
 
     driverController.povDown().whileTrue(climb.outake());
 
-    driverController.povUp().whileTrue(climb.intake());
-  }
+    driverController.povUp().and(() -> (climb.getEncoder() < 60)).whileTrue(climb.intake());
+    }
 
   private void setupAutoChooser(){
     new PathPlannerAuto("Test Auto");
