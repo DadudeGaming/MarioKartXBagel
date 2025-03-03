@@ -32,11 +32,11 @@ public class ArmCommand extends Command {
   @Override
   public void initialize() {
     pivotAnglesArray = new double[5];
-    pivotAnglesArray[0] = ArmConstants.ArmAngles.firstArmAngle;
-    pivotAnglesArray[1] = ArmConstants.ArmAngles.secondArmAngle;
-    pivotAnglesArray[2] = ArmConstants.ArmAngles.thirdArmAngle;
-    pivotAnglesArray[3] = ArmConstants.ArmAngles.fourthArmAngle;
-    pivotAnglesArray[4] = ArmConstants.ArmAngles.fifthArmAngle;
+    pivotAnglesArray[0] = ArmConstants.ArmAngles.Stowed;
+    pivotAnglesArray[1] = ArmConstants.ArmAngles.L1;
+    pivotAnglesArray[2] = ArmConstants.ArmAngles.L2;
+    pivotAnglesArray[3] = ArmConstants.ArmAngles.L3;
+    pivotAnglesArray[4] = ArmConstants.ArmAngles.L4;
     m_subsystem.setArmAngle(pivotAnglesArray[m_PIDPositionIndex]);
   }
 

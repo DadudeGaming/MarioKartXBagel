@@ -38,19 +38,20 @@ public final class Constants {
       public static final double kD = 0;
     }
     public static class ArmAngles {
-      public static double firstArmAngle = 0;
-      public static double secondArmAngle = 20;
-      public static double thirdArmAngle = 40;
-      public static double fourthArmAngle = 60;
-      public static double fifthArmAngle = 80;
+      public static double Stowed = 0;
+      public static double L1     = 20;
+      public static double L2     = 40;
+      public static double L3     = 60;
+      public static double L4     = 80;
     }
     public static class CANIDs{
-      public static int frontMotorCANID = 0;
-      public static int backMotorCANID = 1;
-      public static int canandmagCANID = 2;
+      public static int frontMotorCANID = 12;
+      public static int backMotorCANID = 13;
+      public static int canandmagCANID = 21;
     }
     public static double precisionInDegrees = 1;
   }
+
   // max speed of the robot in m/s use Units.feetToMeters to use feet
   public static final   double  MAX_SPEED = 4.5;
 }
@@ -81,6 +82,9 @@ public final class Constants {
 //  Wrist:
 //    SparkMax: 15(Rotation), 16(Diff 1), 17(Diff 2)
 
+// RIO: 0
+// PDH 10
 
 
-// FREE CANIDS: 9-10, 18-19, 21+
+
+// FREE CANIDS: 9, 18-19, 21+

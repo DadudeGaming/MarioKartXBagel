@@ -18,6 +18,9 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
@@ -41,9 +44,11 @@ public class RobotContainer {
   private final SwerveSubsystem drivebase = new SwerveSubsystem();
   
   // create a new pivot subystem object
-  private final ArmSubsystem pivotSubsystem = new ArmSubsystem();
+  private final ArmSubsystem arm = new ArmSubsystem();
 
   private final ClimbSubsystem climb = new ClimbSubsystem();
+
+  private final PowerDistribution pdh = new PowerDistribution(10, ModuleType.kRev);
  
   // create an object for our driver controller
   // private final CommandXboxController driverController = new CommandXboxController(Constants.OperatorConstants.kDriverControllerPort);
@@ -51,6 +56,8 @@ public class RobotContainer {
   private final CommandPS5Controller operatorController = new CommandPS5Controller(Constants.OperatorConstants.kOperatorControllerPort);
 
   private final SendableChooser<Command> autoChooser;
+
+  private boolean directAngle = false;
   // Build an auto chooser. This will use Commands.none() as the default option.
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -70,6 +77,11 @@ public class RobotContainer {
     // set the default command for the drivebase to the drive command
     // drivebase.setDefaultCommand(driveFieldOrientedAngularVelocity);
     drivebase.setDefaultCommand(driveFieldOrientedAngularVelocity);
+
+    Shuffleboard.getTab(OperatorConstants.AUTO_SHUFFLEBOARD).addDouble("Match Time", () -> Timer.getMatchTime());
+    Shuffleboard.getTab(OperatorConstants.AUTO_SHUFFLEBOARD).addDouble("Voltage", () -> pdh.getVoltage());
+    Shuffleboard.getTab(OperatorConstants.AUTO_SHUFFLEBOARD).addDouble("Current", () -> pdh.getTotalCurrent());
+    Shuffleboard.getTab(OperatorConstants.AUTO_SHUFFLEBOARD).addDouble("Power", () -> pdh.getTotalPower());
   }
 
 
@@ -100,11 +112,16 @@ public class RobotContainer {
   private void configureBindings() {
 
     /** Set up the commands to change the pivot position */
-    driverController.button(5).onTrue(new ArmCommand(pivotSubsystem, 0));
-    driverController.button(6).onTrue(new ArmCommand(pivotSubsystem, 1));
-    driverController.button(7).onTrue(new ArmCommand(pivotSubsystem, 2));
-    driverController.button(8).onTrue(new ArmCommand(pivotSubsystem, 3));
-    driverController.button(9).onTrue(new ArmCommand(pivotSubsystem, 4));
+    // driverController.button(5).onTrue(new ArmCommand(pivotSubsystem, 0));
+    // driverController.button(6).onTrue(new ArmCommand(pivotSubsystem, 1));
+    // driverController.button(7).onTrue(new ArmCommand(pivotSubsystem, 2));
+    // driverController.button(8).onTrue(new ArmCommand(pivotSubsystem, 3));
+    // driverController.button(9).onTrue(new ArmCommand(pivotSubsystem, 4));
+
+    driverController.L1().whileTrue(arm.decreaseSetpoint());
+    driverController.R1().whileTrue(arm.increaseSetpoint());
+
+
     driverController.button(1).whileTrue(drivebase.zeroGyro()); //zero the gyro when square(?) is pressed
 
 
