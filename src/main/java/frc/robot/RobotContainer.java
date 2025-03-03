@@ -123,10 +123,6 @@ public class RobotContainer {
 
 
     driverController.button(1).whileTrue(drivebase.zeroGyro()); //zero the gyro when square(?) is pressed
-
-
-    driverController.triangle()
-                              .toggleOnFalse(driveFieldOrientedDirectAngle);
                               
 
     driverController.circle().whileTrue(Commands.none());
