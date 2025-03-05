@@ -45,9 +45,9 @@ public final class Constants {
 
 
       public static class CANIDs {
-        public static int zMotor = 16;
-        public static int yMotor = 1;
-        public static int xMotor = 3;
+        public static int zMotor = 15;
+        public static int yMotor = 16;
+        public static int xMotor = 17;
       }
 
       // Presets for the position of the wrist
@@ -62,3 +62,31 @@ public final class Constants {
     
   }
 }
+
+
+// ------------     CANID Reference     ------------
+
+//  Drive:
+//    Krakens:  2(FL), 4(FR), 6(BL), 8(BR)
+//    SparkMax: 1(FL), 3(FR), 5(BL), 7(BR
+//    Gyro: 20
+
+//  Climb: 
+//    SparkMax: 23 (Should Change to 11)
+
+//  Arm:
+//    Krakens: 12(F), 13(B)
+//    Encoder: 21
+
+// Intake:
+//    Kraken: 14
+
+//  Wrist:
+//    SparkMax: 15(Rotation), 16(Diff 1), 17(Diff 2)
+
+// RIO: 0
+// PDH 10
+
+
+
+// FREE CANIDS: 9, 18-19, 21+

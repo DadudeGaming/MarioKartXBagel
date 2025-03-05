@@ -9,11 +9,13 @@ import java.util.function.DoubleUnaryOperator;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
+import com.fasterxml.jackson.databind.AnnotationIntrospector.XmlExtensions;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -21,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import frc.robot.Constants;
 import frc.robot.Constants.WristConstants.CANIDs;
+import frc.robot.Constants.WristConstants.PID;
 
 public class Wrist extends SubsystemBase {
 
@@ -30,27 +33,26 @@ public class Wrist extends SubsystemBase {
 
   private final CommandPS5Controller controller = new CommandPS5Controller(0);
 
-  private final SparkClosedLoopController velocityControllerX = xMotor.getClosedLoopController();
+  private final PIDController xPID = new PIDController(0.03, 0, 0);
+  private final PIDController yPID = new PIDController(0.03, 0, 0);
+
+  private double xPos;
+  private double yPos;
+
 
   private SparkMaxConfig sparkConfig = new SparkMaxConfig();
 
-  private final SparkClosedLoopController velocityControllerY = yMotor.getClosedLoopController();
+
+  private double desX = 0;
+  private double desY = 0;
 
   /** Creates a new ExampleSubsystem. */
   public Wrist() {
-    sparkConfig.closedLoop
-                          .p(0.0001)
-                          .i(0)
-                          .d(0)
-                          .velocityFF(0.0001);
-    
-    xMotor.configure(sparkConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
-    yMotor.configure(sparkConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
     xMotor.getEncoder().setPosition(0);
     yMotor.getEncoder().setPosition(0);                 
     
-    Shuffleboard.getTab(Constants.OperatorConstants.AUTO_SHUFFLEBOARD).addNumber("X Axis", () -> getXaxis());
-    Shuffleboard.getTab(Constants.OperatorConstants.AUTO_SHUFFLEBOARD).addNumber("Y Axis", () -> getYaxis());
+    Shuffleboard.getTab(Constants.OperatorConstants.AUTO_SHUFFLEBOARD).addDouble("double 1", () -> desX);
+    Shuffleboard.getTab(Constants.OperatorConstants.AUTO_SHUFFLEBOARD).add(yPID);
   }
 
   
@@ -59,7 +61,11 @@ public class Wrist extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    
+    setAxes(controller.getLeftY()*3, controller.getRightX());
+
+    runPID();
+
+    // xPos = xMotor.getEncoder.getPosition() - yMotor.getEncoder.getPosision
     // Shuffleboard.getTab(Constants.OperatorConstants.AUTO_SHUFFLEBOARD).addDouble(getName(), () -> getYaxis());
   }
 
@@ -76,9 +82,20 @@ public class Wrist extends SubsystemBase {
     double out1 = xIn - yIn;
     double out2 = xIn + yIn;
 
-    velocityControllerX.setReference(out1 *1100, ControlType.kVelocity);
-    velocityControllerY.setReference(out2 *1100, ControlType.kVelocity);
+    desX += out1;
+    desY += out2;
+
+    xPID.setSetpoint(out1*10);
+    yPID.setSetpoint(out2*10);
+
+  
     // yMotor.set(out2);
+  }
+
+
+  private void runPID(){
+    yMotor.set(yPID.calculate(yMotor.getEncoder().getPosition()));
+    xMotor.set(xPID.calculate(xMotor.getEncoder().getPosition()));
   }
 
   public double getXaxis(){
