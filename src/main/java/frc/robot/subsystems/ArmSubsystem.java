@@ -27,6 +27,10 @@ public class ArmSubsystem extends SubsystemBase {
   private final DutyCycleOut m_forwardOut = new DutyCycleOut(0);
   Canandmag canandmag = new Canandmag(ArmConstants.CANIDs.canandmagCANID);
   
+  private boolean isInputing;
+  public final PIDController forwardController = new PIDController(ArmConstants.PIDConstants.kP, ArmConstants.PIDConstants.kI, ArmConstants.PIDConstants.kD);
+  
+  private double output;
   /** Creates a new ArmSubsystem. */
   public ArmSubsystem() {
     // USED TO PERMENENTLY ZERO THE ENCODER
@@ -47,13 +51,13 @@ public class ArmSubsystem extends SubsystemBase {
 
 
     Shuffleboard.getTab(OperatorConstants.AUTO_SHUFFLEBOARD).add(forwardController);
+    Shuffleboard.getTab(OperatorConstants.AUTO_SHUFFLEBOARD).addDouble("ForwardOutput", () -> m_forwardOut.Output);
     Shuffleboard.getTab(OperatorConstants.AUTO_SHUFFLEBOARD).addDouble("Encoder", () -> encoderInDegrees());
+    Shuffleboard.getTab(OperatorConstants.AUTO_SHUFFLEBOARD).addBoolean("Inputing", () -> isInputing);
   }
 
 
-  public final PIDController forwardController = new PIDController(ArmConstants.PIDConstants.kP, ArmConstants.PIDConstants.kI, ArmConstants.PIDConstants.kD);
   
-  private double output;
   
 
   @Override
@@ -84,35 +88,57 @@ public class ArmSubsystem extends SubsystemBase {
          output = -0.55;
 
      m_forwardOut.Output = output;
-    //  m_forwardMotor.setControl(m_forwardOut);
+     m_forwardMotor.setControl(m_forwardOut);
  }
 
  public Command increaseSetpoint(){
-  return run(() -> {
-    // if(forwardController.getSetpoint() < ArmConstants.ArmAngles.L4){
-    //   var curSetpoint = forwardController.getSetpoint() + 0.05;
-    //   if(curSetpoint > ArmAngles.L4){
-    //        curSetpoint = ArmAngles.L4;
-    //   }
-    //   forwardController.setSetpoint(curSetpoint);
+  return runEnd(() -> {
+    if(forwardController.getSetpoint() < ArmConstants.ArmAngles.L4){
+      var curSetpoint = forwardController.getSetpoint() + 0.05;
+      if(curSetpoint > ArmAngles.Stowed){
+           curSetpoint = ArmAngles.Stowed;
+      }
+      forwardController.setSetpoint(curSetpoint);
+    }
+    isInputing = true;
+    // if(encoderInDegrees() < 90){
+    // m_forwardOut.Output = 0.05;
     // }
-    m_forwardOut.Output = 0.05;
-    m_forwardMotor.setControl(m_forwardOut);
-  });
+    // else{
+    //   m_forwardOut.Output = 0;
+    // }
+    // m_forwardMotor.setControl(m_forwardOut);
+  },
+  () -> {
+    // m_forwardOut.Output = 0;
+    // m_forwardMotor.setControl(m_forwardOut);
+    forwardController.setSetpoint(encoderInDegrees());
+  }
+  );
  }
 
  public Command decreaseSetpoint(){
-  return run(() -> {
-    // if(forwardController.getSetpoint() > ArmConstants.ArmAngles.Stowed){
-    //   var curSetpoint = forwardController.getSetpoint() - 0.05;
-    //   if(curSetpoint < ArmAngles.Stowed){
-    //     curSetpoint = ArmAngles.Stowed;
-    //   }
-    //   forwardController.setSetpoint(curSetpoint);
+  return runEnd(() -> {
+    if(forwardController.getSetpoint() > ArmConstants.ArmAngles.Stowed){
+      var curSetpoint = forwardController.getSetpoint() - 0.05;
+      if(curSetpoint < ArmAngles.L4){
+        curSetpoint = ArmAngles.L4;
+      }
+      forwardController.setSetpoint(curSetpoint);
+    }
+    isInputing = true;
+    // if (encoderInDegrees() > 20){
+    // m_forwardOut.Output = -0.05;
+    // } else {
+    //   m_forwardOut.Output = 0;
     // }
-
-    m_forwardOut.Output = -0.05;
-    m_forwardMotor.setControl(m_forwardOut);
-  });
+    // m_forwardMotor.setControl(m_forwardOut);
+  },
+  () -> {
+    // m_forwardOut.Output = 0;
+    // m_forwardMotor.setControl(m_forwardOut);
+    forwardController.setSetpoint(encoderInDegrees());
+  }
+  );
  }
 }

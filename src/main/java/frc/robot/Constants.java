@@ -33,21 +33,29 @@ public final class Constants {
 
   public static class ArmConstants {
     public static class PIDConstants {
-      public static final double kP = 0.001;
+      public static final double kP = 0.01;
       public static final double kI = 0;
       public static final double kD = 0;
     }
     public static class ArmAngles {
-      public static double Stowed = 0;
-      public static double L1     = 20;
+      public static double Stowed = 80;
+      public static double L1     = 60;
       public static double L2     = 40;
-      public static double L3     = 60;
-      public static double L4     = 80;
+      public static double L3     = 30;
+      public static double L4     = 20;
     }
     public static class CANIDs{
-      public static int frontMotorCANID = 12;
+      public static int frontMotorCANID = 14;
       public static int backMotorCANID = 13;
       public static int canandmagCANID = 21;
+    }
+    public static class Buttons{
+      public static int gyroButton = 6;
+      public static int stowButton = 5;
+      public static int L1Button = 1;
+      public static int L2Button = 2;
+      public static int L3Button = 3;
+      public static int L4Button = 4;
     }
     public static double precisionInDegrees = 1;
   }
@@ -73,7 +81,7 @@ public final class Constants {
 //    SparkMax: 23 (Should Change to 11)
 
 //  Arm:
-//    Krakens: 12(F), 13(B)
+//    Krakens: 14(F), 13(B)
 //    Encoder: 21
 
 // Intake:
