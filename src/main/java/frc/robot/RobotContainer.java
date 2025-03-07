@@ -7,8 +7,8 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ArmCommand;
 import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.ClimbSubsystem;
-import frc.robot.subsystems.SwerveSubsystem;
+//import frc.robot.subsystems.ClimbSubsystem;
+//import frc.robot.subsystems.SwerveSubsystem;
 import swervelib.SwerveInputStream;
 
 
@@ -41,12 +41,12 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
 
   // create a new swerve subsystem object
-  private final SwerveSubsystem drivebase = new SwerveSubsystem();
+  //private final SwerveSubsystem drivebase = new SwerveSubsystem();
   
   // create a new pivot subystem object
   private final ArmSubsystem arm = new ArmSubsystem();
 
-  private final ClimbSubsystem climb = new ClimbSubsystem();
+  //private final ClimbSubsystem climb = new ClimbSubsystem();
 
   private final PowerDistribution pdh = new PowerDistribution(10, ModuleType.kRev);
  
@@ -55,7 +55,7 @@ public class RobotContainer {
   private final CommandPS5Controller driverController = new CommandPS5Controller(Constants.OperatorConstants.kDriverControllerPort);
   private final CommandPS5Controller operatorController = new CommandPS5Controller(Constants.OperatorConstants.kOperatorControllerPort);
 
-  private final SendableChooser<Command> autoChooser;
+  //private final SendableChooser<Command> autoChooser;
 
   private boolean directAngle = false;
   // Build an auto chooser. This will use Commands.none() as the default option.
@@ -70,13 +70,13 @@ public class RobotContainer {
     // Shut up
     DriverStation.silenceJoystickConnectionWarning(true);
 
-    autoChooser = AutoBuilder.buildAutoChooser();
+    //autoChooser = AutoBuilder.buildAutoChooser();
 
-    setupAutoChooser();
+    //setupAutoChooser();
 
     // set the default command for the drivebase to the drive command
     // drivebase.setDefaultCommand(driveFieldOrientedAngularVelocity);
-    drivebase.setDefaultCommand(driveFieldOrientedAngularVelocity);
+    //drivebase.setDefaultCommand(driveFieldOrientedAngularVelocity);
 
     Shuffleboard.getTab(OperatorConstants.AUTO_SHUFFLEBOARD).addDouble("Match Time", () -> Timer.getMatchTime());
     Shuffleboard.getTab(OperatorConstants.AUTO_SHUFFLEBOARD).addDouble("Voltage", () -> pdh.getVoltage());
@@ -85,27 +85,27 @@ public class RobotContainer {
   }
 
 
-  SwerveInputStream driveAngularVelocity = SwerveInputStream.of(drivebase.getSwerveDrive(), 
-                                                                () -> driverController.getLeftY() * -1,
-                                                                () -> driverController.getLeftX() * -1)
-                                                                .withControllerRotationAxis(driverController::getRightX)
-                                                                .deadband(OperatorConstants.DEADBAND)
-                                                                .scaleTranslation(OperatorConstants.TRANSLATION_SCALE)
-                                                                .scaleRotation(-OperatorConstants.ROTATION_SCALE)
-                                                                .allianceRelativeControl(true);
+  //SwerveInputStream driveAngularVelocity = SwerveInputStream.of(drivebase.getSwerveDrive(), 
+                                                                // () -> driverController.getLeftY() * -1,
+                                                                // () -> driverController.getLeftX() * -1)
+                                                                // .withControllerRotationAxis(driverController::getRightX)
+                                                                // .deadband(OperatorConstants.DEADBAND)
+                                                                // .scaleTranslation(OperatorConstants.TRANSLATION_SCALE)
+                                                                // .scaleRotation(-OperatorConstants.ROTATION_SCALE)
+                                                                // .allianceRelativeControl(true);
 
   // For the right stick to correspond to the angle we want the robot to face instead of the speed of rotationa
-  SwerveInputStream driveDirectAngle = driveAngularVelocity.copy().withControllerHeadingAxis(
-                                                                                            () -> driverController.getRightX() * -1,
-                                                                                            () -> driverController.getRightY() *-1)
-                                                                                             .headingWhile(true);
+  //SwerveInputStream driveDirectAngle = driveAngularVelocity.copy().withControllerHeadingAxis(
+                                                                                            // () -> driverController.getRightX() * -1,
+                                                                                            // () -> driverController.getRightY() *-1)
+                                                                                            //  .headingWhile(true);
   
 
   // create a new command that calls the driveCommand that we made in the swerveSubsystem
-  Command driveFieldOrientedAngularVelocity = drivebase.driveFieldOriented(driveAngularVelocity);
+  //Command driveFieldOrientedAngularVelocity = drivebase.driveFieldOriented(driveAngularVelocity);
 
   // Same thing but for direct angle rather than angular velocity
-  Command driveFieldOrientedDirectAngle     = drivebase.driveFieldOriented(driveDirectAngle);
+  //Command driveFieldOrientedDirectAngle     = drivebase.driveFieldOriented(driveDirectAngle);
   
 
   // define what buttons do on the controller
@@ -122,28 +122,28 @@ public class RobotContainer {
     driverController.R1().whileTrue(arm.increaseSetpoint());
 
 
-    driverController.button(1).whileTrue(drivebase.zeroGyro()); //zero the gyro when square(?) is pressed
+    //driverController.button(1).whileTrue(drivebase.zeroGyro()); //zero the gyro when square(?) is pressed
                               
 
     driverController.circle().whileTrue(Commands.none());
 
-    driverController.povDown().whileTrue(climb.outake());
+    //driverController.povDown().whileTrue(climb.outake());
 
-    driverController.povUp().and(() -> (climb.getEncoder() < 60)).whileTrue(climb.intake());
+    //driverController.povUp().and(() -> (climb.getEncoder() < 60)).whileTrue(climb.intake());
     }
 
-  private void setupAutoChooser(){
-    new PathPlannerAuto("Test Auto");
-    new PathPlannerAuto("AL4 HL4");
-    new PathPlannerAuto("JL4 HL4");
-    new PathPlannerAuto("Just Leave");
+  // private void setupAutoChooser(){
+  //   new PathPlannerAuto("Test Auto");
+  //   new PathPlannerAuto("AL4 HL4");
+  //   new PathPlannerAuto("JL4 HL4");
+  //   new PathPlannerAuto("Just Leave");
 
 
 
-    Shuffleboard.getTab(OperatorConstants.AUTO_SHUFFLEBOARD).add("Auto", autoChooser);
-  }
+  //   Shuffleboard.getTab(OperatorConstants.AUTO_SHUFFLEBOARD).add("Auto", autoChooser);
+  // }
 
-  public Command getAutonomousCommand() {
-    return autoChooser.getSelected();
-  }
+  // public Command getAutonomousCommand() {
+  //   return autoChooser.getSelected();
+  // }
 }

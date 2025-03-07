@@ -29,6 +29,10 @@ public class ArmSubsystem extends SubsystemBase {
   
   /** Creates a new ArmSubsystem. */
   public ArmSubsystem() {
+    // USED TO PERMENENTLY ZERO THE ENCODER
+    // KEEP COMMENTED
+    //canandmag.setAbsPosition(0.04);
+
     // start with factory-default configs
     var currentConfigs = new MotorOutputConfigs();
 
