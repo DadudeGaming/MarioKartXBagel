@@ -76,17 +76,17 @@ public class ArduinoLEDSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     if(DriverStation.isEStopped())
-      SendLEDInput((byte)5);
+      SendLEDInput((byte)4); //Flashing red
     else if(DriverStation.isDisabled())
-      SendLEDInput((byte)1);
+      SendLEDInput((byte)0); //Slowly fading between Green and Yellow, or Green, White, and Yellow?
     else if(DriverStation.isAutonomousEnabled())
-      SendLEDInput((byte)3); 
+      SendLEDInput((byte)2); //Flashing Yellow and Green (High Speed)
     else if(ClimbSubsystem.angle >= 60.0)
-      SendLEDInput((byte)6); 
+      SendLEDInput((byte)5); //Green
     else if(Timer.getMatchTime() <= 20.0)
-      SendLEDInput((byte)4);
+      SendLEDInput((byte)3); //Flashing Yellow (Hold yellow if possible then flick off then back on quickly)
     else if(DriverStation.isTeleopEnabled())
-      SendLEDInput((byte)2);
+      SendLEDInput((byte)1); //Flashing Yellow and Green (Medium Speed)
     // This method will be called once per scheduler run
   }
 

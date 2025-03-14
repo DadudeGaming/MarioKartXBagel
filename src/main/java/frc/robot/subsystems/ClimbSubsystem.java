@@ -21,7 +21,6 @@ public class ClimbSubsystem extends SubsystemBase {
   // declare variables up here, you can either set their value here, or later in the code, it mostly just depends on what you're doing
 
   // initialize a variable for keeping track of the intake state
-  private boolean intakeMode; 
   public static double angle;
 
   // create a new spark max (neo motor controller) called motor1, at CAN ID 12, and tell it that it is a brushless motor, since spark max
@@ -30,7 +29,6 @@ public class ClimbSubsystem extends SubsystemBase {
   /** Creates a new ExampleMotorSubsystem. */
   public ClimbSubsystem() {
     angle = motor1.getEncoder().getPosition();
-    intakeMode = false; // default to ourtake first (we have a preloaded game piece)
     Shuffleboard.getTab(OperatorConstants.AUTO_SHUFFLEBOARD).addDouble("Climb", () -> angle);
   }
 
@@ -50,7 +48,6 @@ public class ClimbSubsystem extends SubsystemBase {
         }
          // set the motor to 100% speed in
       }, () -> {
-        intakeMode = false; // set the intake mode to false (we need to outake next)
         motor1.set(0); // stop the motor, otherewise it would continue running forever
       }
     );
@@ -61,7 +58,6 @@ public class ClimbSubsystem extends SubsystemBase {
       () -> {
         motor1.set(-0.20); // set the motor to 100% speed out
       }, () -> {
-        intakeMode = true; // set the intake mode to false (we need to intake next)
         motor1.set(0);// stop the motor, otherewise it would continue running forever
       }
     );
