@@ -7,8 +7,11 @@ package frc.robot.subsystems;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.OperatorConstants;
 
 public class ClimbSubsystem extends SubsystemBase {
 
@@ -23,9 +26,12 @@ public class ClimbSubsystem extends SubsystemBase {
   /** Creates a new ExampleMotorSubsystem. */
   public ClimbSubsystem() {
     intakeMode = false; // default to ourtake first (we have a preloaded game piece)
+    Shuffleboard.getTab(OperatorConstants.AUTO_SHUFFLEBOARD).addDouble("Climb", () -> motor1.getEncoder().getPosition());
   }
 
-
+  public double getEncoder(){
+    return motor1.getEncoder().getPosition();
+  }
 
 
   public Command intake(){
@@ -34,7 +40,10 @@ public class ClimbSubsystem extends SubsystemBase {
     // then the second part is what is called when it ends (in this case by timing out), eg. stopping the motors so they don't continue running
     return runEnd(
       () -> {
-        motor1.set(0.20); // set the motor to 100% speed in
+        if(motor1.getEncoder().getPosition() / 100 < 55){
+          motor1.set(0.20);
+        }
+         // set the motor to 100% speed in
       }, () -> {
         intakeMode = false; // set the intake mode to false (we need to outake next)
         motor1.set(0); // stop the motor, otherewise it would continue running forever

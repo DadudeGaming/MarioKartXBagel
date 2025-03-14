@@ -31,7 +31,60 @@ public final class Constants {
     public static final String DRIVER_SHUFFLEBOARD = "DRIVE";
   }
 
+  public static class ArmConstants {
+    public static class PIDConstants {
+      public static final double kP = 0.001;
+      public static final double kI = 0;
+      public static final double kD = 0;
+    }
+    public static class ArmAngles {
+      public static double Stowed = 0;
+      public static double L1     = 20;
+      public static double L2     = 40;
+      public static double L3     = 60;
+      public static double L4     = 80;
+    }
+    public static class CANIDs{
+      public static int frontMotorCANID = 12;
+      public static int backMotorCANID = 13;
+      public static int canandmagCANID = 21;
+    }
+    public static double precisionInDegrees = 1;
+  }
 
   // max speed of the robot in m/s use Units.feetToMeters to use feet
   public static final   double  MAX_SPEED = 4.5;
 }
+
+
+
+
+
+
+
+// ------------     CANID Reference     ------------
+
+//  Drive:
+//    Krakens:  2(FL), 4(FR), 6(BL), 8(BR)
+//    SparkMax: 1(FL), 3(FR), 5(BL), 7(BR
+//    Gyro: 20
+
+//  Climb: 
+//    SparkMax: 23 (Should Change to 11)
+
+//  Arm:
+//    Krakens: 12(F), 13(B)
+//    Encoder: 21
+
+// Intake:
+//    Kraken: 14
+
+//  Wrist:
+//    SparkMax: 15(Rotation), 16(Diff 1), 17(Diff 2)
+
+// RIO: 0
+// PDH 10
+
+
+
+// FREE CANIDS: 9, 18-19, 21+
