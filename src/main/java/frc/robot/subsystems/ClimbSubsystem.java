@@ -4,9 +4,12 @@
 
 package frc.robot.subsystems;
 
+import javax.print.event.PrintJobListener;
+
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -19,14 +22,16 @@ public class ClimbSubsystem extends SubsystemBase {
 
   // initialize a variable for keeping track of the intake state
   private boolean intakeMode; 
+  public static double angle;
 
   // create a new spark max (neo motor controller) called motor1, at CAN ID 12, and tell it that it is a brushless motor, since spark max
   private SparkMax motor1 = new SparkMax(23, MotorType.kBrushless);
 
   /** Creates a new ExampleMotorSubsystem. */
   public ClimbSubsystem() {
+    angle = motor1.getEncoder().getPosition();
     intakeMode = false; // default to ourtake first (we have a preloaded game piece)
-    Shuffleboard.getTab(OperatorConstants.AUTO_SHUFFLEBOARD).addDouble("Climb", () -> motor1.getEncoder().getPosition());
+    Shuffleboard.getTab(OperatorConstants.AUTO_SHUFFLEBOARD).addDouble("Climb", () -> angle);
   }
 
   public double getEncoder(){
@@ -65,5 +70,9 @@ public class ClimbSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run, constantly, usually you'll put logging stuff here
+  }
+
+  public double getPos(){
+    return motor1.getEncoder().getPosition();
   }
 }

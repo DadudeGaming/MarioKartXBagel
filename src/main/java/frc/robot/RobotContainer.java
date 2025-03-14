@@ -7,6 +7,7 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ArmCommand;
 import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ArduinoLEDSubsystem;
 import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import swervelib.SwerveInputStream;
@@ -46,7 +47,7 @@ public class RobotContainer {
   // create a new pivot subystem object
   private final ArmSubsystem arm = new ArmSubsystem();
 
-  private final ClimbSubsystem climb = new ClimbSubsystem();
+  public final ClimbSubsystem climb = new ClimbSubsystem();
 
   private final PowerDistribution pdh = new PowerDistribution(10, ModuleType.kRev);
  
@@ -57,7 +58,11 @@ public class RobotContainer {
 
   private final SendableChooser<Command> autoChooser;
 
+
   private boolean directAngle = false;
+
+  private ArduinoLEDSubsystem LEDSystem = new ArduinoLEDSubsystem();
+
   // Build an auto chooser. This will use Commands.none() as the default option.
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
