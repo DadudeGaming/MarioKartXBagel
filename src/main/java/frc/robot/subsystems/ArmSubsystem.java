@@ -9,11 +9,16 @@ import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
+import com.pathplanner.lib.config.PIDConstants;
 import com.reduxrobotics.sensors.canandmag.Canandmag;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.OperatorConstants;
@@ -29,6 +34,8 @@ public class ArmSubsystem extends SubsystemBase {
   
   private boolean isInputing;
   public final PIDController forwardController = new PIDController(ArmConstants.PIDConstants.kP, ArmConstants.PIDConstants.kI, ArmConstants.PIDConstants.kD);
+
+  public final ProfiledPIDController profiledArmController = new ProfiledPIDController(ArmConstants.PIDConstants.kP, ArmConstants.PIDConstants.kI, ArmConstants.PIDConstants.kD, new TrapezoidProfile.Constraints(600, 300));
   
   private double output;
   /** Creates a new ArmSubsystem. */
@@ -41,16 +48,18 @@ public class ArmSubsystem extends SubsystemBase {
     var currentConfigs = new MotorOutputConfigs();
 
     // The forward motor (probably) goes forward
-    currentConfigs.Inverted = InvertedValue.CounterClockwise_Positive;
+    currentConfigs.Inverted = InvertedValue.Clockwise_Positive;
     m_forwardMotor.getConfigurator().apply(currentConfigs);
 
     // The backward motor is just the reverse of the forward one
-    m_backwardMotor.setControl(new Follower(m_backwardMotor.getDeviceID(), true));
+    m_backwardMotor.setControl(new Follower(m_forwardMotor.getDeviceID(), true));
 
     forwardController.setSetpoint(encoderInDegrees());
+    profiledArmController.setGoal(encoderInDegrees());
 
 
-    Shuffleboard.getTab(OperatorConstants.AUTO_SHUFFLEBOARD).add(forwardController);
+    Shuffleboard.getTab(OperatorConstants.AUTO_SHUFFLEBOARD).add("Arm PID", forwardController);
+    Shuffleboard.getTab(OperatorConstants.AUTO_SHUFFLEBOARD).add("ProfiledPID", profiledArmController);
     Shuffleboard.getTab(OperatorConstants.AUTO_SHUFFLEBOARD).addDouble("ForwardOutput", () -> m_forwardOut.Output);
     Shuffleboard.getTab(OperatorConstants.AUTO_SHUFFLEBOARD).addDouble("Encoder", () -> encoderInDegrees());
     Shuffleboard.getTab(OperatorConstants.AUTO_SHUFFLEBOARD).addBoolean("Inputing", () -> isInputing);
@@ -64,13 +73,18 @@ public class ArmSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
 
+    if(DriverStation.isDisabled()){
+      profiledArmController.setGoal(encoderInDegrees());
+    }
+
     runPID();
   }
 
   public void setArmAngle(double input) {
     // if (encoderInDegrees() > ArmConstants.positions.minPos && encoderInDegrees() < ArmConstants.positions.maxPos) {
          // Should be (encoderValue, then setpoint)
-         forwardController.setSetpoint(input);
+        //  forwardController.setSetpoint(input);
+        profiledArmController.setGoal(input);
          
      //}
  }
@@ -80,15 +94,16 @@ public class ArmSubsystem extends SubsystemBase {
  }
 
  public void runPID() {
-     output = forwardController.calculate(encoderInDegrees());
-     if (output > 0.55)
-     output = 0.55;
+    //  output = forwardController.calculate(encoderInDegrees());
+    output = profiledArmController.calculate(encoderInDegrees(), profiledArmController.getGoal());
+    //  if (output > 0.75)
+    //  output = 0.75;
 
-     if (output < -0.55)
-         output = -0.55;
+    //  if (output < -0.75)
+    //      output = -0.75;
 
      m_forwardOut.Output = output;
-     m_forwardMotor.setControl(m_forwardOut);
+     m_forwardMotor.setControl(new DutyCycleOut(output));
  }
 
  public Command increaseSetpoint(){

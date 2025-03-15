@@ -112,11 +112,11 @@ public class RobotContainer {
   private void configureBindings() {
 
     /** Set up the commands to change the pivot position */
-    driverController.button(Constants.ArmConstants.Buttons.stowButton).onTrue(new ArmCommand(arm, 0));
-    driverController.button(Constants.ArmConstants.Buttons.L1Button).onTrue(new ArmCommand(arm, 1));
-    driverController.button(Constants.ArmConstants.Buttons.L2Button).onTrue(new ArmCommand(arm, 2));
-    driverController.button(Constants.ArmConstants.Buttons.L3Button).onTrue(new ArmCommand(arm, 3));
-    driverController.button(Constants.ArmConstants.Buttons.L4Button).onTrue(new ArmCommand(arm, 4));
+    driverController.R1().onTrue(new ArmCommand(arm, 0));
+    driverController.square().onTrue(new ArmCommand(arm, 1));
+    driverController.cross().onTrue(new ArmCommand(arm, 2));
+    driverController.circle().onTrue(new ArmCommand(arm, 3));
+    driverController.triangle().onTrue(new ArmCommand(arm, 4));
     
     //driverController.button(5).whileTrue(arm.decreaseSetpoint());
     //driverController.button(6).whileTrue(arm.increaseSetpoint());
