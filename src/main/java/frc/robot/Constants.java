@@ -33,16 +33,18 @@ public final class Constants {
 
   public static class ArmConstants {
     public static class PIDConstants {
-      public static final double kP = 0.001;
+      public static final double kP = 0.01;
       public static final double kI = 0;
       public static final double kD = 0;
+      public static final double kMaxVel = 750;
+      public static final double kMaxAccel = 450;
     }
     public static class ArmAngles {
-      public static double Stowed = 0;
-      public static double L1     = 20;
-      public static double L2     = 40;
+      public static double Stowed = 125;
+      public static double L1     = 100;
+      public static double L2     = 75;
       public static double L3     = 60;
-      public static double L4     = 80;
+      public static double L4     = 10;
     }
     public static class CANIDs{
       public static int frontMotorCANID = 12;
