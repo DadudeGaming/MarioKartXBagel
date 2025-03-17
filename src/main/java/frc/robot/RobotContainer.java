@@ -5,6 +5,7 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.ArmCommand;
 // import frc.robot.commands.ArmCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimbSubsystem;
@@ -94,6 +95,7 @@ public class RobotContainer {
                                                                 .scaleRotation(-OperatorConstants.ROTATION_SCALE)
                                                                 .allianceRelativeControl(true);
 
+                                                                
   // For the right stick to correspond to the angle we want the robot to face instead of the speed of rotationa
   SwerveInputStream driveDirectAngle = driveAngularVelocity.copy().withControllerHeadingAxis(
                                                                                             () -> driverController.getRightX() * -1,
@@ -110,22 +112,15 @@ public class RobotContainer {
 
   // define what buttons do on the controller
   private void configureBindings() {
-
     /** Set up the commands to change the pivot position */
-    // driverController.button(5).onTrue(new ArmCommand(pivotSubsystem, 0));
-    // driverController.button(6).onTrue(new ArmCommand(pivotSubsystem, 1));
-    // driverController.button(7).onTrue(new ArmCommand(pivotSubsystem, 2));
-    // driverController.button(8).onTrue(new ArmCommand(pivotSubsystem, 3));
-    // driverController.button(9).onTrue(new ArmCommand(pivotSubsystem, 4));
-
-    driverController.L1().whileTrue(arm.decreaseSetpoint());
-    driverController.R1().whileTrue(arm.increaseSetpoint());
+    driverController.R1().onTrue(new ArmCommand(arm, 0));
+    driverController.square().onTrue(new ArmCommand(arm, 1));
+    driverController.cross().onTrue(new ArmCommand(arm, 2));
+    driverController.circle().onTrue(new ArmCommand(arm, 3));
+    driverController.triangle().onTrue(new ArmCommand(arm, 4));
 
 
     driverController.button(1).whileTrue(drivebase.zeroGyro()); //zero the gyro when square(?) is pressed
-                              
-
-    driverController.circle().whileTrue(Commands.none());
 
     driverController.povDown().whileTrue(climb.outake());
 
