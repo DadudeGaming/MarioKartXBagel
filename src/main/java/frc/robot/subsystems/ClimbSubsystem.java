@@ -21,7 +21,7 @@ public class ClimbSubsystem extends SubsystemBase {
   private boolean intakeMode; 
 
   // create a new spark max (neo motor controller) called motor1, at CAN ID 12, and tell it that it is a brushless motor, since spark max
-  private SparkMax motor1 = new SparkMax(23, MotorType.kBrushless);
+  private SparkMax motor1 = new SparkMax(11, MotorType.kBrushless);
 
   /** Creates a new ExampleMotorSubsystem. */
   public ClimbSubsystem() {
