@@ -33,7 +33,7 @@ public final class Constants {
 
   public static class ArmConstants {
     public static class PIDConstants {
-      public static final double kP = 0.01;
+      public static final double kP = 0.025;
       public static final double kI = 0;
       public static final double kD = 0;
       public static final double kMaxVel = 750;
@@ -51,9 +51,15 @@ public final class Constants {
       public static int backMotorCANID = 13;
       public static int canandmagCANID = 21;
     }
-    public static double precisionInDegrees = 1;
+    public static double precisionInDegrees = 2;
   }
 
+
+  public static class IntakeConstants {
+    public static final double stopCurrent = 50;
+
+    public static final int CANID = 14;
+  }
   // max speed of the robot in m/s use Units.feetToMeters to use feet
   public static final   double  MAX_SPEED = 4.5;
 }
@@ -84,9 +90,12 @@ public final class Constants {
 //  Wrist:
 //    SparkMax: 15(Rotation), 16(Diff 1), 17(Diff 2)
 
+// Telescope:
+//    Kraken: 18
+
 // RIO: 0
 // PDH 10
 
 
 
-// FREE CANIDS: 9, 18-19, 21+
+// FREE CANIDS: 9, 19, 21+

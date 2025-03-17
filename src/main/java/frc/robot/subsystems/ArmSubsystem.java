@@ -48,6 +48,7 @@ public class ArmSubsystem extends SubsystemBase {
 
   
     profiledArmController.setGoal(encoderInDegrees());
+    profiledArmController.setTolerance(ArmConstants.precisionInDegrees);
 
 
     Shuffleboard.getTab(OperatorConstants.AUTO_SHUFFLEBOARD).add("ArmPID", profiledArmController);
@@ -77,6 +78,10 @@ public class ArmSubsystem extends SubsystemBase {
 
  public double encoderInDegrees(){
   return canandmag.getAbsPosition() * 360;
+ }
+
+ public boolean isAtGoal() {
+  return profiledArmController.atGoal();
  }
 
  public void runPID() {

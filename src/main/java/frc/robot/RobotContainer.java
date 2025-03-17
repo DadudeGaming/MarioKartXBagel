@@ -6,9 +6,12 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ArmCommand;
+import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.OuttakeCommand;
 // import frc.robot.commands.ArmCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimbSubsystem;
+import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import swervelib.SwerveInputStream;
 
@@ -27,6 +30,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 //import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
@@ -48,6 +54,8 @@ public class RobotContainer {
   private final ArmSubsystem arm = new ArmSubsystem();
 
   private final ClimbSubsystem climb = new ClimbSubsystem();
+
+  private final EndEffectorSubsystem intake = new EndEffectorSubsystem();
 
   private final PowerDistribution pdh = new PowerDistribution(10, ModuleType.kRev);
  
@@ -119,8 +127,16 @@ public class RobotContainer {
     driverController.circle().onTrue(new ArmCommand(arm, 3));
     driverController.triangle().onTrue(new ArmCommand(arm, 4));
 
+    driverController.L1().onTrue(new SequentialCommandGroup(
+                                                            new ArmCommand(arm, 3),
+                                                            new IntakeCommand(intake))); 
+                                                            
 
-    driverController.button(1).whileTrue(drivebase.zeroGyro()); //zero the gyro when square(?) is pressed
+
+
+    driverController.R2().and(() -> intake.intakeMode).onTrue(new IntakeCommand(intake).until(() -> driverController.L2().getAsBoolean()));
+    driverController.R2().and(() -> !intake.intakeMode).onTrue(new OuttakeCommand(intake).withTimeout(0.6));
+    // driverController.button(1).whileTrue(drivebase.zeroGyro()); //zero the gyro when square(?) is pressed
 
     driverController.povDown().whileTrue(climb.outake());
 
