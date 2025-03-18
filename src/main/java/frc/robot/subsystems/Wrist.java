@@ -28,8 +28,8 @@ import frc.robot.Constants.WristConstants.PID;
 public class Wrist extends SubsystemBase {
 
   private final SparkMax zMotor = new SparkMax(CANIDs.zMotor, MotorType.kBrushless);
-  private final SparkMax yMotor = new SparkMax(CANIDs.yMotor, MotorType.kBrushless);
-  private final SparkMax xMotor = new SparkMax(CANIDs.xMotor, MotorType.kBrushless);
+  private final SparkMax yMotor = new SparkMax(CANIDs.xMotor, MotorType.kBrushless);
+  private final SparkMax xMotor = new SparkMax(CANIDs.yMotor, MotorType.kBrushless);
 
   private final CommandPS5Controller controller = new CommandPS5Controller(0);
 
@@ -51,8 +51,9 @@ public class Wrist extends SubsystemBase {
     xMotor.getEncoder().setPosition(0);
     yMotor.getEncoder().setPosition(0);                 
     
-    Shuffleboard.getTab(Constants.OperatorConstants.AUTO_SHUFFLEBOARD).addDouble("double 1", () -> desX);
-    Shuffleboard.getTab(Constants.OperatorConstants.AUTO_SHUFFLEBOARD).add(yPID);
+    Shuffleboard.getTab(getName()).addDouble("double 1", () -> desX);
+    Shuffleboard.getTab(getName()).add("yPID", yPID);
+    Shuffleboard.getTab(getName()).add("xPID", xPID);
   }
 
   
