@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import org.dyn4j.geometry.Vector3;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -90,12 +92,34 @@ public final class Constants {
   }
   // max speed of the robot in m/s use Units.feetToMeters to use feet
   public static final   double  MAX_SPEED = 4.5;
+
+
+  public static final class WristConstants {
+      public static final class PID{
+        public static double kP = 0;
+        public static double kI = 0;
+        public static double kD = 0;
+      }
+
+
+      public static class CANIDs {
+        public static int zMotor = 15;
+        public static int yMotor = 16;
+        public static int xMotor = 17;
+      }
+
+      // Presets for the position of the wrist
+      public static final class PRESETS{
+        public static Vector3 STOWED = new Vector3(1,2,3);
+        public static Vector3 L1 = new Vector3(1,2,3);
+        public static Vector3 L2 = new Vector3(1,2,3);
+        public static Vector3 L3 = new Vector3(1,2,3);
+        public static Vector3 L4 = new Vector3(1,2,3);
+        public static Vector3 INTAKE = new Vector3(1,2,3);
+      }
+    
+  }
 }
-
-
-
-
-
 
 
 // ------------     CANID Reference     ------------
@@ -120,6 +144,7 @@ public final class Constants {
 
 // Telescope:
 //    Kraken: 18
+
 
 // RIO: 0
 // PDH 10

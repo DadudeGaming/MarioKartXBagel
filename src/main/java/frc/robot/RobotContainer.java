@@ -5,6 +5,10 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
+
+// import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.Wrist;
+
 import frc.robot.commands.ArmCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.OuttakeCommand;
@@ -15,6 +19,7 @@ import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.TelescopeSubsystem;
+
 import swervelib.SwerveInputStream;
 
 
@@ -31,7 +36,10 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
 import edu.wpi.first.wpilibj2.command.Command;
+
+
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 //import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
@@ -47,6 +55,10 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
 
   // create a new swerve subsystem object
+  // private final SwerveSubsystem drivebase = new SwerveSubsystem();
+
+  private final Wrist wrist = new Wrist();
+
   private final SwerveSubsystem drivebase = new SwerveSubsystem();
   
   // create a new pivot subystem object
@@ -66,6 +78,7 @@ public class RobotContainer {
   
   // private final CommandPS5Controller operatorController = new CommandPS5Controller(Constants.OperatorConstants.kOperatorControllerPort);
 
+  // private final SendableChooser<Command> autoChooser;
   private final SendableChooser<Command> autoChooser;
 
   // Build an auto chooser. This will use Commands.none() as the default option.
@@ -85,7 +98,9 @@ public class RobotContainer {
     setupAutoChooser();
 
     // set the default command for the drivebase to the drive command
-    // drivebase.setDefaultCommand(driveFieldOrientedAngularVelocity);
+    drivebase.setDefaultCommand(driveFieldOrientedAngularVelocity);
+    wrist.setDefaultCommand(wrist.runAxes(driverController.getLeftY(), driverController.getRightY()));
+  
     drivebase.setDefaultCommand(driveFieldOrientedAngularVelocity);
 
     Shuffleboard.getTab(OperatorConstants.AUTO_SHUFFLEBOARD).addDouble("Match Time", () -> Timer.getMatchTime());
@@ -104,6 +119,7 @@ public class RobotContainer {
                                                                 .scaleRotation(-OperatorConstants.ROTATION_SCALE)
                                                                 .allianceRelativeControl(true);
 
+
                                                                 
   // For the right stick to correspond to the angle we want the robot to face instead of the speed of rotationa
   SwerveInputStream driveDirectAngle = driveAngularVelocity.copy().withControllerHeadingAxis(
@@ -112,10 +128,10 @@ public class RobotContainer {
                                                                                              .headingWhile(true);
   
 
-  // create a new command that calls the driveCommand that we made in the swerveSubsystem
+  // // create a new command that calls the driveCommand that we made in the swerveSubsystem
   Command driveFieldOrientedAngularVelocity = drivebase.driveFieldOriented(driveAngularVelocity);
 
-  // Same thing but for direct angle rather than angular velocity
+  // // Same thing but for direct angle rather than angular velocity
   Command driveFieldOrientedDirectAngle     = drivebase.driveFieldOriented(driveDirectAngle);
   
 
@@ -163,11 +179,10 @@ public class RobotContainer {
     new PathPlannerAuto("Just Leave");
 
 
-
-    Shuffleboard.getTab(OperatorConstants.AUTO_SHUFFLEBOARD).add("Auto", autoChooser);
-  }
+  //   // Shuffleboard.getTab(OperatorConstants.AUTO_SHUFFLEBOARD).add("Auto", autoChooser);
+  // }
 
   public Command getAutonomousCommand() {
-    return autoChooser.getSelected();
+    return Commands.none();
   }
 }
