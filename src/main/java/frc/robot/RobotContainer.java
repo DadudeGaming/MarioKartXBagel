@@ -8,11 +8,13 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ArmCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.OuttakeCommand;
+import frc.robot.commands.TelescopeCommand;
 // import frc.robot.commands.ArmCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.TelescopeSubsystem;
 import swervelib.SwerveInputStream;
 
 
@@ -49,6 +51,8 @@ public class RobotContainer {
   
   // create a new pivot subystem object
   private final ArmSubsystem arm = new ArmSubsystem();
+
+  private final TelescopeSubsystem telescope = new TelescopeSubsystem();
 
   private final ClimbSubsystem climb = new ClimbSubsystem();
 
@@ -118,11 +122,17 @@ public class RobotContainer {
   // define what buttons do on the controller
   private void configureBindings() {
     /** Set up the commands to change the pivot position */
-    driverController.R1().onTrue(new ArmCommand(arm, 0));
-    driverController.square().onTrue(new ArmCommand(arm, 1));
-    driverController.cross().onTrue(new ArmCommand(arm, 2));
-    driverController.circle().onTrue(new ArmCommand(arm, 3));
-    driverController.triangle().onTrue(new ArmCommand(arm, 4));
+    driverController.R1().onTrue(new TelescopeCommand(telescope, 0).andThen(new ArmCommand(arm, 0)).andThen(new TelescopeCommand(telescope, 0)));
+    driverController.square().onTrue(new TelescopeCommand(telescope, 0).andThen(new ArmCommand(arm, 1)).andThen(new TelescopeCommand(telescope, 1)));
+    driverController.cross().onTrue(new TelescopeCommand(telescope, 0).andThen(new ArmCommand(arm, 2)).andThen(new TelescopeCommand(telescope, 2)));
+    driverController.circle().onTrue(new TelescopeCommand(telescope, 0).andThen(new ArmCommand(arm, 3)).andThen(new TelescopeCommand(telescope, 3)));
+    driverController.triangle().onTrue(new TelescopeCommand(telescope, 0).andThen(new ArmCommand(arm, 4)).andThen(new TelescopeCommand(telescope, 4)));
+
+    // driverController.R1().onTrue(new TelescopeCommand(telescope, 0));
+    // driverController.square().onTrue(new TelescopeCommand(telescope, 1));
+    // driverController.cross().onTrue(new TelescopeCommand(telescope, 2));
+    // driverController.circle().onTrue(new TelescopeCommand(telescope, 3));
+    // driverController.triangle().onTrue(new TelescopeCommand(telescope, 4));
 
     driverController.L1().onTrue(new SequentialCommandGroup(
                                                             new ArmCommand(arm, 3),

@@ -56,25 +56,25 @@ public final class Constants {
 
   public static class TelescopeConstants {
     public static class PIDConstants {
-      public static final double kP = 0.001;
+      public static final double kP = 0.03;
       public static final double kI = 0;
       public static final double kD = 0;
 
-      public static final double kMaxVel = 10;
-      public static final double kMaxAccel = 20;
+      public static final double kMaxVel = 150;
+      public static final double kMaxAccel = 300;
     }
 
     public static class TelescopeLengths {
-      public static double Stowed = 0;
-      public static double L1     = 5;
-      public static double L2     = 10;
-      public static double L3     = 15;
-      public static double L4     = 25;
+      public static double Stowed = -35;
+      public static double L1     = -5;
+      public static double L2     = 15;
+      public static double L3     = 40;
+      public static double L4     = 80;
     }
 
     public static int MotorCANID = 18;
 
-    public static double precisionInCM = 3;
+    public static double precisionInCM = 5;
     
   }
 

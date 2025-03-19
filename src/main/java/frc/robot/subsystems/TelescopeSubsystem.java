@@ -47,9 +47,9 @@ public class TelescopeSubsystem extends SubsystemBase {
     telescopePID.setTolerance(TelescopeConstants.precisionInCM);
 
 
-    Shuffleboard.getTab(OperatorConstants.AUTO_SHUFFLEBOARD).add("telescope PID", telescopePID);
-    Shuffleboard.getTab(OperatorConstants.AUTO_SHUFFLEBOARD).addDouble("Telescope Output", () -> motorOut.Output);
-    Shuffleboard.getTab(OperatorConstants.AUTO_SHUFFLEBOARD).addDouble("Telescope Position", () -> encoderInCM());
+    Shuffleboard.getTab(getName()).addDouble("Telescope Output", () -> motorOut.Output);
+    Shuffleboard.getTab(getName()).addDouble("Telescope Position", () -> encoderInCM());
+    Shuffleboard.getTab(getName()).add("TelescopePID", telescopePID);
   }
 
 
