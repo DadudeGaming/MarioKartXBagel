@@ -2,8 +2,8 @@
 
 int powerPin = 3, rPin = 9, gPin = 10, bPin = 11;
 
-String gold = "#FFD700";
-String green = "#61B077";
+String gold = "#FFC200";
+String green = "#018900";
 String red = "#FF0000";
 String white = "#FFFFFF";
 String currentColour = "";
@@ -17,9 +17,13 @@ unsigned long previousMillis = 0;
 bool fading = false;
 String fadeFrom;
 String fadeTo;
-int fadeSteps = 0;
+
+// steps between the two fade colours
+int fadeSteps = 200;
+// the delay between steps
+unsigned long fadeStepDelay = 20;
+
 int currentFadeStep = 0;
-unsigned long fadeStepDelay = 0;
 unsigned long fadeLastUpdate = 0;
 
 void setup() {
@@ -31,12 +35,10 @@ void setup() {
 
   Serial.begin(9600);
 
-  digitalWrite(powerPin, HIGH);
-  power = true;
-  // digitalWrite(rPin, LOW);
-  analogWrite(rPin, -255);
-  analogWrite(gPin, -190);
-  analogWrite(bPin, 255);
+  digitalWrite(powerPin, LOW);
+  power = false;
+
+  // setColour(gold);
 }
 
 void loop() {
@@ -50,14 +52,23 @@ void loop() {
     Disabled();
   } else if (numberCode == 1) {
     TeleOp();
+    // setColour(gold);
   } else if (numberCode == 2) {
     Auto();
+    // setColour(green);
   } else if (numberCode == 3) {
     EndOfMatch();
+    // setColour(white);
   } else if (numberCode == 4) {
     EStop();
+    // setColour(red);
   } else if (numberCode == 5) {
     ClimbCorrectAngle();
+  } else if (numberCode == 6) {
+    Intake();
+  } else {
+    digitalWrite(powerPin, LOW);
+    power = false;
   }
 }
 
@@ -80,7 +91,7 @@ void setColour(String colour) {
     if (rgb[i] <= 0) {
       rgb[i] = 255;
     } else {
-      rgb[i] *= -1;
+      rgb[i] = -rgb[i];
     }
   }
 
@@ -91,14 +102,16 @@ void setColour(String colour) {
   analogWrite(bPin, rgb[2]);
 }
 
-void startFade(String fromColour, String toColour, int steps, int stepDelay) {
+
+void startFade(String fromColour, String toColour /*, int steps, int stepDelay*/) {
   fadeFrom = fromColour;
   fadeTo = toColour;
-  fadeSteps = steps;
-  fadeStepDelay = stepDelay;
+  // fadeSteps = steps;
+  // fadeStepDelay = stepDelay;
   currentFadeStep = 0;
   fadeLastUpdate = millis();
   fading = true;
+  currentColour = "fading";
 }
 
 // This function should be called frequently (in loop) to update the fade.
@@ -106,7 +119,7 @@ void updateFade() {
   if (!fading) return;
 
   if (millis() - fadeLastUpdate >= fadeStepDelay) {
-    
+
     long fromNumber = strtol(fadeFrom.substring(1).c_str(), NULL, 16);
     int fromR = fromNumber >> 16;
     int fromG = (fromNumber >> 8) & 0xFF;
@@ -148,7 +161,9 @@ void updateFade() {
   }
 }
 void TeleOp() {
-  setColour(gold);
+  if (!currentColour.equals(gold) && !currentColour.equals(green)) {
+    setColour(gold);
+  }
   if (millis() - previousMillis >= 700) {
     previousMillis = millis();
     if (currentColour.equals(gold)) {
@@ -160,7 +175,9 @@ void TeleOp() {
 }
 
 void Auto() {
-  setColour(gold);
+  if (!currentColour.equals(gold) && !currentColour.equals(green)) {
+    setColour(gold);
+  }
   if (millis() - previousMillis >= 450) {
     previousMillis = millis();
     if (currentColour.equals(gold)) {
@@ -172,13 +189,15 @@ void Auto() {
 }
 
 void EndOfMatch() {
-  setColour(gold);
-  if (millis() - previousMillis >= 700 && power) {
+  if (!currentColour.equals(gold)) {
+    setColour(gold);
+  }
+  if (millis() - previousMillis >= 800 && power) {
     previousMillis = millis();
     digitalWrite(powerPin, LOW);
     power = false;
   }
-  if (millis() - previousMillis >= 200 && !power) {
+  if (millis() - previousMillis >= 400 && !power) {
     previousMillis = millis();
     digitalWrite(powerPin, HIGH);
     power = true;
@@ -186,7 +205,9 @@ void EndOfMatch() {
 }
 
 void EStop() {
-  setColour(red);
+  if (!currentColour.equals(red)) {
+    setColour(red);
+  }
   if (millis() - previousMillis >= 500) {
     previousMillis = millis();
     if (power) {
@@ -202,16 +223,26 @@ void EStop() {
 void Disabled() {
   updateFade();
   if (currentColour.equals(gold)) {
-    startFade(gold, green, 20, 500);
+    startFade(gold, green);
+  } else if (currentColour.equals(green)) {
+    startFade(green, white);
+  } else if (currentColour.equals(white)) {
+    startFade(white, gold);
+  } else if (currentColour.equals("fading")) {
+  } else {
+    setColour(gold);
+    startFade(gold, green);
   }
-  if (currentColour.equals(green)) {
-    startFade(green, white, 20, 500);
-  }
-  if (currentColour.equals(white)) {
-    startFade(white, gold, 20, 500);
+}
+
+void Intake() {
+  if (!currentColour.equals(gold)) {
+    setColour(gold);
   }
 }
 
 void ClimbCorrectAngle() {
-  setColour("#00FF00");
+  if (!currentColour.equals(green)) {
+    setColour(green);
+  }
 }
