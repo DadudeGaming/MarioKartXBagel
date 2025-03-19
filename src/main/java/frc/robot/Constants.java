@@ -36,8 +36,10 @@ public final class Constants {
       public static final double kP = 0.025;
       public static final double kI = 0;
       public static final double kD = 0;
-      public static final double kMaxVel = 750;
-      public static final double kMaxAccel = 450;
+      // public static final double kMaxVel = 750;
+      public static final double kMaxVel = 500;
+      // public static final double kMaxAccel = 450;
+      public static final double kMaxAccel = 300;
     }
     public static class ArmAngles {
       public static double Stowed = 125;
@@ -60,16 +62,18 @@ public final class Constants {
       public static final double kI = 0;
       public static final double kD = 0;
 
-      public static final double kMaxVel = 150;
-      public static final double kMaxAccel = 300;
+      public static final double kMaxVel = 75;
+      // public static final double kMaxVel = 50;
+      public static final double kMaxAccel = 150;
+      // public static final double kMaxAccel = 100;
     }
 
     public static class TelescopeLengths {
-      public static double Stowed = -35;
-      public static double L1     = -5;
-      public static double L2     = 15;
-      public static double L3     = 40;
-      public static double L4     = 80;
+      public static double Stowed = 0;
+      public static double L1     = 10;
+      public static double L2     = 20;
+      public static double L3     = 27;
+      public static double L4     = 37;
     }
 
     public static int MotorCANID = 18;

@@ -134,9 +134,15 @@ public class RobotContainer {
     // driverController.circle().onTrue(new TelescopeCommand(telescope, 3));
     // driverController.triangle().onTrue(new TelescopeCommand(telescope, 4));
 
-    driverController.L1().onTrue(new SequentialCommandGroup(
-                                                            new ArmCommand(arm, 3),
-                                                            new IntakeCommand(intake))); 
+    // driverController.R1().onTrue(new ArmCommand(arm, 0));
+    // driverController.square().onTrue(new ArmCommand(arm, 1));
+    // driverController.cross().onTrue(new ArmCommand(arm, 2));
+    // driverController.circle().onTrue(new ArmCommand(arm, 3));
+    // driverController.triangle().onTrue(new ArmCommand(arm, 4));
+
+    // driverController.L1().onTrue(new SequentialCommandGroup(
+    //                                                         new ArmCommand(arm, 3),
+    //                                                         new IntakeCommand(intake))); 
                                                             
 
 

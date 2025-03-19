@@ -50,6 +50,7 @@ public class TelescopeSubsystem extends SubsystemBase {
     Shuffleboard.getTab(getName()).addDouble("Telescope Output", () -> motorOut.Output);
     Shuffleboard.getTab(getName()).addDouble("Telescope Position", () -> encoderInCM());
     Shuffleboard.getTab(getName()).add("TelescopePID", telescopePID);
+    
   }
 
 
@@ -73,7 +74,7 @@ public class TelescopeSubsystem extends SubsystemBase {
  }
 
  public double encoderInCM(){
-  return (telescopeMotor.getPosition().getValueAsDouble() / 25) * (64.8 * Math.PI);
+  return (telescopeMotor.getPosition().getValueAsDouble() / 9) * (6.48 * Math.PI);
  }
 
  public boolean isAtGoal() {
