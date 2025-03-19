@@ -81,6 +81,9 @@ public class ArduinoLEDSubsystem extends SubsystemBase {
       SendLEDInput((byte)0); //Slowly fading between Green and Yellow, or Green, White, and Yellow? (Slow Speed / 5s)
     else if(DriverStation.isAutonomousEnabled())
       SendLEDInput((byte)2); //Flashing Yellow and Green with White between (High Speed / 0.5s)
+    // TODO THIS IS FOR INTAKE PUT IS INTAKE IN USE VARIABLE HERE INSTEAD OF FALSE
+      else if(false) //Gold (Solid Color / 0s) 
+      SendLEDInput((byte)6);
     else if(ClimbSubsystem.angle >= 60.0)
       SendLEDInput((byte)5); //Green (Solid Color / 0s)
     else if(Timer.getMatchTime() <= 20.0)
