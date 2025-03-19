@@ -9,6 +9,8 @@ String currentColour = "";
 
 bool power = false;
 
+int numberCode = -1;
+
 unsigned long previousMillis = 0;
 
 void setup() {
@@ -30,7 +32,23 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-  
+  if (Serial.available()) {
+    String serialString = Serial.readString();
+  }
+
+  if (numberCode == 0) {
+    //disable
+  } else if (numberCode == 1) {
+    TeleOp();
+  } else if (numberCode == 2) {
+    Auto();
+  } else if (numberCode == 3) {
+    EndOfMatch();
+  } else if (numberCode == 4) {
+    EStop();
+  } else if (numberCode == 5) {
+    ClimbCorrectAngle();
+  }
 }
 
 void setColour(String colour) {
@@ -112,6 +130,11 @@ void EStop() {
       digitalWrite(powerPin, HIGH);
       power = true;
     }
+  }
+}
+
+void Disabled() {
+  // fade between colours
 }
 
 void ClimbCorrectAngle() {
