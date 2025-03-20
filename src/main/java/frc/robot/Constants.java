@@ -74,8 +74,8 @@ public final class Constants {
       public static double Stowed = 0;
       public static double L1     = 10;
       public static double L2     = 20;
-      public static double L3     = 27;
-      public static double L4     = 37;
+      public static double L3     = 30;
+      public static double L4     = 40;
     }
 
     public static int MotorCANID = 18;

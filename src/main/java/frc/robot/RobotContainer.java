@@ -15,6 +15,7 @@ import frc.robot.commands.OuttakeCommand;
 import frc.robot.commands.TelescopeCommand;
 // import frc.robot.commands.ArmCommand;
 import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ClimbCamera;
 import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -71,14 +72,15 @@ public class RobotContainer {
   private final EndEffectorSubsystem intake = new EndEffectorSubsystem();
 
   private final PowerDistribution pdh = new PowerDistribution(10, ModuleType.kRev);
+
+  // private final ClimbCamera climbCamera = new ClimbCamera();
  
   // create an object for our driver controller
-  // private final CommandXboxController driverController = new CommandXboxController(Constants.OperatorConstants.kDriverControllerPort);
   private final CommandPS5Controller driverController = new CommandPS5Controller(Constants.OperatorConstants.kDriverControllerPort);
   
-  // private final CommandPS5Controller operatorController = new CommandPS5Controller(Constants.OperatorConstants.kOperatorControllerPort);
+  private final CommandPS5Controller operatorController = new CommandPS5Controller(Constants.OperatorConstants.kOperatorControllerPort);
 
-  // private final SendableChooser<Command> autoChooser;
+
   private final SendableChooser<Command> autoChooser;
 
   // Build an auto chooser. This will use Commands.none() as the default option.
@@ -99,7 +101,9 @@ public class RobotContainer {
 
     // set the default command for the drivebase to the drive command
     drivebase.setDefaultCommand(driveFieldOrientedAngularVelocity);
-    wrist.setDefaultCommand(wrist.runAxes(driverController.getLeftY(), driverController.getRightY()));
+
+
+    wrist.setDefaultCommand(wrist.runAxes(operatorController.getRightX(), operatorController.getLeftY()));
   
     drivebase.setDefaultCommand(driveFieldOrientedAngularVelocity);
 
@@ -156,7 +160,7 @@ public class RobotContainer {
     // driverController.circle().onTrue(new ArmCommand(arm, 3));
     // driverController.triangle().onTrue(new ArmCommand(arm, 4));
 
-    // driverController.L1().onTrue(new SequentialCommandGroup(
+    driverController.L1().onTrue(new IntakeCommand(intake));
     //                                                         new ArmCommand(arm, 3),
     //                                                         new IntakeCommand(intake))); 
                                                             
@@ -179,10 +183,10 @@ public class RobotContainer {
     new PathPlannerAuto("Just Leave");
 
 
-  //   // Shuffleboard.getTab(OperatorConstants.AUTO_SHUFFLEBOARD).add("Auto", autoChooser);
-  // }
+    Shuffleboard.getTab(OperatorConstants.AUTO_SHUFFLEBOARD).add("Auto", autoChooser);
+  }
 
   public Command getAutonomousCommand() {
-    return Commands.none();
+    return autoChooser.getSelected();
   }
 }

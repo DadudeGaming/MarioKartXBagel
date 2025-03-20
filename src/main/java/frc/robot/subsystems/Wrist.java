@@ -4,26 +4,17 @@
 
 package frc.robot.subsystems;
 
-import java.util.function.DoubleUnaryOperator;
 
-import com.revrobotics.spark.SparkBase.ControlType;
-import com.revrobotics.spark.SparkBase.PersistMode;
-import com.revrobotics.spark.SparkBase.ResetMode;
-import com.fasterxml.jackson.databind.AnnotationIntrospector.XmlExtensions;
-import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
-import frc.robot.Constants;
 import frc.robot.Constants.WristConstants.CANIDs;
-import frc.robot.Constants.WristConstants.PID;
 
 public class Wrist extends SubsystemBase {
 
@@ -31,7 +22,7 @@ public class Wrist extends SubsystemBase {
   private final SparkMax yMotor = new SparkMax(CANIDs.xMotor, MotorType.kBrushless);
   private final SparkMax xMotor = new SparkMax(CANIDs.yMotor, MotorType.kBrushless);
 
-  private final CommandPS5Controller controller = new CommandPS5Controller(0);
+  private final CommandPS5Controller controller = new CommandPS5Controller(1);
 
   private final PIDController xPID = new PIDController(0.03, 0, 0);
   private final PIDController yPID = new PIDController(0.03, 0, 0);
@@ -62,7 +53,7 @@ public class Wrist extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    setAxes(controller.getLeftY()*3, controller.getRightX());
+    // setAxes(controller.getLeftY()*3, controller.getRightX());
 
     runPID();
 
@@ -118,7 +109,7 @@ public class Wrist extends SubsystemBase {
   public Command runAxes(double in1, double in2){
     return runEnd(
       () -> {
-        setAxes(controller.getLeftY(), controller.getRightY());
+        setAxes(controller.getRightX(), controller.getLeftY());
         // System.out.print("test");
       }, () -> {
         xMotor.set(0);
