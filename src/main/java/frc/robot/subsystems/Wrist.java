@@ -54,6 +54,11 @@ public class Wrist extends SubsystemBase {
     Shuffleboard.getTab(getName()).addDouble("double 1", () -> desX);
     Shuffleboard.getTab(getName()).add("yPID", yPID);
     Shuffleboard.getTab(getName()).add("xPID", xPID);
+
+Shuffleboard.getTab(getName()).addDouble("xIn", () -> xPos);
+
+Shuffleboard.getTab(getName()).addDouble("yIn", () -> yPos);
+
   }
 
   
@@ -79,6 +84,9 @@ public class Wrist extends SubsystemBase {
     if(Math.abs(yIn) < 0.07) {
       yIn = 0;
     }
+
+    xPos = xIn;
+    yPos = yIn;
 
     double out1 = xIn - yIn;
     double out2 = xIn + yIn;
