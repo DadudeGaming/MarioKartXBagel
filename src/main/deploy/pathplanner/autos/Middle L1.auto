@@ -5,9 +5,22 @@
     "data": {
       "commands": [
         {
-          "type": "wait",
+          "type": "deadline",
           "data": {
-            "waitTime": 3.0
+            "commands": [
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 5.0
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "MoveArm"
+                }
+              }
+            ]
           }
         },
         {
@@ -19,7 +32,13 @@
         {
           "type": "named",
           "data": {
-            "name": "Score"
+            "name": "Outake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Middle leave reef"
           }
         },
         {

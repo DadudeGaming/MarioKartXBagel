@@ -47,7 +47,7 @@ public final class Constants {
     }
     public static class ArmAngles {
       public static double Stowed = 125;
-      public static double L1     = 88;
+      public static double L1     = 97;
       public static double L2     = 61;
       public static double L3     = 47;
       public static double L4     = 110;
@@ -81,7 +81,7 @@ public final class Constants {
 
     public static class TelescopeLengths {
       public static double Stowed = 0;
-      public static double L1     = 12;
+      public static double L1     = 11;
       public static double L2     = 7;
       public static double L3     = 38;
       public static double L4     = 10;
@@ -124,7 +124,8 @@ public final class Constants {
       // Presets for the position of the wrist
       public static final class PRESETS{
         public static Vector2 STOWED = new Vector2(-1,1);
-        public static Vector2 L1 = new Vector2(27,-4);
+        // public static Vector2 L1 = new Vector2(27,-4);
+        public static Vector2 L1 = new Vector2(22,2);
         public static Vector2 L2 = new Vector2(30,18);
         public static Vector2 L3 = new Vector2(32,15);
         public static Vector2 L4 = new Vector2(0,0);

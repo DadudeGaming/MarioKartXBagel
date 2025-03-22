@@ -97,12 +97,10 @@ public class RobotContainer {
     NamedCommands.registerCommand("Armup", new ArmCommand(arm, 1));
     NamedCommands.registerCommand("Armdown", new ArmCommand(arm, 0));
     NamedCommands.registerCommand("Outake", new OuttakeCommand(intake).withTimeout(1.5));
-    NamedCommands.registerCommand("Score", new SequentialCommandGroup(
+    NamedCommands.registerCommand("MoveArm", new SequentialCommandGroup(
                                                                             new TelescopeCommand(telescope, 0)
                                                                             .andThen(new ArmCommand(arm, 1))
-                                                                            .andThen(new TelescopeCommand(telescope, 1).alongWith(new WristCommand(wrist, 6).andThen(new WristCommand(wrist, 1))))
-                                                                            .andThen(new WaitCommand(0.5))
-                                                                            .andThen(new OuttakeCommand(intake).withTimeout(1.5))));
+                                                                            .andThen(new TelescopeCommand(telescope, 1).alongWith(new WristCommand(wrist, 6).andThen(new WristCommand(wrist, 1))))));
     
     NamedCommands.registerCommand("Stow", new SequentialCommandGroup(
                                                                           new TelescopeCommand(telescope, 0)
