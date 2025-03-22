@@ -30,7 +30,7 @@ public class TelescopeSubsystem extends SubsystemBase {
   public final ProfiledPIDController telescopePID = new ProfiledPIDController(TelescopeConstants.PIDConstants.kP, TelescopeConstants.PIDConstants.kI, TelescopeConstants.PIDConstants.kD, new TrapezoidProfile.Constraints(TelescopeConstants.PIDConstants.kMaxVel, TelescopeConstants.PIDConstants.kMaxAccel));
 
 
-  /** Creates a new ArmSubsystem. */
+  /** Creates a new TelescopSubsystem. */
   public TelescopeSubsystem() {
 
     // start with factory-default configs

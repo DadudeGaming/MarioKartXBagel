@@ -32,7 +32,7 @@ public class OuttakeCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-      m_subsystem.setMotor(-0.3);
+      m_subsystem.setMotor(-0.17);
     
   }
 

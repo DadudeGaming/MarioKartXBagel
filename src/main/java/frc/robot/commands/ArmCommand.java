@@ -31,12 +31,13 @@ public class ArmCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    pivotAnglesArray = new double[5];
+    pivotAnglesArray = new double[6];
     pivotAnglesArray[0] = ArmConstants.ArmAngles.Stowed;
     pivotAnglesArray[1] = ArmConstants.ArmAngles.L1;
     pivotAnglesArray[2] = ArmConstants.ArmAngles.L2;
     pivotAnglesArray[3] = ArmConstants.ArmAngles.L3;
     pivotAnglesArray[4] = ArmConstants.ArmAngles.L4;
+    pivotAnglesArray[5] = ArmConstants.ArmAngles.Intake;
     m_subsystem.setArmAngle(pivotAnglesArray[m_PIDPositionIndex]);
   }
 
