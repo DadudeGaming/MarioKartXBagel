@@ -37,7 +37,7 @@ public class ClimbSubsystem extends SubsystemBase {
     return runEnd(
       () -> {
         if(climbMotor.getEncoder().getPosition() / 100 < 55){
-          climbMotor.set(0.20);
+          // climbMotor.set(0.5);
         }
          // set the motor to 100% speed in
       }, () -> {// set the intake mode to false (we need to outake next)
@@ -49,7 +49,7 @@ public class ClimbSubsystem extends SubsystemBase {
   public Command outake(){
     return runEnd(
       () -> {
-        climbMotor.set(-0.20); // set the motor to 100% speed out
+        // climbMotor.set(-0.5); // set the motor to 100% speed out
       }, () -> { // set the intake mode to false (we need to intake next)
         climbMotor.set(0);// stop the motor, otherewise it would continue running forever
       }
