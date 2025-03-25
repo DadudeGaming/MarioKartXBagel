@@ -5,23 +5,28 @@
 package frc.robot.commands;
 
 import frc.robot.Constants.ArmConstants;
+import frc.robot.Constants.WristConstants;
 import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.Wrist;
+
+import org.dyn4j.geometry.Vector2;
+
 import edu.wpi.first.wpilibj2.command.Command;
 
 /** An example command that uses an example subsystem. */
-public class ArmCommand extends Command {
+public class WristCommand extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final ArmSubsystem m_subsystem;
+  private final Wrist m_subsystem;
   private int m_PIDPositionIndex;
 
-  double[] pivotAnglesArray;
+  Vector2[] wristAnglesArray;
 
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public ArmCommand(ArmSubsystem subsystem, int PIDPositionIndex) {
+  public WristCommand(Wrist subsystem, int PIDPositionIndex) {
     m_subsystem = subsystem;
     m_PIDPositionIndex = PIDPositionIndex;
     // Use addRequirements() here to declare subsystem dependencies.
@@ -31,14 +36,16 @@ public class ArmCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    pivotAnglesArray = new double[6];
-    pivotAnglesArray[0] = ArmConstants.ArmAngles.Stowed;
-    pivotAnglesArray[1] = ArmConstants.ArmAngles.L1;
-    pivotAnglesArray[2] = ArmConstants.ArmAngles.L2;
-    pivotAnglesArray[3] = ArmConstants.ArmAngles.L3;
-    pivotAnglesArray[4] = ArmConstants.ArmAngles.L4;
-    pivotAnglesArray[5] = ArmConstants.ArmAngles.Intake;
-    m_subsystem.setArmAngle(pivotAnglesArray[m_PIDPositionIndex]);
+    wristAnglesArray = new Vector2[8];
+    wristAnglesArray[0] = WristConstants.PRESETS.STOWED;
+    wristAnglesArray[1] = WristConstants.PRESETS.L1;
+    wristAnglesArray[2] = WristConstants.PRESETS.L2;
+    wristAnglesArray[3] = WristConstants.PRESETS.L3;
+    wristAnglesArray[4] = WristConstants.PRESETS.L4;
+    wristAnglesArray[5] = WristConstants.PRESETS.INTAKE;
+    wristAnglesArray[6] = WristConstants.PRESETS.INTERMEDIATE;
+    wristAnglesArray[7] = WristConstants.PRESETS.GROUND;
+    m_subsystem.setPID(wristAnglesArray[m_PIDPositionIndex]);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

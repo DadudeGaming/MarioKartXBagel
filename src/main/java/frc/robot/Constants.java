@@ -4,6 +4,10 @@
 
 package frc.robot;
 
+import java.util.Vector;
+
+import org.dyn4j.geometry.Vector2;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -36,15 +40,24 @@ public final class Constants {
       public static final double kP = 0.025;
       public static final double kI = 0;
       public static final double kD = 0;
-      public static final double kMaxVel = 750;
-      public static final double kMaxAccel = 450;
+      // public static final double kMaxVel = 750;
+      public static final double kMaxVel = 500;
+      // public static final double kMaxAccel = 450;
+      public static final double kMaxAccel = 300;
     }
     public static class ArmAngles {
       public static double Stowed = 125;
-      public static double L1     = 100;
-      public static double L2     = 75;
-      public static double L3     = 60;
-      public static double L4     = 10;
+      public static double L1     = 97;
+      public static double L2     = 61;
+      public static double L3     = 47;
+      public static double L4     = 110;
+      public static double Intake = 85;
+      
+      // public static double Stowed = 125;
+      // public static double L1     = 7;
+      // public static double L2     = 20;
+      // public static double L3     = 20;
+      // public static double L4     = 20;
     }
     public static class CANIDs{
       public static int frontMotorCANID = 12;
@@ -52,6 +65,34 @@ public final class Constants {
       public static int canandmagCANID = 21;
     }
     public static double precisionInDegrees = 2;
+  }
+
+  public static class TelescopeConstants {
+    public static class PIDConstants {
+      public static final double kP = 0.03;
+      public static final double kI = 0;
+      public static final double kD = 0;
+
+      public static final double kMaxVel = 75;
+      // public static final double kMaxVel = 50;
+      public static final double kMaxAccel = 150;
+      // public static final double kMaxAccel = 100;
+    }
+
+    public static class TelescopeLengths {
+      public static double Stowed = 0;
+      public static double L1     = 11;
+      public static double L2     = 7;
+      public static double L3     = 38;
+      public static double L4     = 10;
+      public static double Intake = 5;
+      // public static double Ground = 
+    }
+
+    public static int MotorCANID = 18;
+
+    public static double precisionInCM = 5;
+    
   }
 
 
@@ -62,12 +103,39 @@ public final class Constants {
   }
   // max speed of the robot in m/s use Units.feetToMeters to use feet
   public static final   double  MAX_SPEED = 4.5;
+
+
+  public static final class WristConstants {
+      public static final class PID{
+        public static double kP = 0.02;
+        public static double kI = 0;
+        public static double kD = 0;
+
+        public static double precision = 4;
+      }
+
+
+      public static class CANIDs {
+        public static int zMotor = 15;
+        public static int yMotor = 16;
+        public static int xMotor = 17;
+      }
+
+      // Presets for the position of the wrist
+      public static final class PRESETS{
+        public static Vector2 STOWED = new Vector2(-1,1);
+        // public static Vector2 L1 = new Vector2(27,-4);
+        public static Vector2 L1 = new Vector2(22,2);
+        public static Vector2 L2 = new Vector2(30,18);
+        public static Vector2 L3 = new Vector2(32,15);
+        public static Vector2 L4 = new Vector2(0,0);
+        public static Vector2 INTAKE = new Vector2(16,7);
+        public static Vector2 INTERMEDIATE = new Vector2(5,-5);
+        public static Vector2 GROUND = new Vector2(28, -6);
+      }
+    
+  }
 }
-
-
-
-
-
 
 
 // ------------     CANID Reference     ------------
@@ -92,6 +160,7 @@ public final class Constants {
 
 // Telescope:
 //    Kraken: 18
+
 
 // RIO: 0
 // PDH 10

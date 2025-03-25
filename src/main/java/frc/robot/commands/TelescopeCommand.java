@@ -4,21 +4,26 @@
 
 package frc.robot.commands;
 
-import frc.robot.subsystems.EndEffectorSubsystem;
+import frc.robot.Constants.TelescopeConstants;
+import frc.robot.subsystems.TelescopeSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /** An example command that uses an example subsystem. */
-public class OuttakeCommand extends Command {
+public class TelescopeCommand extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final EndEffectorSubsystem m_subsystem;
+  private final TelescopeSubsystem m_subsystem;
+  private int m_PIDPositionIndex;
+
+  double[] pivotAnglesArray;
 
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public OuttakeCommand(EndEffectorSubsystem subsystem){
+  public TelescopeCommand(TelescopeSubsystem subsystem, int PIDPositionIndex) {
     m_subsystem = subsystem;
+    m_PIDPositionIndex = PIDPositionIndex;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }
@@ -26,26 +31,29 @@ public class OuttakeCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-  
+    pivotAnglesArray = new double[6];
+    pivotAnglesArray[0] = TelescopeConstants.TelescopeLengths.Stowed;
+    pivotAnglesArray[1] = TelescopeConstants.TelescopeLengths.L1;
+    pivotAnglesArray[2] = TelescopeConstants.TelescopeLengths.L2;
+    pivotAnglesArray[3] = TelescopeConstants.TelescopeLengths.L3;
+    pivotAnglesArray[4] = TelescopeConstants.TelescopeLengths.L4;
+    pivotAnglesArray[5] = TelescopeConstants.TelescopeLengths.Intake;
+    m_subsystem.setTelescopeLength(pivotAnglesArray[m_PIDPositionIndex]);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-      m_subsystem.setMotor(-0.17);
-    
+    // pivotsubsytem.setsetpoint(input)
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    m_subsystem.setMotor(0);
-    m_subsystem.intakeMode = !m_subsystem.intakeMode;
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return m_subsystem.isAtGoal();
   }
 }
