@@ -7,11 +7,15 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.Vision;
+import frc.robot.subsystems.Vision.Cameras;
 import frc.robot.Constants;
 import frc.robot.Constants.OperatorConstants;
 
 import java.io.File;
+import java.util.Optional;
 import java.util.function.Supplier;
+
+import org.photonvision.EstimatedRobotPose;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathfindingCommand;
@@ -86,6 +90,11 @@ public class SwerveSubsystem extends SubsystemBase {
 
   public void periodic(){
     SmartDashboard.putData("Field", swerveDrive.field);
+    Optional<EstimatedRobotPose> visionEst = vision.getEstimatedGlobalPose(Cameras.FRONT_CAM);
+
+    
+    // Field2d visionEst = new Vision(, swerveDrive.field)
+    // SmartDashboard.putData("Vision Pose" new Field2d());
     swerveDrive.updateOdometry();
     vision.updatePoseEstimation(swerveDrive);
   }
