@@ -52,7 +52,7 @@ public final class Constants {
     private static final double camPitch = Units.degreesToRadians(30.0);
 
     public static final Transform3d kRobotToCam =
-        new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0, -camPitch, 0));
+        new Transform3d(new Translation3d(0.2, 0.2, 0.51), new Rotation3d(0, -camPitch, 0));
 
     // The layout of the AprilTags on the field
     public static final AprilTagFieldLayout kTagLayout =
