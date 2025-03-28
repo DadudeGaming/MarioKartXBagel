@@ -163,7 +163,7 @@ public class Vision {
      * Front Camera
      */
     FRONT_CAM("Camera-1",
-             new Rotation3d(0, Math.toRadians(-24.094), 0),
+             new Rotation3d(0, 0, 0),
              new Translation3d(0.2,
                                0.2,
                                0.51),
