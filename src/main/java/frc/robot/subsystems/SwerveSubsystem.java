@@ -202,6 +202,8 @@ public class SwerveSubsystem extends SubsystemBase {
 
 
   
+  // TODO check that the currently targeted apriltag is one of the reef ones, then run the pathfind to pose with the pose from vision.getPoseOfReef
+
   // public Command Visionlineup() {
   //   if (vision)
   // }
