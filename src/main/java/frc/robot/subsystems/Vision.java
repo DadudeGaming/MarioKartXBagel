@@ -6,6 +6,7 @@ import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
@@ -17,6 +18,8 @@ import edu.wpi.first.networktables.NetworkTablesJNI;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import frc.robot.Constants;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -88,6 +91,11 @@ public class Vision {
       throw new RuntimeException("Cannot get AprilTag " + aprilTag + " from field " + fieldLayout.toString());
     }
 
+  }
+
+
+  Pose2d getPoseOfReef(int aprilTagID, Boolean right){
+    return getAprilTagPose(aprilTagID, new Transform2d(Constants.reefOffset * right.compareTo(true), Constants.reefOffsetY,new Rotation2d(0)));
   }
 
   /**

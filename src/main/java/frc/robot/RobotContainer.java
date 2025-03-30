@@ -89,6 +89,8 @@ public class RobotContainer {
   // define what buttons do on the controller
   private void configureBindings() {
     driverController.button(1).onTrue(drivebase.zeroGyro()); //zero the gyro when square(?) is pressed
+
+    // driverController.L1().onTrue(driveFieldOrientedAngularVelocity)
   }
 
   private void setupAutoChooser(){

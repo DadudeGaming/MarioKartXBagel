@@ -22,13 +22,18 @@ import com.pathplanner.lib.commands.PathfindingCommand;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.path.PathConstraints;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.util.Units;
 
+import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Meter;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
+import static edu.wpi.first.units.Units.Second;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -194,9 +199,25 @@ public class SwerveSubsystem extends SubsystemBase {
     // IF USING CUSTOM PATHFINDER ADD BEFORE THIS LINE
     PathfindingCommand.warmupCommand().schedule();
   }
-  public Command Visionlineup() {
-    return run( () -> {
-        AutoBuilder.pathfindToPose(null, null);
+
+
+  
+  // public Command Visionlineup() {
+  //   if (vision)
+  // }
+
+  public Command pathndToPose(Pose2d pose)
+  {
+    return defer(()->{
+    PathConstraints constraints = new PathConstraints(
+        1, 0.75,
+        Degrees.of(90).per(Second).in(RadiansPerSecond), Units.degreesToRadians(360));
+// Since AutoBuilder is configured, we can use it to build pathfinding commands
+    return AutoBuilder.pathfindToPose(
+        pose,
+        constraints,
+        edu.wpi.first.units.Units.MetersPerSecond.of(0) // Goal end velocity in meters/sec
+                                     );
     });
   }
 
