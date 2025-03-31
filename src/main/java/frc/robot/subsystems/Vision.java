@@ -93,7 +93,6 @@ public class Vision {
 
   }
 
-
   Pose2d getPoseOfReef(int aprilTagID, Boolean right){
     return getAprilTagPose(aprilTagID, new Transform2d(Constants.reefOffset * right.compareTo(true), Constants.reefOffsetY,new Rotation2d(0)));
   }

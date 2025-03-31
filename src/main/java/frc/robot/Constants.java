@@ -51,7 +51,7 @@ public final class Constants {
 
 
   public static class VisionConstants{
-    public static final String kFrontCameraName = "PhotonFront";
+    public static final String kFrontCameraName = "Camera-1";
     // Cam mounted facing forward, half a meter forward of center, half a meter up from center,
     // pitched upward.
     private static final double camPitch = Units.degreesToRadians(30.0);
