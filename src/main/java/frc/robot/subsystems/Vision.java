@@ -345,9 +345,10 @@ public class Vision {
 
         /**
      * Checks if a specific AprilTag ID is currently detected by the vision system.
+     * Uses the best target (lowest ambiguity) instead of checking all targets.
      * 
      * @param tagId The ID of the AprilTag to check for
-     * @return true if the specified AprilTag is detected, false otherwise
+     * @return true if the specified AprilTag is detected as the best target, false otherwise
      */
     public boolean isAprilTagDetected(int tagId) {
       updateUnreadResults();
@@ -363,16 +364,10 @@ public class Vision {
           return false;
       }
       
-      // Look through all detected targets to find the specified tag ID
-      for (PhotonTrackedTarget target : latestResult.getTargets()) {
-          if (target.getFiducialId() == tagId) {
-              return true;
-          }
-      }
-      
-      return false;
+      // Get the best target and check if it matches the specified tag ID
+      PhotonTrackedTarget bestTarget = latestResult.getBestTarget();
+      return bestTarget.getFiducialId() == tagId;
     }
-
     /**
     * Checks if any AprilTag is currently detected by the vision system.
     * 
