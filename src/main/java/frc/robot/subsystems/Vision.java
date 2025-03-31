@@ -368,21 +368,17 @@ public class Vision {
       PhotonTrackedTarget bestTarget = latestResult.getBestTarget();
       return bestTarget.getFiducialId() == tagId;
     }
-    /**
-    * Checks if any AprilTag is currently detected by the vision system.
-    * 
-    * @return true if any AprilTag is detected, false otherwise
-    */
+        /**
+        /**
+     * Checks if any AprilTag is currently detected by the vision system.
+     * 
+     * @return true if any AprilTag is detected, false otherwise
+     */
     public boolean isAnyAprilTagDetected() {
-      updateUnreadResults();
+      // Get the latest results directly from the camera instead of using cached results
+      PhotonPipelineResult latestResult = camera.getLatestResult();
       
-      if (resultsList.isEmpty()) {
-          return false;
-      }
-      
-      // Check the most recent result
-      PhotonPipelineResult latestResult = resultsList.get(0);
-      
+      // Simple check for targets in the latest frame
       return latestResult.hasTargets();
     }
 

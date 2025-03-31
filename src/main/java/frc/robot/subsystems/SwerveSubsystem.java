@@ -123,10 +123,10 @@ public class SwerveSubsystem extends SubsystemBase {
     Matrix<N3, N1> stdDevs = VecBuilder.fill(0.5, 0.5, 0.5);
     
     // Add the vision measurement to the swerve drive's pose estimator
-    swerveDrive.addVisionMeasurement(
-        pose.estimatedPose.toPose2d(),
-        pose.timestampSeconds,
-        stdDevs);
+    // swerveDrive.addVisionMeasurement(
+    //     pose.estimatedPose.toPose2d(),
+    //     pose.timestampSeconds,
+    //     stdDevs);
   }
   
   // This updates the pose visualization
@@ -241,7 +241,7 @@ public class SwerveSubsystem extends SubsystemBase {
     return defer(()->{
     PathConstraints constraints = new PathConstraints(
         1, 0.75,
-        Degrees.of(90).per(Second).in(RadiansPerSecond), Units.degreesToRadians(360));
+        Degrees.of(0).per(Second).in(RadiansPerSecond), Units.degreesToRadians(360));
 // Since AutoBuilder is configured, we can use it to build pathfinding commands
     return AutoBuilder.pathfindToPose(
         pose,

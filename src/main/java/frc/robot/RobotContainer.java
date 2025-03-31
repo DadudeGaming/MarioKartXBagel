@@ -64,12 +64,16 @@ public class RobotContainer {
 
     // set the default command for the drivebase to the drive command
     drivebase.setDefaultCommand(driveFieldOrientedAngularVelocity);
+
+
+    Shuffleboard.getTab("DRIVE").addBoolean("has Tag", () -> Vision.Cameras.FRONT_CAM.isAnyAprilTagDetected());
+
   }
 
 
   SwerveInputStream driveAngularVelocity = SwerveInputStream.of(drivebase.getSwerveDrive(), 
-                                                                () -> driverController.getLeftY() * -1,
-                                                                () -> driverController.getLeftX() * -1)
+                                                                () -> driverController.getLeftY() *-1,
+                                                                () -> driverController.getLeftX() *-1)
                                                                 .withControllerRotationAxis(driverController::getRightX)
                                                                 .deadband(OperatorConstants.DEADBAND)
                                                                 .scaleTranslation(OperatorConstants.TRANSLATION_SCALE)
@@ -93,16 +97,17 @@ public class RobotContainer {
   private void configureBindings() {
     driverController.button(1).onTrue(drivebase.zeroGyro()); //zero the gyro when square(?) is pressed
   }
+  
   private void configureTriggers() {
     // Create a trigger that activates when AprilTag 13 is detected
-    new Trigger(() -> Vision.Cameras.FRONT_CAM.isAprilTagDetected(13)).and(driverController.L2())
+    new Trigger(() -> Vision.Cameras.FRONT_CAM. isAnyAprilTagDetected()).and(driverController.L2())
         .onTrue(drivebase.pathfindToPose(
-            Vision.getAprilTagPose(13, new Transform2d(
+            Vision.getAprilTagPose(10, new Transform2d(
                 Constants.reefOffset,
                 Constants.reefOffsetY,
                 new Rotation2d(0)
             ))
-        ));
+        ).until(driverController.L2().negate()));
 }
   private void setupAutoChooser(){
     new PathPlannerAuto("Test Auto");
