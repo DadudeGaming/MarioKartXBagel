@@ -24,11 +24,15 @@ import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathConstraints;
 
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.math.Matrix;
 
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Meter;
@@ -93,17 +97,36 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
 
-  public void periodic(){
-    SmartDashboard.putData("Field", swerveDrive.field);
-    Optional<EstimatedRobotPose> visionEst = vision.getEstimatedGlobalPose(Cameras.FRONT_CAM);
-
+  public void periodic() {
+  SmartDashboard.putData("Field", swerveDrive.field);
+  
+  // Get the vision estimated pose
+  Optional<EstimatedRobotPose> visionEst = vision.getEstimatedGlobalPose(Cameras.FRONT_CAM);
+  
+  // Update odometry with wheel measurements
+  swerveDrive.updateOdometry();
+  
+  // If vision has a valid estimate, apply it directly with appropriate confidence
+  if (visionEst.isPresent()) {
+    EstimatedRobotPose pose = visionEst.get();
     
-    // Field2d visionEst = new Vision(, swerveDrive.field)
-    // SmartDashboard.putData("Vision Pose" new Field2d());
-    swerveDrive.updateOdometry();
-    vision.updatePoseEstimation(swerveDrive);
+    // Display the vision targets on SmartDashboard for debugging
+    SmartDashboard.putNumber("Vision Tags Detected", pose.targetsUsed.size());
+    
+    // For consistently using vision measurements, use fixed reasonable std devs
+    // instead of the dynamic ones that might reject measurements
+    Matrix<N3, N1> stdDevs = VecBuilder.fill(0.5, 0.5, 0.5);
+    
+    // Add the vision measurement to the swerve drive's pose estimator
+    swerveDrive.addVisionMeasurement(
+        pose.estimatedPose.toPose2d(),
+        pose.timestampSeconds,
+        stdDevs);
   }
-
+  
+  // This updates the pose visualization
+  vision.updateVisionField();
+}
 
   // command for zeroing the gyro, it needs disabling and re-enabling to start moving again after calling, might want to look into that
   public Command zeroGyro() {
