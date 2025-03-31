@@ -98,13 +98,18 @@ public class SwerveSubsystem extends SubsystemBase {
 
 
   public void periodic() {
-  SmartDashboard.putData("Field", swerveDrive.field);
+  
   
   // Get the vision estimated pose
   Optional<EstimatedRobotPose> visionEst = vision.getEstimatedGlobalPose(Cameras.FRONT_CAM);
   
+  vision.updatePoseEstimation(swerveDrive);
+  vision.updateVisionField();
+
   // Update odometry with wheel measurements
   swerveDrive.updateOdometry();
+
+  SmartDashboard.putData("Field", swerveDrive.field);
   
   // If vision has a valid estimate, apply it directly with appropriate confidence
   if (visionEst.isPresent()) {
@@ -125,7 +130,7 @@ public class SwerveSubsystem extends SubsystemBase {
   }
   
   // This updates the pose visualization
-  vision.updateVisionField();
+  // vision.updateVisionField();
 }
 
   // command for zeroing the gyro, it needs disabling and re-enabling to start moving again after calling, might want to look into that
