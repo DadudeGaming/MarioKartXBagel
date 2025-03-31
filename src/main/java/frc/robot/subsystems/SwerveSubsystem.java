@@ -236,7 +236,7 @@ public class SwerveSubsystem extends SubsystemBase {
   //   if (vision)
   // }
 
-  public Command pathndToPose(Pose2d pose)
+  public Command pathfindToPose(Pose2d pose)
   {
     return defer(()->{
     PathConstraints constraints = new PathConstraints(

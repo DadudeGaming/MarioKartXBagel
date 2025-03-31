@@ -7,6 +7,7 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.Vision;
 import swervelib.SwerveInputStream;
 
 
@@ -15,15 +16,16 @@ import com.reduxrobotics.canand.CanandEventLoop;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-
-
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -51,6 +53,7 @@ public class RobotContainer {
     CanandEventLoop.getInstance();
     // Configure the trigger bindings
     configureBindings();
+    configureTriggers();
 
     // Shut up
     DriverStation.silenceJoystickConnectionWarning(true);
@@ -89,10 +92,18 @@ public class RobotContainer {
   // define what buttons do on the controller
   private void configureBindings() {
     driverController.button(1).onTrue(drivebase.zeroGyro()); //zero the gyro when square(?) is pressed
-
-    // driverController.L1().onTrue(driveFieldOrientedAngularVelocity)
   }
-
+  private void configureTriggers() {
+    // Create a trigger that activates when AprilTag 13 is detected
+    new Trigger(() -> Vision.Cameras.FRONT_CAM.isAprilTagDetected(13)).and(driverController.L2())
+        .onTrue(drivebase.pathfindToPose(
+            Vision.getAprilTagPose(13, new Transform2d(
+                Constants.reefOffset,
+                Constants.reefOffsetY,
+                new Rotation2d(0)
+            ))
+        ));
+}
   private void setupAutoChooser(){
     new PathPlannerAuto("Test Auto");
     new PathPlannerAuto("AL4 HL4");

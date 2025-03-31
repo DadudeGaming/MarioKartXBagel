@@ -165,7 +165,7 @@ public class Vision {
   /**
    * Camera Enum to select each camera
    */
-  enum Cameras {
+  public enum Cameras {
     /**
      * Front Camera
      */
@@ -341,6 +341,54 @@ public class Vision {
           updateEstimatedGlobalPose();
         }
       }
+    }
+
+        /**
+     * Checks if a specific AprilTag ID is currently detected by the vision system.
+     * 
+     * @param tagId The ID of the AprilTag to check for
+     * @return true if the specified AprilTag is detected, false otherwise
+     */
+    public boolean isAprilTagDetected(int tagId) {
+      updateUnreadResults();
+      
+      if (resultsList.isEmpty()) {
+          return false;
+      }
+      
+      // Check the most recent result first (first in the sorted list)
+      PhotonPipelineResult latestResult = resultsList.get(0);
+      
+      if (!latestResult.hasTargets()) {
+          return false;
+      }
+      
+      // Look through all detected targets to find the specified tag ID
+      for (PhotonTrackedTarget target : latestResult.getTargets()) {
+          if (target.getFiducialId() == tagId) {
+              return true;
+          }
+      }
+      
+      return false;
+    }
+
+    /**
+    * Checks if any AprilTag is currently detected by the vision system.
+    * 
+    * @return true if any AprilTag is detected, false otherwise
+    */
+    public boolean isAnyAprilTagDetected() {
+      updateUnreadResults();
+      
+      if (resultsList.isEmpty()) {
+          return false;
+      }
+      
+      // Check the most recent result
+      PhotonPipelineResult latestResult = resultsList.get(0);
+      
+      return latestResult.hasTargets();
     }
 
     /**
