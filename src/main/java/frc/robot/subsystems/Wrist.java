@@ -9,6 +9,7 @@ import java.util.Vector;
 
 import org.dyn4j.geometry.Vector2;
 
+import com.fasterxml.jackson.databind.AnnotationIntrospector.XmlExtensions;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkMaxConfig;
@@ -34,8 +35,8 @@ public class Wrist extends SubsystemBase {
 
   // private final PIDController xPID = new PIDController(0.01, 0, 0);
   // private final PIDController yPID = new PIDController(0.01, 0, 0);
-  private final ProfiledPIDController xPID = new ProfiledPIDController(0.02, 0, 0, new TrapezoidProfile.Constraints(27, 23));
-  private final ProfiledPIDController yPID = new ProfiledPIDController(0.02, 0, 0, new TrapezoidProfile.Constraints(27, 23));
+  private final ProfiledPIDController xPID = new ProfiledPIDController(0.02, 0, 0, new TrapezoidProfile.Constraints(40, 35));
+  private final ProfiledPIDController yPID = new ProfiledPIDController(0.02, 0, 0, new TrapezoidProfile.Constraints(40, 35));
   private final PIDController zPID = new PIDController(0.03, 0, 0);
 
   private double xPos;
@@ -56,8 +57,8 @@ public class Wrist extends SubsystemBase {
     
     // Shuffleboard.getTab(getName()).addDouble("zencoder", () -> zMotor.getEncoder().getPosition());
 
-    Shuffleboard.getTab(getName()).addDouble("x setpoint", () -> controller.getRightX()*2);
-    Shuffleboard.getTab(getName()).addDouble("y setpoint", () -> controller.getLeftY());
+    Shuffleboard.getTab(getName()).addDouble("x setpoint", () -> getAxesVector().x);
+    Shuffleboard.getTab(getName()).addDouble("y setpoint", () -> getAxesVector().y);
 
     Shuffleboard.getTab(getName()).addDouble("x enc", () -> xMotor.getEncoder().getPosition());
     Shuffleboard.getTab(getName()).addDouble("y enc", () -> yMotor.getEncoder().getPosition());
@@ -123,6 +124,22 @@ public class Wrist extends SubsystemBase {
     // yMotor.set(out2);
   }
 
+  // set PID goals based on an input vector for each of the axes
+  public void setAxesVector (Vector2 inputVector){
+    double xPidOut = inputVector.x - inputVector.y;
+    double yPidOut = inputVector.x + inputVector.y;
+
+    xPID.setGoal(xPidOut);
+    yPID.setGoal(yPidOut);
+  }
+
+  public Vector2 getAxesVector(){
+    double originalX = (xMotor.getEncoder().getPosition() + yMotor.getEncoder().getPosition())/2;
+    double originalY = (yMotor.getEncoder().getPosition() - xMotor.getEncoder().getPosition())/2;
+    return new Vector2(originalX, originalY);
+  }
+
+  // sets PID goals directly
   public void setPID(Vector2 input) {
     xPID.setGoal(input.x);
     yPID.setGoal(input.y);

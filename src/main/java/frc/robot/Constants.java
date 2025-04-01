@@ -50,8 +50,12 @@ public final class Constants {
       public static double L1     = 97;
       public static double L2     = 61;
       public static double L3     = 47;
-      public static double L4     = 110;
+      public static double Climb     = 3;
       public static double Intake = 85;
+      public static double Ground = 120;
+      public static double Intermediate = 110;
+
+
       
       // public static double Stowed = 125;
       // public static double L1     = 7;
@@ -83,10 +87,11 @@ public final class Constants {
       public static double Stowed = 0;
       public static double L1     = 11;
       public static double L2     = 7;
-      public static double L3     = 38;
-      public static double L4     = 10;
+      public static double L3     = 30;
+      public static double Climb  = 0;
       public static double Intake = 5;
-      // public static double Ground = 
+      public static double Ground = 22;
+      public static double Intermediate = 27;
     }
 
     public static int MotorCANID = 18;
@@ -123,17 +128,28 @@ public final class Constants {
 
       // Presets for the position of the wrist
       public static final class PRESETS{
-        public static Vector2 STOWED = new Vector2(-1,1);
+        public static Vector2 STOWED = new Vector2(0,0);
         // public static Vector2 L1 = new Vector2(27,-4);
-        public static Vector2 L1 = new Vector2(22,2);
-        public static Vector2 L2 = new Vector2(30,18);
-        public static Vector2 L3 = new Vector2(32,15);
-        public static Vector2 L4 = new Vector2(0,0);
-        public static Vector2 INTAKE = new Vector2(16,7);
-        public static Vector2 INTERMEDIATE = new Vector2(5,-5);
-        public static Vector2 GROUND = new Vector2(28, -6);
+        public static Vector2 L1 = new Vector2(0,0);
+        public static Vector2 L2 = new Vector2(0,0);
+        public static Vector2 L3 = new Vector2(0,0);
+        public static Vector2 Climb = new Vector2(0,0);
+        public static Vector2 INTAKE = new Vector2(0,0);
+        public static Vector2 INTERMEDIATE = new Vector2(0,-3);
+        public static Vector2 GROUND = new Vector2(1, -8.7);
       }
-    
+
+
+      public static final class PresetsNonDiffy{
+        public static double STOWED = 0;
+        public static double L1 = 0;
+        public static double L2 = 0;
+        public static double L3 = 0;
+        public static double Climb = 0;
+        public static double INTAKE = 0;
+        public static double INTERMEDIATE = 0;
+        public static double GROUND =  0;
+      }
   }
 }
 

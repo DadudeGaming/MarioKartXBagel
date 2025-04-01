@@ -8,18 +8,20 @@ import frc.robot.Constants.OperatorConstants;
 
 // import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.Wrist;
-
+import frc.robot.subsystems.WristNotDiffy;
 import frc.robot.commands.ArmCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.LowerCommand;
 import frc.robot.commands.OuttakeCommand;
 import frc.robot.commands.TelescopeCommand;
 import frc.robot.commands.WristCommand;
+import frc.robot.commands.WristCommandDirectAxes;
 // import frc.robot.commands.ArmCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimbCamera;
 import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
+import frc.robot.subsystems.StateManager;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.TelescopeSubsystem;
 
@@ -27,7 +29,7 @@ import swervelib.SwerveInputStream;
 
 
 import com.reduxrobotics.canand.CanandEventLoop;
-
+import com.fasterxml.jackson.databind.deser.std.StdScalarDeserializer;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
@@ -40,6 +42,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -61,7 +64,7 @@ public class RobotContainer {
   // create a new swerve subsystem object
   // private final SwerveSubsystem drivebase = new SwerveSubsystem();
 
-  private final Wrist wrist = new Wrist();
+  private final WristNotDiffy wrist = new WristNotDiffy();
 
   private final SwerveSubsystem drivebase = new SwerveSubsystem();
   
@@ -76,6 +79,9 @@ public class RobotContainer {
 
   private final PowerDistribution pdh = new PowerDistribution(10, ModuleType.kRev);
 
+
+  private final StateManager stateManager = new StateManager();
+
   // private final ClimbCamera climbCamera = new ClimbCamera();
  
   // create an object for our driver controller
@@ -85,6 +91,9 @@ public class RobotContainer {
 
 
   private final SendableChooser<Command> autoChooser;
+
+
+  
 
   // Build an auto chooser. This will use Commands.none() as the default option.
 
@@ -113,7 +122,7 @@ public class RobotContainer {
     configureBindings();
 
     // Shut up
-    DriverStation.silenceJoystickConnectionWarning(true);
+    // DriverStation.silenceJoystickConnectionWarning(true);
 
     autoChooser = AutoBuilder.buildAutoChooser();
 
@@ -131,6 +140,7 @@ public class RobotContainer {
     Shuffleboard.getTab(OperatorConstants.AUTO_SHUFFLEBOARD).addDouble("Voltage", () -> pdh.getVoltage());
     Shuffleboard.getTab(OperatorConstants.AUTO_SHUFFLEBOARD).addDouble("Current", () -> pdh.getTotalCurrent());
     Shuffleboard.getTab(OperatorConstants.AUTO_SHUFFLEBOARD).addDouble("Power", () -> pdh.getTotalPower());
+    Shuffleboard.getTab(OperatorConstants.DRIVER_SHUFFLEBOARD).addInteger("Robot State", () -> stateManager.robotState);
   }
 
 
@@ -162,30 +172,35 @@ public class RobotContainer {
   // define what buttons do on the controller
   private void configureBindings() {
     // /** Set up the commands to change the pivot position */
-    driverController.R1().onTrue(new TelescopeCommand(telescope, 0)
-                                    // .alongWith(new WristCommand(wrist, 6).andThen(new WristCommand(wrist, 0)))
-                                    .andThen(new WristCommand(wrist, 0))
-                                    .andThen(new ArmCommand(arm, 0)));
+    // driverController.R1().and(() -> stateManager.robotState != "STOWED").onTrue(new TelescopeCommand(telescope, 0)
+    //                                 // .alongWith(new WristCommand(wrist, 6).andThen(new WristCommand(wrist, 0)))
+    //                                 .andThen(new WristCommand(wrist, 0))
+    //                                 .andThen(new ArmCommand(arm, 0))
+    //                                 .andThen(stateManager.setRobotState("STOWED")));
                                   
-    driverController.square().onTrue(new TelescopeCommand(telescope, 0)
-                                        // .alongWith(new WristCommand(wrist, 6).andThen(new WristCommand(wrist, 0)))
-                                        .andThen(new ArmCommand(arm, 1))
-                                        .andThen(new TelescopeCommand(telescope, 1).alongWith(new WristCommand(wrist, 6).andThen(new WristCommand(wrist, 1)))));
+    // driverController.square().and(() -> stateManager.robotState != "L1").onTrue(new TelescopeCommand(telescope, 0)
+    //                                     // .alongWith(new WristCommand(wrist, 6).andThen(new WristCommand(wrist, 0)))
+    //                                     .andThen(new ArmCommand(arm, 1))
+    //                                     .andThen(new TelescopeCommand(telescope, 1).alongWith(new WristCommand(wrist, 6).andThen(new WristCommand(wrist, 1))
+    //                                     .andThen(stateManager.setRobotState("L1")))));
 
-    driverController.cross().onTrue(new TelescopeCommand(telescope, 0)
-                                        // .alongWith(new WristCommand(wrist, 6).andThen(new WristCommand(wrist, 0)))
-                                        .andThen(new ArmCommand(arm, 2))
-                                        .andThen(new TelescopeCommand(telescope, 2).alongWith(new WristCommand(wrist, 6).andThen(new WristCommand(wrist, 2)))));
+    // driverController.cross().and(() -> stateManager.robotState != "L2").onTrue(new TelescopeCommand(telescope, 0)
+    //                                     // .alongWith(new WristCommand(wrist, 6).andThen(new WristCommand(wrist, 0)))
+    //                                     .andThen(new ArmCommand(arm, 2))
+    //                                     .andThen(new TelescopeCommand(telescope, 2).alongWith(new WristCommand(wrist, 6).andThen(new WristCommand(wrist, 2))
+    //                                     .andThen(stateManager.setRobotState("L2")))));
 
-    driverController.circle().onTrue(new TelescopeCommand(telescope, 0)
-                                        // .alongWith(new WristCommand(wrist, 6).andThen(new WristCommand(wrist, 0)))
-                                        .andThen(new ArmCommand(arm, 3))
-                                        .andThen(new TelescopeCommand(telescope, 3).alongWith(new WristCommand(wrist, 6).andThen(new WristCommand(wrist, 3)))));
+    // driverController.circle().and(() -> stateManager.robotState != "L3").onTrue(new TelescopeCommand(telescope, 0)
+    //                                     // .alongWith(new WristCommand(wrist, 6).andThen(new WristCommand(wrist, 0)))
+    //                                     .andThen(new ArmCommand(arm, 3))
+    //                                     .andThen(new TelescopeCommand(telescope, 3).alongWith(new WristCommand(wrist, 6).andThen(new WristCommand(wrist, 3))
+    //                                     .andThen(stateManager.setRobotState("L3")))));
 
-    driverController.triangle().onTrue(new TelescopeCommand(telescope, 0)
-                                        // .alongWith(new WristCommand(wrist, 6).andThen(new WristCommand(wrist, 0)))
-                                        .andThen(new ArmCommand(arm, 4))
-                                        .andThen(new TelescopeCommand(telescope, 4).alongWith(new WristCommand(wrist, 6).andThen(new WristCommand(wrist, 4)))));
+    // driverController.triangle().and(() -> stateManager.robotState != "CLIMB").onTrue(new TelescopeCommand(telescope, 0)
+    //                                     // .alongWith(new WristCommand(wrist, 6).andThen(new WristCommand(wrist, 0)))
+    //                                     .andThen(new ArmCommand(arm, 4))
+    //                                     .andThen(new TelescopeCommand(telescope, 4).alongWith(new WristCommand(wrist, 6).andThen(new WristCommand(wrist, 4))
+    //                                     .andThen(stateManager.setRobotState("CLIMB")))));
 
     
 
@@ -224,11 +239,11 @@ public class RobotContainer {
     // driverController.circle().onTrue(new TelescopeCommand(telescope, 3));
     // driverController.triangle().onTrue(new TelescopeCommand(telescope, 4));
 
-    // driverController.R1().onTrue(new WristCommand(wrist, 6).andThen(new WristCommand(wrist, 0)));
-    // driverController.square().onTrue(new WristCommand(wrist, 6).andThen(new WristCommand(wrist, 1)));
-    // driverController.cross().onTrue(new WristCommand(wrist, 6).andThen(new WristCommand(wrist, 2)));
-    // driverController.circle().onTrue(new WristCommand(wrist, 6).andThen(new WristCommand(wrist, 3)));
-    // driverController.triangle().onTrue(new WristCommand(wrist, 6).andThen(new WristCommand(wrist, 4)));
+    // driverController.R1().onTrue(new WristCommandDirectAxes(wrist, 0));
+    // driverController.square().onTrue(new WristCommandDirectAxes(wrist, 1));
+    // driverController.cross().onTrue(new WristCommandDirectAxes(wrist, 2));
+    // driverController.circle().onTrue(new WristCommandDirectAxes(wrist, 3));
+    // driverController.triangle().onTrue(new WristCommandDirectAxes(wrist, 4));
 
     // driverController.R1().onTrue(new ArmCommand(arm, 0));
     // driverController.square().onTrue(new ArmCommand(arm, 1));
@@ -242,18 +257,46 @@ public class RobotContainer {
                                                             
 
 
+    // driverController.R1().and(() -> stateManager.robotState != 6).onTrue(stateManager.goToState(0, telescope, arm, wrist));
+
+    // driverController.square().and(() -> stateManager.robotState != 6).onTrue(stateManager.goToState(1, telescope, arm, wrist));
+    // driverController.cross().and(() -> stateManager.robotState != 6).onTrue(stateManager.goToState(2, telescope, arm, wrist));
+    // driverController.circle().and(() -> stateManager.robotState != 6).onTrue(stateManager.goToState(3, telescope, arm, wrist));
+    // driverController.triangle().and(() -> stateManager.robotState != 6).onTrue(stateManager.goToState(4, telescope, arm, wrist));
+
+    // driverController.R1().and(() -> stateManager.robotState != 6).onTrue(new TelescopeCommand(telescope, 7).alongWith(new ArmCommand(arm, 7).alongWith(new WristCommand(wrist, 7))).andThen(stateManager.goToState(0, telescope, arm, wrist)));
+
+    // driverController.square().and(() -> stateManager.robotState == 6).onTrue(new TelescopeCommand(telescope, 7).alongWith(new ArmCommand(arm, 7).alongWith(new WristCommand(wrist, 7))).andThen(stateManager.goToState(1, telescope, arm, wrist)));
+    // driverController.cross().and(() -> stateManager.robotState == 6).onTrue(new TelescopeCommand(telescope, 7).alongWith(new ArmCommand(arm, 7).alongWith(new WristCommand(wrist, 7))).andThen(stateManager.goToState(2, telescope, arm, wrist)));
+    // driverController.circle().and(() -> stateManager.robotState == 6).onTrue(new TelescopeCommand(telescope, 7).alongWith(new ArmCommand(arm, 7).alongWith(new WristCommand(wrist, 7))).andThen(stateManager.goToState(3, telescope, arm, wrist)));
+    // driverController.triangle().and(() -> stateManager.robotState == 6).onTrue(new TelescopeCommand(telescope, 7).alongWith(new ArmCommand(arm, 7).alongWith(new WristCommand(wrist, 7))).andThen(stateManager.goToState(4, telescope, arm, wrist)));
+    
+    
+    driverController.R1().onTrue(stateManager.goToState(0, telescope, arm, wrist));
+
+    driverController.square().onTrue(stateManager.goToState(1, telescope, arm, wrist));
+    driverController.cross().onTrue(stateManager.goToState(2, telescope, arm, wrist));
+    driverController.circle().onTrue(stateManager.goToState(3, telescope, arm, wrist));
+    driverController.triangle().onTrue(stateManager.goToState(4, telescope, arm, wrist));
 
     // driverController.R2().and(() -> intake.intakeMode).onTrue(new IntakeCommand(intake).until(() -> driverController.L2().getAsBoolean()));
     // driverController.R2().and(() -> !intake.intakeMode).onTrue(new OuttakeCommand(intake).withTimeout(0.6));
 
     // intake
-    driverController.R2().onTrue(new TelescopeCommand(telescope, 0)
-                                  // .alongWith(new WristCommand(wrist, 6).andThen(new WristCommand(wrist, 0)))
-                                  .andThen(new ArmCommand(arm, 5))
-                                  .andThen(new TelescopeCommand(telescope, 5).alongWith(new WristCommand(wrist, 6).andThen(new WristCommand(wrist, 5)
-                                  .andThen(new IntakeCommand(intake).until(driverController.R3()))))));
+    // driverController.R2().and(() -> stateManager.robotState != 6).onTrue(
+    //                             new TelescopeCommand(telescope, 0)
+    //                               // .alongWith(new WristCommand(wrist, 6).andThen(new WristCommand(wrist, 0)))
+    //                               .andThen(new ArmCommand(arm, 6))
+    //                               .andThen(new TelescopeCommand(telescope, 6).andThen(new WristCommand(wrist, 7)
+    //                               .andThen(new IntakeCommand(intake).until(driverController.R3()))
+    //                               .andThen(stateManager.setRobotState(6)))));
+
+    driverController.R2().onTrue(stateManager.goToState(6, telescope, arm, wrist));
+
+  // driverController.R2().and(() -> stateManager.robotState == 6).onTrue(
+  //                                     new IntakeCommand(intake).until(driverController.R3()));
     
-    driverController.L2().onTrue(new LowerCommand(arm, telescope));
+    // driverController.L2().onTrue(new LowerCommand(arm, telescope));
 
     // operatorController.R2().and(() -> intake.intakeMode).onTrue(new IntakeCommand(intake).until(() -> driverController.L2().getAsBoolean()));
     // operatorController.R2().and(() -> !intake.intakeMode).onTrue(new OuttakeCommand(intake).withTimeout(0.6));

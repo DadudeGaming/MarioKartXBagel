@@ -51,13 +51,13 @@ public class IntakeCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(m_subsystem.intakeMotor.getTorqueCurrent().getValueAsDouble() > IntakeConstants.stopCurrent){
-      if(wasJustStalled < 5){
-        wasJustStalled++;
-        return false;
-      }
+    // if(m_subsystem.intakeMotor.getTorqueCurrent().getValueAsDouble() > IntakeConstants.stopCurrent){
+    //   if(wasJustStalled < 5){
+    //     wasJustStalled++;
+    //     return false;
+    //   }
       return true;
-    }
-    return false;
+    // }
+    // return false;
   }
 }

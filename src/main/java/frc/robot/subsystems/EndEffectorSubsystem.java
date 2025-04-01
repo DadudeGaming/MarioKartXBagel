@@ -20,7 +20,7 @@ public class EndEffectorSubsystem extends SubsystemBase {
   // initialize a variable for keeping track of the intake state
   public boolean intakeMode; 
 
-  public final TalonFX intakeMotor = new TalonFX(IntakeConstants.CANID);
+  // public final TalonFX intakeMotor = new TalonFX(IntakeConstants.CANID);
 
   /** Creates a new ExampleMotorSubsystem. */
   public EndEffectorSubsystem() {
@@ -30,10 +30,10 @@ public class EndEffectorSubsystem extends SubsystemBase {
 
     // The forward motor (probably) goes forward
     currentConfigs.Inverted = InvertedValue.Clockwise_Positive;
-    intakeMotor.getConfigurator().apply(currentConfigs);
+    // intakeMotor.getConfigurator().apply(currentConfigs);
 
     Shuffleboard.getTab(getName()).addBoolean("Intake Mode", () -> intakeMode);
-    Shuffleboard.getTab(getName()).addDouble("Motor Current", () -> intakeMotor.getTorqueCurrent().getValueAsDouble());
+    // Shuffleboard.getTab(getName()).addDouble("Motor Current", () -> intakeMotor.getTorqueCurrent().getValueAsDouble());
   }
 
 
@@ -52,11 +52,11 @@ public class EndEffectorSubsystem extends SubsystemBase {
   // }
 
   public void setMotor(double in){
-    intakeMotor.setControl(new DutyCycleOut(in));
+    // intakeMotor.setControl(new DutyCycleOut(in));
   }
 
   public boolean isStalled() {
-    if(intakeMotor.getTorqueCurrent().getValueAsDouble() > IntakeConstants.stopCurrent){
+    if(/*intakeMotor.getTorqueCurrent().getValueAsDouble() > IntakeConstants.stopCurrent*/ true){
       return true;
     }
     return false;

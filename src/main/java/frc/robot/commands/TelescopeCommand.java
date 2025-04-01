@@ -31,13 +31,16 @@ public class TelescopeCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    pivotAnglesArray = new double[6];
+    pivotAnglesArray = new double[8];
     pivotAnglesArray[0] = TelescopeConstants.TelescopeLengths.Stowed;
     pivotAnglesArray[1] = TelescopeConstants.TelescopeLengths.L1;
     pivotAnglesArray[2] = TelescopeConstants.TelescopeLengths.L2;
     pivotAnglesArray[3] = TelescopeConstants.TelescopeLengths.L3;
-    pivotAnglesArray[4] = TelescopeConstants.TelescopeLengths.L4;
+    pivotAnglesArray[4] = TelescopeConstants.TelescopeLengths.Climb;
     pivotAnglesArray[5] = TelescopeConstants.TelescopeLengths.Intake;
+    pivotAnglesArray[6] = TelescopeConstants.TelescopeLengths.Ground;
+    pivotAnglesArray[7] = TelescopeConstants.TelescopeLengths.Intermediate;
+
     m_subsystem.setTelescopeLength(pivotAnglesArray[m_PIDPositionIndex]);
   }
 
