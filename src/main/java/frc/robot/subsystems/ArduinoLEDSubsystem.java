@@ -93,10 +93,9 @@ public class ArduinoLEDSubsystem extends SubsystemBase {
             SendLEDInput((byte)0); //Slowly fading between Green and Yellow, or Green, White, and Yellow? (Slow Speed / 5s)
           else if(DriverStation.isAutonomousEnabled())
             SendLEDInput((byte)2); //Flashing Yellow and Green with White between (High Speed / 0.5s)
-          // TODO THIS IS FOR INTAKE PUT IS INTAKE IN USE VARIABLE HERE INSTEAD OF FALSE
-          else if(false) //Gold (Solid Color / 0s) 
-            SendLEDInput((byte)6);
-          else if(ClimbSubsystem.angle >= 60.0)
+          else if(StateManager.robotState == 5 && EndEffectorSubsystem.speeeeeeen) //speeeeeeen is just if the motor spinning above speed of 0.2
+            SendLEDInput((byte)6); //Gold (Solid Color / 0s)
+          else if(StateManager.robotState == 5)
             SendLEDInput((byte)5); //Green (Solid Color / 0s)
           else if(Timer.getMatchTime() <= 20.0)
             SendLEDInput((byte)3); //Flashing Yellow (Hold yellow if possible then flick off then back on quickly / 0.8s + 0.2s)

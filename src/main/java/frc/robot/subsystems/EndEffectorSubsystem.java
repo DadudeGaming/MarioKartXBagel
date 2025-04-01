@@ -20,7 +20,10 @@ public class EndEffectorSubsystem extends SubsystemBase {
   // initialize a variable for keeping track of the intake state
   public boolean intakeMode; 
 
-  // public final TalonFX intakeMotor = new TalonFX(IntakeConstants.CANID);
+  public static boolean speeeeeeen;
+  //speeeeeeen is just if the motor spinning above speed of 0.2
+
+  public final TalonFX intakeMotor = new TalonFX(IntakeConstants.CANID);
 
   /** Creates a new ExampleMotorSubsystem. */
   public EndEffectorSubsystem() {
@@ -52,11 +55,11 @@ public class EndEffectorSubsystem extends SubsystemBase {
   // }
 
   public void setMotor(double in){
-    // intakeMotor.setControl(new DutyCycleOut(in));
+    intakeMotor.setControl(new DutyCycleOut(in));
   }
 
   public boolean isStalled() {
-    if(/*intakeMotor.getTorqueCurrent().getValueAsDouble() > IntakeConstants.stopCurrent*/ true){
+    if(intakeMotor.getTorqueCurrent().getValueAsDouble() > IntakeConstants.stopCurrent){
       return true;
     }
     return false;
@@ -66,6 +69,7 @@ public class EndEffectorSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+    speeeeeeen = Math.abs(intakeMotor.get()) >= 0.2;
     // This method will be called once per scheduler run, constantly, usually you'll put logging stuff here
   }
 }

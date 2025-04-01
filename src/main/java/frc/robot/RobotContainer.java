@@ -127,6 +127,7 @@ public class RobotContainer {
     configureBindings();
 
     // Shut up
+    // No you
     // DriverStation.silenceJoystickConnectionWarning(true);
 
     autoChooser = AutoBuilder.buildAutoChooser();

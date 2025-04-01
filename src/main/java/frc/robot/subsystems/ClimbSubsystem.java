@@ -19,12 +19,14 @@ public class ClimbSubsystem extends SubsystemBase {
 
   // declare variables up here, you can either set their value here, or later in the code, it mostly just depends on what you're doing
 
+  public double angle;
 
   // create a new spark max (neo motor controller) called motor1, at CAN ID 12, and tell it that it is a brushless motor, since spark max
   private SparkMax climbMotor = new SparkMax(11, MotorType.kBrushless);
 
   /** Creates a new ExampleMotorSubsystem. */
   public ClimbSubsystem() { // default to ourtake first (we have a preloaded game piece)
+    angle = climbMotor.getEncoder().getPosition();
     Shuffleboard.getTab(OperatorConstants.AUTO_SHUFFLEBOARD).addDouble("Climb", () -> climbMotor.getEncoder().getPosition());
   }
 
@@ -65,6 +67,6 @@ public class ClimbSubsystem extends SubsystemBase {
   }
 
   public double getPos(){
-    return motor1.getEncoder().getPosition();
+    return climbMotor.getEncoder().getPosition();
   }
 }
