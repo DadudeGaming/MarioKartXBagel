@@ -5,23 +5,29 @@
 package frc.robot.commands;
 
 import frc.robot.Constants.ArmConstants;
+import frc.robot.Constants.WristConstants;
 import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.Wrist;
+import frc.robot.subsystems.WristNotDiffy;
+
+import org.dyn4j.geometry.Vector2;
+
 import edu.wpi.first.wpilibj2.command.Command;
 
 /** An example command that uses an example subsystem. */
-public class ArmCommand extends Command {
+public class WristCommand extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final ArmSubsystem m_subsystem;
+  private final WristNotDiffy m_subsystem;
   private int m_PIDPositionIndex;
 
-  double[] pivotAnglesArray;
+  double[] wristAnglesArray;
 
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public ArmCommand(ArmSubsystem subsystem, int PIDPositionIndex) {
+  public WristCommand(WristNotDiffy subsystem, int PIDPositionIndex) {
     m_subsystem = subsystem;
     m_PIDPositionIndex = PIDPositionIndex;
     // Use addRequirements() here to declare subsystem dependencies.
@@ -31,16 +37,17 @@ public class ArmCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    pivotAnglesArray = new double[8];
-    pivotAnglesArray[0] = ArmConstants.ArmAngles.Stowed;
-    pivotAnglesArray[1] = ArmConstants.ArmAngles.L1;
-    pivotAnglesArray[2] = ArmConstants.ArmAngles.L2;
-    pivotAnglesArray[3] = ArmConstants.ArmAngles.L3;
-    pivotAnglesArray[4] = ArmConstants.ArmAngles.Climb;
-    pivotAnglesArray[5] = ArmConstants.ArmAngles.Intake;
-    pivotAnglesArray[6] = ArmConstants.ArmAngles.Ground;
-    pivotAnglesArray[7] = ArmConstants.ArmAngles.Intermediate;
-    m_subsystem.setArmAngle(pivotAnglesArray[m_PIDPositionIndex]);
+    wristAnglesArray = new double[8];
+    wristAnglesArray[0] = WristConstants.PresetsNonDiffy.STOWED;
+    wristAnglesArray[1] = WristConstants.PresetsNonDiffy.L1;
+    wristAnglesArray[2] = WristConstants.PresetsNonDiffy.L2;
+    wristAnglesArray[3] = WristConstants.PresetsNonDiffy.L3;
+    wristAnglesArray[4] = WristConstants.PresetsNonDiffy.Climb;
+    wristAnglesArray[5] = WristConstants.PresetsNonDiffy.INTAKE;
+    wristAnglesArray[6] = WristConstants.PresetsNonDiffy.GROUND;
+    wristAnglesArray[7] = WristConstants.PresetsNonDiffy.INTERMEDIATE;
+    
+    m_subsystem.setSetpoint(wristAnglesArray[m_PIDPositionIndex]);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
