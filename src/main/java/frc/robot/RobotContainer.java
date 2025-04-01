@@ -105,7 +105,7 @@ public class RobotContainer {
             Vision.getAprilTagPose(10, new Transform2d(
                 Constants.reefOffset,
                 Constants.reefOffsetY,
-                new Rotation2d(0)
+                new Rotation2d(Math.toRadians(180))
             ))
         ).until(driverController.L2().negate()));
 }
