@@ -158,7 +158,7 @@ public class Vision {
         poses.add(targetPose);
       } //tupid code
     }
-
+    
     field2d.getObject("tracked targets").setPoses(poses);
   }
 
@@ -171,8 +171,8 @@ public class Vision {
      */
     FRONT_CAM("Camera-1",
              new Rotation3d(0, 0, 0),
-             new Translation3d(0.2,
-                               0.2,
+             new Translation3d(-0.2,
+                               -0.2,
                                0.51),
              VecBuilder.fill(4, 4, 8), VecBuilder.fill(0.5, 0.5, 1));
     // /**

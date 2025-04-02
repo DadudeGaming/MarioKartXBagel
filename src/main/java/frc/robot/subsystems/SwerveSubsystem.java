@@ -109,25 +109,25 @@ public class SwerveSubsystem extends SubsystemBase {
   // Update odometry with wheel measurements
   swerveDrive.updateOdometry();
 
-  SmartDashboard.putData("Field", swerveDrive.field);
+  // SmartDashboard.putData("Field", swerveDrive.field);
   
   // If vision has a valid estimate, apply it directly with appropriate confidence
-  if (visionEst.isPresent()) {
-    EstimatedRobotPose pose = visionEst.get();
+  // if (visionEst.isPresent()) {
+  //   EstimatedRobotPose pose = visionEst.get();
     
-    // Display the vision targets on SmartDashboard for debugging
-    SmartDashboard.putNumber("Vision Tags Detected", pose.targetsUsed.size());
+  //   // Display the vision targets on SmartDashboard for debugging
+  //   SmartDashboard.putNumber("Vision Tags Detected", pose.targetsUsed.size());
     
-    // For consistently using vision measurements, use fixed reasonable std devs
-    // instead of the dynamic ones that might reject measurements
-    Matrix<N3, N1> stdDevs = VecBuilder.fill(0.5, 0.5, 0.5);
+  //   // For consistently using vision measurements, use fixed reasonable std devs
+  //   // instead of the dynamic ones that might reject measurements
+  //   Matrix<N3, N1> stdDevs = VecBuilder.fill(0.5, 0.5, 0.5);
     
     // Add the vision measurement to the swerve drive's pose estimator
     // swerveDrive.addVisionMeasurement(
     //     pose.estimatedPose.toPose2d(),
     //     pose.timestampSeconds,
     //     stdDevs);
-  }
+  // }
   
   // This updates the pose visualization
   // vision.updateVisionField();
