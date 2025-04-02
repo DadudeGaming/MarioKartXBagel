@@ -47,6 +47,9 @@ public class WristNotDiffy extends SubsystemBase {
     Shuffleboard.getTab(getName()).addDouble("y enc", () -> followerMotor.getEncoder().getPosition());
 
 
+    Shuffleboard.getTab(getName()).addDouble("Wrist Output", () -> wristPID.calculate(MainMotor.getEncoder().getPosition()));
+
+
     
     followerMotor.configure(new SparkMaxConfig().follow(MainMotor.getDeviceId(),true), null, PersistMode.kPersistParameters);
 
