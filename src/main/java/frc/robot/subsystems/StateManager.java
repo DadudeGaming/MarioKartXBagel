@@ -55,7 +55,7 @@ public class StateManager extends SubsystemBase {
 
   public Command goToState(int position, TelescopeSubsystem telescope, ArmSubsystem arm, WristNotDiffy wrist) {
     return defer(() -> {
-      if (robotStateSupplier.getAsInt() == 6) {
+      if (robotStateSupplier.getAsInt() == 6 && position != 6) {
       return  new SequentialCommandGroup(new PrintCommand("this works"),
                                  new TelescopeCommand(telescope, 7).alongWith(new ArmCommand(arm, 7).alongWith(new WristCommand(wrist, 7))),
                                  moveToPosition(position, telescope, arm, wrist)
