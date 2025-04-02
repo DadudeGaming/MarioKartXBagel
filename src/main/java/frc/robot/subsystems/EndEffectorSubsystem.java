@@ -37,6 +37,8 @@ public class EndEffectorSubsystem extends SubsystemBase {
 
     Shuffleboard.getTab(getName()).addBoolean("Intake Mode", () -> intakeMode);
     Shuffleboard.getTab(getName()).addDouble("Dist", () -> colorSense.getProximity());
+
+    Shuffleboard.getTab(getName()).addBoolean("Coral Dectected", () -> getDist() < 0.35);
     // Shuffleboard.getTab(getName()).addDouble("Motor Current", () -> intakeMotor.getTorqueCurrent().getValueAsDouble());
   }
 
