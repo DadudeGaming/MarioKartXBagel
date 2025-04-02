@@ -4,7 +4,10 @@
 
 package frc.robot.commands;
 
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.EndEffectorSubsystem;
+import frc.robot.subsystems.StateManager;
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /** An example command that uses an example subsystem. */
@@ -32,7 +35,12 @@ public class OuttakeCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-      m_subsystem.setMotor(-0.17);
+    if(StateManager.robotState == 1){
+      m_subsystem.setMotor(0.1);
+    } else {
+      m_subsystem.setMotor(0.3);
+    }
+      
     
   }
 

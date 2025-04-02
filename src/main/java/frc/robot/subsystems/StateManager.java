@@ -38,7 +38,7 @@ public class StateManager extends SubsystemBase {
     return defer(() -> {
       if (position != robotState || position == 0){
        return new SequentialCommandGroup(
-                                        new TelescopeCommand(telescope, 0),
+                                        new TelescopeCommand(telescope, 0).alongWith(new WristCommand(wrist, 0)),
                                         new ArmCommand(arm, position),
                                         new TelescopeCommand(telescope, position).alongWith(new WristCommand(wrist, position)),
                                         setRobotState(position)

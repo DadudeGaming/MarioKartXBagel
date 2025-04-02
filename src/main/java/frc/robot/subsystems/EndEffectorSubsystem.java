@@ -8,6 +8,7 @@ import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
+import com.reduxrobotics.sensors.canandcolor.Canandcolor;
 
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -20,7 +21,9 @@ public class EndEffectorSubsystem extends SubsystemBase {
   // initialize a variable for keeping track of the intake state
   public boolean intakeMode; 
 
-  // public final TalonFX intakeMotor = new TalonFX(IntakeConstants.CANID);
+  private final Canandcolor colorSense = new Canandcolor(22);
+
+  public final TalonFX intakeMotor = new TalonFX(IntakeConstants.CANID);
 
   /** Creates a new ExampleMotorSubsystem. */
   public EndEffectorSubsystem() {
@@ -33,7 +36,12 @@ public class EndEffectorSubsystem extends SubsystemBase {
     // intakeMotor.getConfigurator().apply(currentConfigs);
 
     Shuffleboard.getTab(getName()).addBoolean("Intake Mode", () -> intakeMode);
+    Shuffleboard.getTab(getName()).addDouble("Dist", () -> colorSense.getProximity());
     // Shuffleboard.getTab(getName()).addDouble("Motor Current", () -> intakeMotor.getTorqueCurrent().getValueAsDouble());
+  }
+
+  public double getDist(){
+    return colorSense.getProximity();
   }
 
 
@@ -52,11 +60,11 @@ public class EndEffectorSubsystem extends SubsystemBase {
   // }
 
   public void setMotor(double in){
-    // intakeMotor.setControl(new DutyCycleOut(in));
+    intakeMotor.setControl(new DutyCycleOut(in));
   }
 
   public boolean isStalled() {
-    if(/*intakeMotor.getTorqueCurrent().getValueAsDouble() > IntakeConstants.stopCurrent*/ true){
+    if(intakeMotor.getTorqueCurrent().getValueAsDouble() > IntakeConstants.stopCurrent){
       return true;
     }
     return false;

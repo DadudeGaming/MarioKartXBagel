@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.StateManager;
 import frc.robot.subsystems.TelescopeSubsystem;
 import frc.robot.subsystems.Wrist;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -32,8 +33,9 @@ public class LowerCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if (m_armSubsystem.profiledArmController.getGoal().position + 10 < 90){
-      m_armSubsystem.setArmAngle(m_armSubsystem.profiledArmController.getGoal().position + 10);
+    if (m_armSubsystem.profiledArmController.getGoal().position - 13 > 20){
+      m_armSubsystem.setArmAngle(m_armSubsystem.profiledArmController.getGoal().position - 13);
+      
     } else {
       // m_armSubsystem.setArmAngle(90);
     }
@@ -43,6 +45,7 @@ public class LowerCommand extends Command {
     } else {
       m_TelescopeSubsystem.setTelescopeLength(0);
     }
+    StateManager.robotState = 0;
   }
 
   // Called every time the scheduler runs while the command is scheduled.

@@ -41,18 +41,18 @@ public final class Constants {
       public static final double kI = 0;
       public static final double kD = 0;
       // public static final double kMaxVel = 750;
-      public static final double kMaxVel = 500;
+      public static final double kMaxVel = 750;
       // public static final double kMaxAccel = 450;
-      public static final double kMaxAccel = 300;
+      public static final double kMaxAccel = 450;
     }
     public static class ArmAngles {
       public static double Stowed = 125;
-      public static double L1     = 97;
-      public static double L2     = 61;
-      public static double L3     = 47;
+      public static double L1     = 107;
+      public static double L2     = 89;
+      public static double L3     = 65.6;
       public static double Climb     = 3;
-      public static double Intake = 85;
-      public static double Ground = 120;
+      public static double Intake = 62.4;
+      public static double Ground = 118;
       public static double Intermediate = 110;
 
 
@@ -77,20 +77,20 @@ public final class Constants {
       public static final double kI = 0;
       public static final double kD = 0;
 
-      public static final double kMaxVel = 75;
+      public static final double kMaxVel = 175;
       // public static final double kMaxVel = 50;
-      public static final double kMaxAccel = 150;
+      public static final double kMaxAccel = 225;
       // public static final double kMaxAccel = 100;
     }
 
     public static class TelescopeLengths {
       public static double Stowed = 0;
       public static double L1     = 11;
-      public static double L2     = 7;
-      public static double L3     = 30;
+      public static double L2     = 11;
+      public static double L3     = 28;
       public static double Climb  = 0;
-      public static double Intake = 5;
-      public static double Ground = 22;
+      public static double Intake = 9.8;
+      public static double Ground = 26;
       public static double Intermediate = 27;
     }
 
@@ -142,13 +142,13 @@ public final class Constants {
 
       public static final class PresetsNonDiffy{
         public static double STOWED = 0;
-        public static double L1 = 0;
-        public static double L2 = 0;
-        public static double L3 = 0;
+        public static double L1 = 1.5;
+        public static double L2 = 4.2;
+        public static double L3 = 6;
         public static double Climb = 0;
-        public static double INTAKE = 0;
-        public static double INTERMEDIATE = 0;
-        public static double GROUND =  0;
+        public static double INTAKE = 15.1;
+        public static double INTERMEDIATE = 5;
+        public static double GROUND =  12;
       }
   }
 }

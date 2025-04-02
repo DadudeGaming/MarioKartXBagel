@@ -277,7 +277,7 @@ public class RobotContainer {
     driverController.square().onTrue(stateManager.goToState(1, telescope, arm, wrist));
     driverController.cross().onTrue(stateManager.goToState(2, telescope, arm, wrist));
     driverController.circle().onTrue(stateManager.goToState(3, telescope, arm, wrist));
-    driverController.triangle().onTrue(stateManager.goToState(4, telescope, arm, wrist));
+    // driverController.triangle().onTrue(stateManager.goToState(5, telescope, arm, wrist));
 
     // driverController.R2().and(() -> intake.intakeMode).onTrue(new IntakeCommand(intake).until(() -> driverController.L2().getAsBoolean()));
     // driverController.R2().and(() -> !intake.intakeMode).onTrue(new OuttakeCommand(intake).withTimeout(0.6));
@@ -291,12 +291,17 @@ public class RobotContainer {
     //                               .andThen(new IntakeCommand(intake).until(driverController.R3()))
     //                               .andThen(stateManager.setRobotState(6)))));
 
-    driverController.R2().onTrue(stateManager.goToState(6, telescope, arm, wrist));
+    // driverController.R2().onTrue(stateManager.goToState(6, telescope, arm, wrist));
+    driverController.R2().onTrue(new SequentialCommandGroup(stateManager.goToState(6, telescope, arm, wrist),
+                                  new IntakeCommand(intake).until(driverController.R3())));
+    
+    driverController.triangle().onTrue(new SequentialCommandGroup(stateManager.goToState(5, telescope, arm, wrist),
+                                  new IntakeCommand(intake).until(driverController.R3())));
 
   // driverController.R2().and(() -> stateManager.robotState == 6).onTrue(
   //                                     new IntakeCommand(intake).until(driverController.R3()));
     
-    // driverController.L2().onTrue(new LowerCommand(arm, telescope));
+    driverController.L2().onTrue(new LowerCommand(arm, telescope));
 
     // operatorController.R2().and(() -> intake.intakeMode).onTrue(new IntakeCommand(intake).until(() -> driverController.L2().getAsBoolean()));
     // operatorController.R2().and(() -> !intake.intakeMode).onTrue(new OuttakeCommand(intake).withTimeout(0.6));
