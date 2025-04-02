@@ -1,0 +1,66 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 5.033604452054794,
+        "y": 5.264619006849315
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 5.679708904109589,
+        "y": 6.43662243150685
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.697902397260274,
+        "y": 7.323137842465753
+      },
+      "prevControl": {
+        "x": 2.7947773972602734,
+        "y": 6.211237157534246
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "",
+      "waypointRelativePos": 0.5050847457627125,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "MoveArmIntake"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 180.0,
+    "maxAngularAcceleration": 360.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 128.15722658736908
+  },
+  "reversed": false,
+  "folder": "Jl2 LL1",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -122.34744349944201
+  },
+  "useDefaultConstraints": true
+}

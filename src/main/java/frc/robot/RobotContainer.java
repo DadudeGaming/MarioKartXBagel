@@ -111,10 +111,14 @@ public class RobotContainer {
                                                                             .andThen(new ArmCommand(arm, 1))
                                                                             .andThen(new TelescopeCommand(telescope, 1).alongWith(new WristCommand(wrist, 6).andThen(new WristCommand(wrist, 1))))));
     
-    NamedCommands.registerCommand("Stow", new SequentialCommandGroup(
-                                                                          new TelescopeCommand(telescope, 0)
-                                                                          .alongWith(new WristCommand(wrist, 6).andThen(new WristCommand(wrist, 0)))
-                                                                          .andThen(new ArmCommand(arm, 0))));                                                                        
+    NamedCommands.registerCommand("MoveArmL2", stateManager.goToState(2, telescope, arm, wrist));
+    NamedCommands.registerCommand("MoveArmL1", stateManager.goToState(1, telescope, arm, wrist));
+    NamedCommands.registerCommand("MoveArmIntake", stateManager.goToState(5, telescope, arm, wrist));
+
+    NamedCommands.registerCommand("Intake", new IntakeCommand(intake));
+                                                                              
+
+    NamedCommands.registerCommand("Stow", stateManager.goToState(0, telescope, arm, wrist));                                                                        
                     
     // NamedCommands.registerCommand("Score", new SequentialCommandGroup(
 
