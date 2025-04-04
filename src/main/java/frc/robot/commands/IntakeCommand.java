@@ -7,6 +7,7 @@ package frc.robot.commands;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.subsystems.StateManager;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /** An example command that uses an example subsystem. */
@@ -38,13 +39,11 @@ public class IntakeCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(StateManager.robotState == 5){
-      m_subsystem.setMotor(0.13);
+    if(StateManager.robotState == 5 || DriverStation.isAutonomous()){
+      m_subsystem.setMotor(0.10);
     } else {
       m_subsystem.setMotor(0.3);
     }
-      
-    
   }
 
   // Called once the command ends or is interrupted.

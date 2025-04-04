@@ -38,7 +38,7 @@ public class WristNotDiffy extends SubsystemBase {
 
   // private final PIDController xPID = new PIDController(0.01, 0, 0);
   // private final PIDController yPID = new PIDController(0.01, 0, 0);
-  private final ProfiledPIDController wristPID = new ProfiledPIDController(0.02, 0, 0, new TrapezoidProfile.Constraints(40, 35));
+  private final ProfiledPIDController wristPID = new ProfiledPIDController(0.02, 0, 0, new TrapezoidProfile.Constraints(65, 80));
 
   /** Creates a new ExampleSubsystem. */
   public WristNotDiffy() {

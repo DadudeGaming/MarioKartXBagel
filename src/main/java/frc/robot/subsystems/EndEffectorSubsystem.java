@@ -77,5 +77,10 @@ public class EndEffectorSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run, constantly, usually you'll put logging stuff here
+    if(intakeMotor.getTorqueCurrent().getValueAsDouble() > 2) {
+      colorSense.setLampLEDBrightness(0.5);
+    } else {
+      colorSense.setLampLEDBrightness(0);
+    }
   }
 }

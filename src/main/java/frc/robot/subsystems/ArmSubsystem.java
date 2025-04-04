@@ -52,7 +52,7 @@ public class ArmSubsystem extends SubsystemBase {
 
 
     Shuffleboard.getTab(OperatorConstants.AUTO_SHUFFLEBOARD).add("ArmPID", profiledArmController);
-    Shuffleboard.getTab(OperatorConstants.AUTO_SHUFFLEBOARD).addDouble("ForwardOutput", () -> m_forwardOut.Output);
+    Shuffleboard.getTab(OperatorConstants.AUTO_SHUFFLEBOARD).addDouble("Arm Output", () -> m_forwardOut.Output);
     Shuffleboard.getTab(OperatorConstants.AUTO_SHUFFLEBOARD).addDouble("Encoder", () -> encoderInDegrees());
   }
 

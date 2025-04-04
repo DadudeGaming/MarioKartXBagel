@@ -46,13 +46,13 @@ public final class Constants {
       public static final double kMaxAccel = 450;
     }
     public static class ArmAngles {
-      public static double Stowed = 125;
-      public static double L1     = 107;
+      public static double Stowed = 132;
+      public static double L1     = 96;
       public static double L2     = 89;
       public static double L3     = 65.6;
       public static double Climb     = 3;
-      public static double Intake = 62.4;
-      public static double Ground = 118;
+      public static double Intake = 58;
+      public static double Ground = 120;
       public static double Intermediate = 110;
 
 
@@ -89,8 +89,8 @@ public final class Constants {
       public static double L2     = 11;
       public static double L3     = 28;
       public static double Climb  = 0;
-      public static double Intake = 9.8;
-      public static double Ground = 26;
+      public static double Intake = 7;
+      public static double Ground = 21.5;
       public static double Intermediate = 27;
     }
 
@@ -142,13 +142,13 @@ public final class Constants {
 
       public static final class PresetsNonDiffy{
         public static double STOWED = 0;
-        public static double L1 = 1.5;
-        public static double L2 = 4.2;
-        public static double L3 = 6;
-        public static double Climb = 0;
-        public static double INTAKE = 15.1;
-        public static double INTERMEDIATE = 5;
-        public static double GROUND =  12;
+        public static double L1 = 3.7 *5;
+        public static double L2 = 3.7 *5;
+        public static double L3 = 6 *5;
+        public static double Climb = 0 *5;
+        public static double INTAKE = 15.1 *5;
+        public static double INTERMEDIATE = 5 *5;
+        public static double GROUND =  13.4 *5;
       }
   }
 }

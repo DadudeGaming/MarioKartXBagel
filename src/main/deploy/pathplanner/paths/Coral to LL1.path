@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.697902397260274,
-        "y": 7.3081121575342465
+        "x": 1.487542808219178,
+        "y": 7.1954195205479445
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.374058219178082,
-        "y": 6.331442636986301
+        "x": 2.1636986301369863,
+        "y": 6.218749999999999
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Top Coral"
     },
     {
       "anchor": {
@@ -60,7 +60,7 @@
   "folder": "Jl2 LL1",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 126.86989764584403
+    "rotation": 126.32933979160654
   },
   "useDefaultConstraints": true
 }

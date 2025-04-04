@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.018578767123288,
-        "y": 5.294670376712329
+        "x": 1.487542808219178,
+        "y": 7.1954195205479445
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.544477739726028,
-        "y": 6.28636558219178
+        "x": 2.3669407894736842,
+        "y": 6.0551809210526315
       },
       "isLocked": false,
-      "linkedName": "J"
+      "linkedName": "Top Coral"
     },
     {
       "anchor": {
-        "x": 6.656378424657535,
-        "y": 7.248009417808219
+        "x": 5.340049342105263,
+        "y": 5.083388157894737
       },
       "prevControl": {
-        "x": 5.739811643835617,
-        "y": 7.2630351027397255
+        "x": 6.321463815789473,
+        "y": 6.497779605263157
       },
       "nextControl": null,
       "isLocked": false,
@@ -34,12 +34,12 @@
   "eventMarkers": [
     {
       "name": "",
-      "waypointRelativePos": 0.49830508474576285,
+      "waypointRelativePos": 0.06283422459893043,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "Stow"
+          "name": "MoveArmL2"
         }
       }
     }
@@ -54,13 +54,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 1.1457628381750233
+    "rotation": -123.43256013840092
   },
   "reversed": false,
-  "folder": "JL2",
+  "folder": "IL2",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -120.34324888423963
+    "rotation": 126.32933979160654
   },
   "useDefaultConstraints": true
 }
