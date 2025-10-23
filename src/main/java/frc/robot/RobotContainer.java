@@ -77,7 +77,7 @@ public class RobotContainer {
 
   private final EndEffectorSubsystem intake = new EndEffectorSubsystem();
 
-  private final PowerDistribution pdh = new PowerDistribution(10, ModuleType.kRev);
+  // private final PowerDistribution pdh = new PowerDistribution(10, ModuleType.kRev);
 
 
   private final StateManager stateManager = new StateManager();
@@ -141,9 +141,9 @@ public class RobotContainer {
     drivebase.setDefaultCommand(driveFieldOrientedAngularVelocity);
 
     Shuffleboard.getTab(OperatorConstants.AUTO_SHUFFLEBOARD).addDouble("Match Time", () -> Timer.getMatchTime());
-    Shuffleboard.getTab(OperatorConstants.AUTO_SHUFFLEBOARD).addDouble("Voltage", () -> pdh.getVoltage());
-    Shuffleboard.getTab(OperatorConstants.AUTO_SHUFFLEBOARD).addDouble("Current", () -> pdh.getTotalCurrent());
-    Shuffleboard.getTab(OperatorConstants.AUTO_SHUFFLEBOARD).addDouble("Power", () -> pdh.getTotalPower());
+    // Shuffleboard.getTab(OperatorConstants.AUTO_SHUFFLEBOARD).addDouble("Voltage", () -> pdh.getVoltage());
+    // Shuffleboard.getTab(OperatorConstants.AUTO_SHUFFLEBOARD).addDouble("Current", () -> pdh.getTotalCurrent());
+    // Shuffleboard.getTab(OperatorConstants.AUTO_SHUFFLEBOARD).addDouble("Power", () -> pdh.getTotalPower());
     Shuffleboard.getTab(OperatorConstants.DRIVER_SHUFFLEBOARD).addInteger("Robot State", () -> stateManager.robotState);
   }
 
@@ -297,7 +297,7 @@ public class RobotContainer {
 
     // driverController.R2().onTrue(stateManager.goToState(6, telescope, arm, wrist));
     driverController.R2().onTrue(new SequentialCommandGroup(stateManager.goToState(6, telescope, arm, wrist),
-                                  new IntakeCommand(intake).until(driverController.R3())));
+                                 new IntakeCommand(intake).until(driverController.R3())));
     
     driverController.triangle().onTrue(new SequentialCommandGroup(stateManager.goToState(5, telescope, arm, wrist),
                                   new IntakeCommand(intake).until(driverController.R3())));

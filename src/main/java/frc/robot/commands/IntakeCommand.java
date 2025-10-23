@@ -40,7 +40,7 @@ public class IntakeCommand extends Command {
   @Override
   public void execute() {
     if(StateManager.robotState == 5 || DriverStation.isAutonomous()){
-      m_subsystem.setMotor(0.10);
+      m_subsystem.setMotor(0.15);
     } else {
       m_subsystem.setMotor(0.3);
     }
@@ -64,7 +64,7 @@ public class IntakeCommand extends Command {
     //   return true;
     // }
 
-    if(m_subsystem.getDist() < 0.35){
+    if(m_subsystem.getDist() < 0.20){
       return true;
     }
     return false;

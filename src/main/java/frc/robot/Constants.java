@@ -51,8 +51,8 @@ public final class Constants {
       public static double L2     = 89;
       public static double L3     = 65.6;
       public static double Climb     = 3;
-      public static double Intake = 58;
-      public static double Ground = 120;
+      public static double Intake = 60;
+      public static double Ground = 118;
       public static double Intermediate = 110;
 
 
@@ -89,8 +89,8 @@ public final class Constants {
       public static double L2     = 11;
       public static double L3     = 28;
       public static double Climb  = 0;
-      public static double Intake = 7;
-      public static double Ground = 21.5;
+      public static double Intake = 10;
+      public static double Ground = 23;
       public static double Intermediate = 27;
     }
 
@@ -107,7 +107,7 @@ public final class Constants {
     public static final int CANID = 14;
   }
   // max speed of the robot in m/s use Units.feetToMeters to use feet
-  public static final   double  MAX_SPEED = 4.5;
+  public static final   double  MAX_SPEED = 1.5;
 
 
   public static final class WristConstants {
