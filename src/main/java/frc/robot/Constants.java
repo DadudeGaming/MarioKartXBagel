@@ -33,5 +33,5 @@ public final class Constants {
 
 
   // max speed of the robot in m/s use Units.feetToMeters to use feet
-  public static final   double  MAX_SPEED = 4.5;
+  public static final   double  MAX_SPEED = 1;
 }
