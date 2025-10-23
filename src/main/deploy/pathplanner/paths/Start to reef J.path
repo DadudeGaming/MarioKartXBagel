@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 8.072615131578948,
+        "y": 7.24827302631579
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 7.257405821917809,
+        "y": 6.917444349315068
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.018578767123288,
+        "y": 5.279644691780822
+      },
+      "prevControl": {
+        "x": 5.589554794520548,
+        "y": 6.346468321917809
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 180.0,
+    "maxAngularAcceleration": 360.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 60.01836063115069
+  },
+  "reversed": false,
+  "folder": "JL4 HL4",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 1.1691393279073505
+  },
+  "useDefaultConstraints": true
+}
