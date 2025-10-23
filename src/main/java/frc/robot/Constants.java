@@ -52,7 +52,7 @@ public final class Constants {
       public static double L3     = 65.6;
       public static double Climb     = 3;
       public static double Intake = 60;
-      public static double Ground = 118;
+      public static double Ground = 117;
       public static double Intermediate = 110;
 
 

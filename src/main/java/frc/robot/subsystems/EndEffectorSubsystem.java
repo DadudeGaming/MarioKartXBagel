@@ -62,7 +62,7 @@ public class EndEffectorSubsystem extends SubsystemBase {
   // }
 
   public void setMotor(double in){
-    intakeMotor.setControl(new DutyCycleOut(in));
+    intakeMotor.setControl(new DutyCycleOut(-in));
   }
 
   public boolean isStalled() {
@@ -77,7 +77,7 @@ public class EndEffectorSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run, constantly, usually you'll put logging stuff here
-    if(intakeMotor.getTorqueCurrent().getValueAsDouble() > 2) {
+    if(Math.abs(intakeMotor.getTorqueCurrent().getValueAsDouble()) > 2) {
       colorSense.setLampLEDBrightness(0.5);
     } else {
       colorSense.setLampLEDBrightness(0);

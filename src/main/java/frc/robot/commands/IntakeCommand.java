@@ -40,7 +40,7 @@ public class IntakeCommand extends Command {
   @Override
   public void execute() {
     if(StateManager.robotState == 5 || DriverStation.isAutonomous()){
-      m_subsystem.setMotor(0.15);
+      m_subsystem.setMotor(0.08);
     } else {
       m_subsystem.setMotor(0.3);
     }
