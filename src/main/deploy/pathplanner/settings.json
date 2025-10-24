@@ -3,8 +3,16 @@
   "robotLength": 0.964,
   "holonomicMode": true,
   "pathFolders": [
+    "AL4 HL4",
+    "FL2 EL2",
+    "HL1",
+    "JL2",
+    "JL2 AL2",
     "JL4 HL4",
-    "AL4 HL4"
+    "Jl2 LL1",
+    "IL2",
+    "Random Paths",
+    "l1"
   ],
   "autoFolders": [],
   "defaultMaxVel": 3.0,

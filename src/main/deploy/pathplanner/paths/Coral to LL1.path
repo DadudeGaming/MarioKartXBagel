@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.0,
-        "y": 7.0
+        "x": 1.487542808219178,
+        "y": 7.1954195205479445
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.0,
-        "y": 7.0
+        "x": 2.1636986301369863,
+        "y": 6.218749999999999
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Top Coral"
     },
     {
       "anchor": {
-        "x": 3.7864726027397264,
-        "y": 7.0
+        "x": 3.6512414383561644,
+        "y": 5.1293878424657535
       },
       "prevControl": {
-        "x": 2.7864726027397264,
-        "y": 7.0
+        "x": 2.9450342465753425,
+        "y": 5.985851883561644
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,7 +31,19 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "",
+      "waypointRelativePos": 0.3525423728813561,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "MoveArmL1"
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -42,13 +54,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -178.41490085694298
+    "rotation": -57.847704858717584
   },
   "reversed": false,
-  "folder": "Random Paths",
+  "folder": "Jl2 LL1",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 126.32933979160654
   },
   "useDefaultConstraints": true
 }
