@@ -255,7 +255,7 @@ public class RobotContainer {
     // driverController.circle().onTrue(new ArmCommand(arm, 3));
     // driverController.triangle().onTrue(new ArmCommand(arm, 4));
 
-    driverController.L1().onTrue(new OuttakeCommand(intake).withTimeout(1.5));
+    //driverController.L1().onTrue(new OuttakeCommand(intake).withTimeout(1.5)); //Commented
 
     // operatorController.L2().whileTrue(wrist.runAxes(operatorController.getRightX(), operatorController.getLeftY()));
                                                             
@@ -276,12 +276,12 @@ public class RobotContainer {
     // driverController.triangle().and(() -> stateManager.robotState == 6).onTrue(new TelescopeCommand(telescope, 7).alongWith(new ArmCommand(arm, 7).alongWith(new WristCommand(wrist, 7))).andThen(stateManager.goToState(4, telescope, arm, wrist)));
     
     
-    driverController.R1().onTrue(stateManager.goToState(0, telescope, arm, wrist));
+    // driverController.R1().onTrue(stateManager.goToState(0, telescope, arm, wrist)); //Commented
 
-    driverController.square().onTrue(stateManager.goToState(1, telescope, arm, wrist));
-    driverController.cross().onTrue(stateManager.goToState(2, telescope, arm, wrist));
-    driverController.circle().onTrue(stateManager.goToState(3, telescope, arm, wrist));
-    // driverController.triangle().onTrue(stateManager.goToState(5, telescope, arm, wrist));
+    // driverController.square().onTrue(stateManager.goToState(1, telescope, arm, wrist));
+    // driverController.cross().onTrue(stateManager.goToState(2, telescope, arm, wrist));
+    // driverController.circle().onTrue(stateManager.goToState(3, telescope, arm, wrist));
+    // driverController.triangle().onTrue(stateManager.goToState(5, telescope, arm, wrist)); //to here
 
     // driverController.R2().and(() -> intake.intakeMode).onTrue(new IntakeCommand(intake).until(() -> driverController.L2().getAsBoolean()));
     // driverController.R2().and(() -> !intake.intakeMode).onTrue(new OuttakeCommand(intake).withTimeout(0.6));
@@ -296,20 +296,20 @@ public class RobotContainer {
     //                               .andThen(stateManager.setRobotState(6)))));
 
     // driverController.R2().onTrue(stateManager.goToState(6, telescope, arm, wrist));
-    driverController.R2().onTrue(new SequentialCommandGroup(stateManager.goToState(6, telescope, arm, wrist),
-                                 new IntakeCommand(intake).until(driverController.R3())));
+    // driverController.R2().onTrue(new SequentialCommandGroup(stateManager.goToState(6, telescope, arm, wrist), //Commented
+    //                              new IntakeCommand(intake).until(driverController.R3())));
     
-    driverController.triangle().onTrue(new SequentialCommandGroup(stateManager.goToState(5, telescope, arm, wrist),
-                                  new IntakeCommand(intake).until(driverController.R3())));
+    // driverController.triangle().onTrue(new SequentialCommandGroup(stateManager.goToState(5, telescope, arm, wrist),
+    //                               new IntakeCommand(intake).until(driverController.R3()))); //to here
 
   // driverController.R2().and(() -> stateManager.robotState == 6).onTrue(
   //                                     new IntakeCommand(intake).until(driverController.R3()));
     
-    driverController.L2().onTrue(new LowerCommand(arm, telescope));
+    //driverController.L2().onTrue(new LowerCommand(arm, telescope)); //Commented
 
     // operatorController.R2().and(() -> intake.intakeMode).onTrue(new IntakeCommand(intake).until(() -> driverController.L2().getAsBoolean()));
     // operatorController.R2().and(() -> !intake.intakeMode).onTrue(new OuttakeCommand(intake).withTimeout(0.6));
-    driverController.L3().whileTrue(drivebase.zeroGyro()); //zero the gyro when square(?) is pressed
+    //driverController.L3().whileTrue(drivebase.zeroGyro()); //zero the gyro when square(?) is pressed //Commented
 
     // driverController.povDown().whileTrue(climb.outake());
 
