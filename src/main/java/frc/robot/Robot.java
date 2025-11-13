@@ -4,6 +4,9 @@
 
 package frc.robot;
 
+import org.ironmaple.simulation.SimulatedArena;
+
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -28,6 +31,12 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+
+    // Initialize the SimulatedArena instance
+    SimulatedArena.getInstance();
+
+    // Optional: Override simulation timings (if needed)
+    // SimulatedArena.overrideSimulationTimings(0.01, 3);
   }
 
   /**
@@ -99,5 +108,10 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically whilst in simulation. */
   @Override
-  public void simulationPeriodic() {}
+  public void simulationPeriodic() {
+    // Update the simulation world
+    if (!RobotBase.isReal()) {
+    SimulatedArena.getInstance().simulationPeriodic();
+    }
+  }
 }

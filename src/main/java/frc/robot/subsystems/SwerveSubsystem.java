@@ -4,13 +4,16 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
-import frc.robot.Constants.OperatorConstants;
+import static edu.wpi.first.units.Units.Inches;
+import static edu.wpi.first.units.Units.Meter;
 
 import java.io.File;
 import java.util.function.Supplier;
+
+import org.ironmaple.simulation.SimulatedArena;
+import org.ironmaple.simulation.drivesims.COTS;
+import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
+import org.ironmaple.simulation.drivesims.configs.DriveTrainSimulationConfig;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathfindingCommand;
@@ -22,16 +25,18 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-
-import static edu.wpi.first.units.Units.Meter;
-
+import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import swervelib.parser.SwerveParser;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+import frc.robot.Constants.OperatorConstants;
 import swervelib.SwerveDrive;
+import swervelib.parser.SwerveParser;
 import swervelib.telemetry.SwerveDriveTelemetry;
 import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 
@@ -45,6 +50,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
   private Field2d m_field = new Field2d();
 
+  private SwerveDriveSimulation swerveDriveSimulation;
 
   public SwerveSubsystem() {
 
@@ -71,10 +77,36 @@ public class SwerveSubsystem extends SubsystemBase {
     swerveDrive.setAngularVelocityCompensation(true,
                                                true,
                                                0.1); //Correct for skew that gets worse as angular velocity increases. Start with a coefficient of 0.1.
+    
+    // Instantiate the swerve drive simulation
+    this.swerveDriveSimulation = new SwerveDriveSimulation(
+            driveTrainSimulationConfig,
+            new Pose2d(3, 3, new Rotation2d()) // Starting pose
+    );
+
+    // Register the drivetrain simulation to the simulation world
+    SimulatedArena.getInstance().addDriveTrainSimulation(swerveDriveSimulation);
+
+    
     setupPathPlanner();
 
     Shuffleboard.getTab(OperatorConstants.AUTO_SHUFFLEBOARD).add(m_field);
   }
+
+  // Create and configure a drivetrain simulation configuration
+public static final DriveTrainSimulationConfig driveTrainSimulationConfig = DriveTrainSimulationConfig.Default()
+        // Specify gyro type (for realistic gyro drifting and error simulation)
+        .withGyro(COTS.ofPigeon2())
+        // Specify swerve module (for realistic swerve dynamics)
+        .withSwerveModule(COTS.ofMark4(
+                DCMotor.getKrakenX60(1), // Drive motor is a Kraken X60
+                DCMotor.getKrakenX60(1), // Steer motor is a Falcon 500
+                COTS.WHEELS.COLSONS.cof, // Use the COF for Colson Wheels
+                3)) // L3 Gear ratio
+        // Configures the track length and track width (spacing between swerve modules)
+        .withTrackLengthTrackWidth(Inches.of(24), Inches.of(24))
+        // Configures the bumper size (dimensions of the robot bumper)
+        .withBumperSize(Inches.of(30), Inches.of(30));
 
 
   public void periodic(){
