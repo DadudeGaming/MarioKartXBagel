@@ -33,7 +33,9 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer();
 
     // Initialize the SimulatedArena instance
+    if (!RobotBase.isReal()) {
     SimulatedArena.getInstance();
+    }
 
     // Optional: Override simulation timings (if needed)
     // SimulatedArena.overrideSimulationTimings(0.01, 3);

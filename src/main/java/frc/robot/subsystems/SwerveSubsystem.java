@@ -28,6 +28,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -43,7 +44,7 @@ import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 public class SwerveSubsystem extends SubsystemBase {
 
   // declare the configuration directory
-  File directory = new File(Filesystem.getDeployDirectory(),"swerve2"); //Change to swerve2 for 4992 and swerve for bagel
+  File directory = new File(Filesystem.getDeployDirectory(),"swerve"); //Change to swerve2 for 4992 and swerve for bagel
 
   // create a swerveDrive object but don't define it yet becasue it coomplains about not handling potential errors
   SwerveDrive swerveDrive;
@@ -79,13 +80,17 @@ public class SwerveSubsystem extends SubsystemBase {
                                                0.1); //Correct for skew that gets worse as angular velocity increases. Start with a coefficient of 0.1.
     
     // Instantiate the swerve drive simulation
+    if (!RobotBase.isReal()) {
     this.swerveDriveSimulation = new SwerveDriveSimulation(
             driveTrainSimulationConfig,
             new Pose2d(3, 3, new Rotation2d()) // Starting pose
     );
+    }
 
     // Register the drivetrain simulation to the simulation world
+    if (!RobotBase.isReal()) {
     SimulatedArena.getInstance().addDriveTrainSimulation(swerveDriveSimulation);
+    }
 
     
     setupPathPlanner();
