@@ -58,7 +58,7 @@ public class RobotContainer {
 
 
   // Declare a variable to track the current speed
-  private double currentSpeed = 0.0;
+  public static double currentSpeed = 0.0;
 
   // Define constants for acceleration, deceleration, and decay
   private static final double ACCELERATION_RATE = 0.05; // Rate of increase when "b" is pressed
@@ -88,7 +88,7 @@ public class RobotContainer {
 
   // Decrease speed while "a" is pressed
   driverController.a().whileTrue(Commands.run(() -> {
-    currentSpeed = Math.max(currentSpeed - DECELERATION_RATE, -1.0); // Cap speed at -1.0
+    currentSpeed = Math.max(currentSpeed - DECELERATION_RATE, -0.4); // Cap speed at -1.0
   }));  
 
     // Shut up
