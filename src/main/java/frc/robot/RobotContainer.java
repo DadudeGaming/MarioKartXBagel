@@ -4,6 +4,19 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.reduxrobotics.canand.CanandEventLoop;
+
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
+//import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.OperatorConstants;
 
 // import frc.robot.subsystems.SwerveSubsystem;
@@ -12,33 +25,7 @@ import frc.robot.Constants.OperatorConstants;
 // import frc.robot.commands.ArmCommand;
 
 import frc.robot.subsystems.SwerveSubsystem;
-
-
 import swervelib.SwerveInputStream;
-
-
-import com.reduxrobotics.canand.CanandEventLoop;
-import com.fasterxml.jackson.databind.deser.std.StdScalarDeserializer;
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.commands.PathPlannerAuto;
-
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.PowerDistribution;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
-import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
-//import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 
 
@@ -70,6 +57,13 @@ public class RobotContainer {
   private final SendableChooser<Command> autoChooser;
 
 
+  // Declare a variable to track the current speed
+  private double currentSpeed = 0.0;
+
+  // Define constants for acceleration, deceleration, and decay
+  private static final double ACCELERATION_RATE = 0.05; // Rate of increase when "b" is pressed
+  private static final double DECELERATION_RATE = 0.05; // Rate of decrease when "a" is pressed
+  private static final double DECAY_RATE = 0.02;        // Rate of decay when no button is pressed
   
 
   // Build an auto chooser. This will use Commands.none() as the default option.
@@ -87,6 +81,16 @@ public class RobotContainer {
     // Configure the trigger bindings
     configureBindings();
 
+    // Increase speed while "b" is pressed
+  driverController.b().whileTrue(Commands.run(() -> {
+    currentSpeed = Math.min(currentSpeed + ACCELERATION_RATE, 1.0); // Cap speed at 1.0
+  }));
+
+  // Decrease speed while "a" is pressed
+  driverController.a().whileTrue(Commands.run(() -> {
+    currentSpeed = Math.max(currentSpeed - DECELERATION_RATE, -1.0); // Cap speed at -1.0
+  }));  
+
     // Shut up
     // DriverStation.silenceJoystickConnectionWarning(true);
 
@@ -95,12 +99,12 @@ public class RobotContainer {
     setupAutoChooser();
 
     // set the default command for the drivebase to the drive command
-    drivebase.setDefaultCommand(driveFieldOrientedAngularVelocity);
+    drivebase.setDefaultCommand(driveFieldOrientedWithDecay); //driveFieldOrientedAngularVelocity
 
 
     // wrist.setDefaultCommand(wrist.runAxes(operatorController.getRightX(), operatorController.getLeftY()));
   
-    drivebase.setDefaultCommand(driveFieldOrientedAngularVelocity);
+    drivebase.setDefaultCommand(driveFieldOrientedWithDecay);
 
     Shuffleboard.getTab(OperatorConstants.AUTO_SHUFFLEBOARD).addDouble("Match Time", () -> Timer.getMatchTime());
     // Shuffleboard.getTab(OperatorConstants.AUTO_SHUFFLEBOARD).addDouble("Voltage", () -> pdh.getVoltage());
@@ -111,7 +115,7 @@ public class RobotContainer {
 
 
   SwerveInputStream driveAngularVelocity = SwerveInputStream.of(drivebase.getSwerveDrive(), 
-                                                                () -> driverController.getLeftY() * -1,
+                                                                () -> currentSpeed,
                                                                 () -> driverController.getLeftX() * -1)
                                                                 .withControllerRotationAxis(driverController::getRightX)
                                                                 .deadband(OperatorConstants.DEADBAND)
@@ -126,17 +130,37 @@ public class RobotContainer {
                                                                                             () -> driverController.getRightX() * -1,
                                                                                             () -> driverController.getRightY() *-1)
                                                                                              .headingWhile(true);
-  
 
   // // create a new command that calls the driveCommand that we made in the swerveSubsystem
   Command driveFieldOrientedAngularVelocity = drivebase.driveFieldOriented(driveAngularVelocity);
 
   // // Same thing but for direct angle rather than angular velocity
   Command driveFieldOrientedDirectAngle     = drivebase.driveFieldOriented(driveDirectAngle);
+
+    // Wrap the existing driveFieldOrientedAngularVelocity command with additional logic
+  Command driveFieldOrientedWithDecay = Commands.parallel(
+    // Existing drive command
+    driveFieldOrientedAngularVelocity,
+
+    // Deceleration logic and SmartDashboard updates
+    Commands.run(() -> {
+        // Decay speed slowly when neither button is pressed
+        if (!driverController.b().getAsBoolean() && !driverController.a().getAsBoolean()) {
+            if (currentSpeed > 0) {
+                currentSpeed = Math.max(currentSpeed - DECAY_RATE, 0); // Decay toward 0
+            } else if (currentSpeed < 0) {
+                currentSpeed = Math.min(currentSpeed + DECAY_RATE, 0); // Decay toward 0
+            }
+        }
+
+        // Update SmartDashboard with the current speed
+        SmartDashboard.putNumber("Current Speed", currentSpeed);
+    })
+  );
   
 
   // define what buttons do on the controller
-  private void configureBindings() {
+  private void configureBindings() { //circle accel x decell
     // /** Set up the commands to change the pivot position */
     // driverController.R1().and(() -> stateManager.robotState != "STOWED").onTrue(new TelescopeCommand(telescope, 0)
     //                                 // .alongWith(new WristCommand(wrist, 6).andThen(new WristCommand(wrist, 0)))
