@@ -38,7 +38,7 @@ import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 public class SwerveSubsystem extends SubsystemBase {
 
   // declare the configuration directory
-  File directory = new File(Filesystem.getDeployDirectory(),"swerve2"); //Change to swerve2 for 4992 and swerve for bagel
+  File directory = new File(Filesystem.getDeployDirectory(),"swerve"); //Change to swerve2 for 4992 and swerve for bagel
 
   // create a swerveDrive object but don't define it yet becasue it coomplains about not handling potential errors
   SwerveDrive swerveDrive;

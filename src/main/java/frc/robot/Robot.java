@@ -45,13 +45,13 @@ public class Robot extends TimedRobot {
 
     // PWM port 9
     // Must be a PWM header, not MXP or DIO
-    m_led = new AddressableLED(9);
+    m_led = new AddressableLED(0);
 
 
     // Reuse buffer
     // Default to a length of 60, start empty output
     // Length is expensive to set, so only set it once, then just update data
-    m_ledBuffer = new AddressableLEDBuffer(300);
+    m_ledBuffer = new AddressableLEDBuffer(183);
     m_led.setLength(m_ledBuffer.getLength());
 
     m_rainbow.applyTo(m_ledBuffer);
