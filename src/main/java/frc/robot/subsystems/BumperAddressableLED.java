@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.LEDPattern;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /**
@@ -15,10 +16,10 @@ public class BumperAddressableLED extends SubsystemBase {
   private final AddressableLEDBuffer m_ledBuffer;
 
   // PWM port for the LED strip. This must be a PWM header on the roboRIO.
-  private static final int kLedPort = 9;
+  private static final int kLedPort = 0;
 
   // Number of LEDs on the strip.
-  private static final int kLedStripLength = 60;
+  private static final int kLedStripLength = 183;
 
   /** Creates a new WhiteLED subsystem. */
   public BumperAddressableLED() {
@@ -31,6 +32,11 @@ public class BumperAddressableLED extends SubsystemBase {
     // Set the data and start the LED output.
     m_led.setData(m_ledBuffer);
     m_led.start();
+
+    // Set the default command to turn the strip off, otherwise the last colors written by
+    // the last command to run will continue to be displayed.
+    // Note: Other default patterns could be used instead!
+    setDefaultCommand(runPattern(LEDPattern.solid(Color.kBlack)).withName("Off"));
   }
 
   /**
@@ -46,6 +52,10 @@ public class BumperAddressableLED extends SubsystemBase {
     // This method will be called once per scheduler run.
     // Continuously send the buffer data to the LEDs.
     m_led.setData(m_ledBuffer);
+  }
+
+  public Command runPattern(LEDPattern pattern) {
+    return run(() -> pattern.applyTo(m_ledBuffer));
   }
 }
 
