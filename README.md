@@ -2,4 +2,8 @@ MarioKartXBagel
 
 vroom vroom
 
-Now making my own swerve! YAY FUN!
+Now NOT making my own swerve! YAY FUN!
+
+Lights Go Vroom!
+
+Hacking the gyro...
