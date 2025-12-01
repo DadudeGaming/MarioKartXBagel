@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
+import edu.wpi.first.wpilibj.AddressableLEDBufferView;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -14,6 +15,10 @@ public class BumperAddressableLED extends SubsystemBase {
 
   private final AddressableLED m_led;
   private final AddressableLEDBuffer m_ledBuffer;
+  private final AddressableLEDBufferView m_LedSection1;
+  private final AddressableLEDBufferView m_LedSection2;
+  private final AddressableLEDBufferView m_LedSection3;
+  private final AddressableLEDBufferView m_LedSection4;
 
   // PWM port for the LED strip. This must be a PWM header on the roboRIO.
   private static final int kLedPort = 0;
@@ -33,6 +38,11 @@ public class BumperAddressableLED extends SubsystemBase {
     m_led.setData(m_ledBuffer);
     m_led.start();
 
+    m_LedSection1 = m_ledBuffer.createView(0, 74);
+    m_LedSection2 = m_ledBuffer.createView(75, 91);
+    m_LedSection3 = m_ledBuffer.createView(92, 164);
+    m_LedSection4 = m_ledBuffer.createView(165, 183);
+
     // Set the default command to turn the strip off, otherwise the last colors written by
     // the last command to run will continue to be displayed.
     // Note: Other default patterns could be used instead!
@@ -42,14 +52,17 @@ public class BumperAddressableLED extends SubsystemBase {
   /**
    * Sets the entire LED strip to a solid white color.
    */
-  public void setWhite() {
+  public void pattern1() {
     // Using LEDPattern is a convenient way to set all LEDs to the same color.
-    LEDPattern.solid(Color.kWhite).applyTo(m_ledBuffer);
+    LEDPattern.solid(Color.kWhite).applyTo(m_LedSection1);
+    LEDPattern.solid(Color.kRed).applyTo(m_LedSection2);
+    LEDPattern.solid(Color.kWhite).applyTo(m_LedSection3);
+    LEDPattern.solid(Color.kRed).applyTo(m_LedSection4);
   }
 
   public Command setWhiteCommand() {
     return run(() -> {
-      setWhite();
+      pattern1();
     });
   }
 

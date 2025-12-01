@@ -74,7 +74,7 @@ public class RobotContainer {
 
     CanandEventLoop.getInstance();
 
-    m_BumperAddressableLED.setWhite();
+    m_BumperAddressableLED.pattern1();
                                                                   
                     
     // NamedCommands.registerCommand("Score", new SequentialCommandGroup(
