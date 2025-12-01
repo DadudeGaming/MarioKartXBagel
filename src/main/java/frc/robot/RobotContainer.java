@@ -164,7 +164,7 @@ public class RobotContainer {
   private void configureBindings() { //circle accel x decell
     // /** Set up the commands to change the pivot position */
 
-    driverController.x().onTrue(new InstantCommand(m_BumperAddressableLED::setWhite, m_BumperAddressableLED));
+    driverController.x().onTrue(m_BumperAddressableLED.setWhiteCommand());
 
     // driverController.R1().and(() -> stateManager.robotState != "STOWED").onTrue(new TelescopeCommand(telescope, 0)
     //                                 // .alongWith(new WristCommand(wrist, 6).andThen(new WristCommand(wrist, 0)))

@@ -36,7 +36,7 @@ public class BumperAddressableLED extends SubsystemBase {
     // Set the default command to turn the strip off, otherwise the last colors written by
     // the last command to run will continue to be displayed.
     // Note: Other default patterns could be used instead!
-    setDefaultCommand(runPattern(LEDPattern.solid(Color.kBlack)).withName("Off"));
+    // setDefaultCommand(runPattern(LEDPattern.solid(Color.kBlack)).withName("Off"));
   }
 
   /**
@@ -47,6 +47,12 @@ public class BumperAddressableLED extends SubsystemBase {
     LEDPattern.solid(Color.kWhite).applyTo(m_ledBuffer);
   }
 
+  public Command setWhiteCommand() {
+    return run(() -> {
+      setWhite();
+    });
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run.
@@ -54,6 +60,7 @@ public class BumperAddressableLED extends SubsystemBase {
     m_led.setData(m_ledBuffer);
   }
 
+  
   public Command runPattern(LEDPattern pattern) {
     return run(() -> pattern.applyTo(m_ledBuffer));
   }
