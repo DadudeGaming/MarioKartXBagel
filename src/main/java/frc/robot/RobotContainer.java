@@ -14,10 +14,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
-//import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.subsystems.BumperAddressableLED;
 
 // import frc.robot.subsystems.SwerveSubsystem;
 
@@ -44,7 +45,7 @@ public class RobotContainer {
 
   private final SwerveSubsystem drivebase = new SwerveSubsystem();
   
-  
+  private final BumperAddressableLED m_BumperAddressableLED = new BumperAddressableLED();
 
   // private final ClimbCamera climbCamera = new ClimbCamera();
  
@@ -162,6 +163,9 @@ public class RobotContainer {
   // define what buttons do on the controller
   private void configureBindings() { //circle accel x decell
     // /** Set up the commands to change the pivot position */
+
+    driverController.x().onTrue(new InstantCommand(m_BumperAddressableLED::setWhite, m_BumperAddressableLED));
+
     // driverController.R1().and(() -> stateManager.robotState != "STOWED").onTrue(new TelescopeCommand(telescope, 0)
     //                                 // .alongWith(new WristCommand(wrist, 6).andThen(new WristCommand(wrist, 0)))
     //                                 .andThen(new WristCommand(wrist, 0))
