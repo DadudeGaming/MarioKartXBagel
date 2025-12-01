@@ -14,11 +14,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class BumperAddressableLED extends SubsystemBase {
 
   private final AddressableLED m_led;
-  private final AddressableLEDBuffer m_ledBuffer;
-  private final AddressableLEDBufferView m_LedSection1;
-  private final AddressableLEDBufferView m_LedSection2;
-  private final AddressableLEDBufferView m_LedSection3;
-  private final AddressableLEDBufferView m_LedSection4;
+  private final AddressableLEDBuffer m_ledBuffer = new AddressableLEDBuffer(kLedStripLength);;
 
   // PWM port for the LED strip. This must be a PWM header on the roboRIO.
   private static final int kLedPort = 0;
@@ -26,22 +22,24 @@ public class BumperAddressableLED extends SubsystemBase {
   // Number of LEDs on the strip.
   private static final int kLedStripLength = 183;
 
+  AddressableLEDBufferView m_LedSection1 = m_ledBuffer.createView(0, 73);
+  AddressableLEDBufferView m_LedSection2 = m_ledBuffer.createView(74, 90);
+  AddressableLEDBufferView m_LedSection3 = m_ledBuffer.createView(91, 163);
+  AddressableLEDBufferView m_LedSection4 = m_ledBuffer.createView(164, 182);
+
   /** Creates a new WhiteLED subsystem. */
   public BumperAddressableLED() {
     m_led = new AddressableLED(kLedPort);
 
     // Create a buffer for the LED data.
-    m_ledBuffer = new AddressableLEDBuffer(kLedStripLength);
+
     m_led.setLength(m_ledBuffer.getLength());
 
     // Set the data and start the LED output.
     m_led.setData(m_ledBuffer);
     m_led.start();
 
-    m_LedSection1 = m_ledBuffer.createView(0, 74);
-    m_LedSection2 = m_ledBuffer.createView(75, 91);
-    m_LedSection3 = m_ledBuffer.createView(92, 164);
-    m_LedSection4 = m_ledBuffer.createView(165, 183);
+   
 
     // Set the default command to turn the strip off, otherwise the last colors written by
     // the last command to run will continue to be displayed.
