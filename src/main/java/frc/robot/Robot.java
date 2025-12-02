@@ -26,14 +26,6 @@ public class Robot extends TimedRobot {
 
   private final RobotContainer m_robotContainer;
 
-  AddressableLED m_led;
-  AddressableLEDBuffer m_ledBuffer;
-
-   // all hues at maximum saturation and half brightness
-  private final LEDPattern m_rainbow = LEDPattern.rainbow(255, 128);
-  // Our LED strip has a density of 120 LEDs per meter
-  private static final Distance kLedSpacing = Meters.of(1 / 120.0);
-
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -42,24 +34,6 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
-
-    // PWM port 9
-    // Must be a PWM header, not MXP or DIO
-    m_led = new AddressableLED(0);
-
-
-    // Reuse buffer
-    // Default to a length of 60, start empty output
-    // Length is expensive to set, so only set it once, then just update data
-    m_ledBuffer = new AddressableLEDBuffer(183);
-    m_led.setLength(m_ledBuffer.getLength());
-
-    m_rainbow.applyTo(m_ledBuffer);
-
-    // Set the data
-    m_led.setData(m_ledBuffer);
-
-    m_led.start();
   }
 
   /**
