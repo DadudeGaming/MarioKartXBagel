@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import java.util.Vector;
-
 import org.dyn4j.geometry.Vector2;
 
 /**

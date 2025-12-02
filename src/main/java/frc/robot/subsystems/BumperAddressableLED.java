@@ -53,9 +53,9 @@ public class BumperAddressableLED extends SubsystemBase {
   public void pattern1() {
     // Using LEDPattern is a convenient way to set all LEDs to the same color.
     LEDPattern.solid(Color.kWhite).applyTo(m_LedSection1);
-    LEDPattern.solid(Color.kRed).applyTo(m_LedSection2);
+    LEDPattern.solid(Color.kBlack).applyTo(m_LedSection2);
     LEDPattern.solid(Color.kWhite).applyTo(m_LedSection3);
-    LEDPattern.solid(Color.kRed).applyTo(m_LedSection4);
+    LEDPattern.solid(Color.kBlack).applyTo(m_LedSection4);
   }
 
   public Command setWhiteCommand() {
