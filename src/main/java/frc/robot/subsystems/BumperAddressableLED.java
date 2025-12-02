@@ -23,9 +23,25 @@ public class BumperAddressableLED extends SubsystemBase {
   private static final int kLedStripLength = 183;
 
   AddressableLEDBufferView m_LedSection1 = m_ledBuffer.createView(0, 73);
-  AddressableLEDBufferView m_LedSection2 = m_ledBuffer.createView(74, 90);
-  AddressableLEDBufferView m_LedSection3 = m_ledBuffer.createView(91, 163);
+  AddressableLEDBufferView m_LedSection2 = m_ledBuffer.createView(74, 89);
+  AddressableLEDBufferView m_LedSection3 = m_ledBuffer.createView(90, 163);
   AddressableLEDBufferView m_LedSection4 = m_ledBuffer.createView(164, 182);
+
+  //set up patterns
+
+  //public static LEDPattern m_visor1 = LEDPattern.
+  public static LEDPattern m_off = LEDPattern.kOff;
+
+  // one shared position and direction for both visors
+private int visorPos = 0;
+private int visorDir = 1;
+
+// how many LEDs the white bar uses
+private static final int kBarSize = 4;
+
+// how often to advance the animation (smaller = faster)
+private static final int kSpeed = 1;  
+private int speedCounter = 0;
 
   /** Creates a new WhiteLED subsystem. */
   public BumperAddressableLED() {
@@ -51,11 +67,12 @@ public class BumperAddressableLED extends SubsystemBase {
    * Sets the entire LED strip to a solid white color.
    */
   public void pattern1() {
-    // Using LEDPattern is a convenient way to set all LEDs to the same color.
-    LEDPattern.solid(Color.kWhite).applyTo(m_LedSection1);
-    LEDPattern.solid(Color.kBlack).applyTo(m_LedSection2);
-    LEDPattern.solid(Color.kWhite).applyTo(m_LedSection3);
-    LEDPattern.solid(Color.kBlack).applyTo(m_LedSection4);
+ 
+    //m_visor1.applyTo(m_LedSection1);
+    //m_visor1.applyTo(m_LedSection3);
+
+    m_off.applyTo(m_LedSection2);
+    m_off.applyTo(m_LedSection4);
   }
 
   public Command setWhiteCommand() {
@@ -64,8 +81,55 @@ public class BumperAddressableLED extends SubsystemBase {
     });
   }
 
+  private void drawVisor(AddressableLEDBufferView view, int startSide, int sharedPos) {
+    int len = view.getLength();
+  
+    // Choose index mapping per section
+    int localPos = (startSide == 0)
+        ? sharedPos
+        : (len - kBarSize - sharedPos);
+  
+    // Clear
+    for (int i = 0; i < len; i++) {
+      view.setRGB(i, 0, 0, 0);
+    }
+  
+    // Draw bar
+    for (int i = 0; i < kBarSize; i++) {
+      int idx = localPos + i;
+      if (idx >= 0 && idx < len) {
+        view.setRGB(idx, 255, 255, 255);
+      }
+    }
+  }
+
+  private void updateSharedVisorState(int maxLen) {
+    speedCounter++;
+    if (speedCounter < kSpeed) return;
+    speedCounter = 0;
+  
+    visorPos += visorDir;
+  
+    if (visorPos <= 0) {
+      visorPos = 0;
+      visorDir = 1;
+    } else if (visorPos >= maxLen - kBarSize) {
+      visorPos = Math.max(0, maxLen - kBarSize);
+      visorDir = -1;
+    }
+  }
+
   @Override
   public void periodic() {
+
+    // pick the longest section since sharedPos must fit both
+    int maxLen = Math.max(m_LedSection1.getLength(),
+    m_LedSection3.getLength());
+
+    updateSharedVisorState(maxLen);
+
+    drawVisor(m_LedSection3, 1, visorPos);  // reversed
+    drawVisor(m_LedSection1, 0, visorPos);  // forward
     // This method will be called once per scheduler run.
     // Continuously send the buffer data to the LEDs.
     m_led.setData(m_ledBuffer);
