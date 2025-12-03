@@ -33,18 +33,16 @@ public class BumperAddressableLED extends SubsystemBase {
   public static LEDPattern m_off = LEDPattern.kOff;
 
   // one shared position and direction for both visors
-private int visorPos = 0;
-private int visorDir = 1;
+    private int visorPos = 0;
+    private int visorDir = 1;
 
-// how many LEDs the white bar uses
-private static final int kBarSize = 4;
+    // how many LEDs the white bar uses
+    private static final int kBarSize = 6;
 
-// how often to advance the animation (smaller = faster)
-private static final int kSpeed = 1;  
-private int speedCounter = 0;
+    private static final int kStep = 8;   // how many LEDs it moves per tick
 
-  /** Creates a new WhiteLED subsystem. */
-  public BumperAddressableLED() {
+    /** Creates a new WhiteLED subsystem. */
+    public BumperAddressableLED() {
     m_led = new AddressableLED(kLedPort);
 
     // Create a buffer for the LED data.
@@ -104,11 +102,7 @@ private int speedCounter = 0;
   }
 
   private void updateSharedVisorState(int maxLen) {
-    speedCounter++;
-    if (speedCounter < kSpeed) return;
-    speedCounter = 0;
-  
-    visorPos += visorDir;
+    visorPos += visorDir * kStep;
   
     if (visorPos <= 0) {
       visorPos = 0;
