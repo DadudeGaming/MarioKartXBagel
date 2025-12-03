@@ -6,6 +6,7 @@ import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.LEDPattern;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LEDs extends SubsystemBase {
@@ -28,11 +29,51 @@ public class LEDs extends SubsystemBase {
         m_ledBuffer = new AddressableLEDBuffer(183);
         m_led.setLength(m_ledBuffer.getLength());
 
-        m_rainbow.applyTo(m_ledBuffer);
+        // m_rainbow.applyTo(m_ledBuffer);
+        funnyPattern();
 
         // Set the data
         m_led.setData(m_ledBuffer);
 
         m_led.start();
+    }
+
+    public void funnyPattern() {
+        int length = m_ledBuffer.getLength();
+        boolean goldGroup = true;
+        boolean greenGroup = false;
+        int ledGroupCounter = 0;
+        for (int i = 0; i < length; i++) {
+            // if (i > 0) {
+            // m_ledBuffer.setLED(i - 1, Color.kBlack);
+            // }
+
+            if (greenGroup) {
+                if (ledGroupCounter <= 4) {
+                    m_ledBuffer.setLED(i, Color.kDarkGreen);
+                    ledGroupCounter++;
+                } else {
+                    greenGroup = false;
+                    goldGroup = true;
+                    ledGroupCounter = 0;
+                }
+            }
+
+            if (goldGroup) {
+                if (ledGroupCounter <= 4) {
+                    m_ledBuffer.setLED(i, new Color(255, 165, 0));
+                    ledGroupCounter++;
+                } else {
+                    goldGroup = false;
+                    greenGroup = true;
+                    ledGroupCounter = 0;
+                }
+            }
+        }
+    }
+
+    @Override
+    public void periodic() {
+
     }
 }
