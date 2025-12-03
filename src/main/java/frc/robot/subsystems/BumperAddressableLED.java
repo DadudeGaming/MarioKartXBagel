@@ -43,6 +43,10 @@ public class BumperAddressableLED extends SubsystemBase {
   private boolean flashOn = false;
   private long waitUntil = 0;
 
+  // add this at the top of your class
+private int flashDelayCounter = 0;
+private static final int FLASH_DELAY = 2; // increase for slower flashes
+
 
   public enum PatternMode {
     VISOR_SWEEP,
@@ -96,25 +100,74 @@ public class BumperAddressableLED extends SubsystemBase {
         view.setRGB(idx, 255, 255, 255);
       }
     }
+
+    // clear sections 2 and 4
+    for (int i = 0; i < m_LedSection2.getLength(); i++) {
+      m_LedSection2.setRGB(i, 0, 0, 0);
+    }
+    for (int i = 0; i < m_LedSection4.getLength(); i++) {
+      m_LedSection4.setRGB(i, 0, 0, 0);
+    }
+
+
   }
 
   private void runSweepAndFlash() {
+  
+    // speed table slow to fast
+    int[] speeds = {4, 5, 6, 7, 8};  // you can tune this
     int maxLen = Math.max(m_LedSection1.getLength(), m_LedSection3.getLength());
-  
-    // playing the 5 sweeps
+
     if (sweepCount < 5) {
-      updateSharedVisorState(maxLen);
-      drawVisor(m_LedSection3, 1, visorPos);
-      drawVisor(m_LedSection1, 0, visorPos);
-  
-      if (visorPos == 0 || visorPos == maxLen - kBarSize) {
+
+      // pick speed based on which pulse we are on
+      int step = speeds[sweepCount];
+
+      // advance forward only
+      visorPos += step;
+
+      // clear sections 1 and 3
+      for (int i = 0; i < m_LedSection1.getLength(); i++) {
+        m_LedSection1.setRGB(i, 0, 0, 0);
+      }
+      for (int i = 0; i < m_LedSection3.getLength(); i++) {
+        m_LedSection3.setRGB(i, 0, 0, 0);
+      }
+
+      // turn off 2 and 4
+      for (int i = 0; i < m_LedSection2.getLength(); i++) {
+        m_LedSection2.setRGB(i, 0, 0, 0);
+      }
+      for (int i = 0; i < m_LedSection4.getLength(); i++) {
+        m_LedSection4.setRGB(i, 0, 0, 0);
+      }
+
+      // draw pulse
+      for (int i = 0; i < kBarSize; i++) {
+        int idx = visorPos + i;
+        if (idx >= 0 && idx < m_LedSection1.getLength()) {
+          m_LedSection1.setRGB(idx, 255, 255, 255);
+        }
+        if (idx >= 0 && idx < m_LedSection3.getLength()) {
+          m_LedSection3.setRGB(idx, 255, 255, 255);
+        }
+      }
+
+      // reached the end
+      if (visorPos >= maxLen) {
+        visorPos = 0;
         sweepCount++;
       }
+
       return;
     }
   
     // flash 8 times (on/off)
     if (flashCount < 16) {   // on/off pairs
+      flashDelayCounter++;
+      if (flashDelayCounter < FLASH_DELAY) return; // wait before toggling
+      flashDelayCounter = 0;
+
       flashOn = !flashOn;
   
       int r = flashOn ? 255 : 0;
@@ -127,7 +180,15 @@ public class BumperAddressableLED extends SubsystemBase {
       for (int i = 0; i < m_LedSection3.getLength(); i++) {
         m_LedSection3.setRGB(i, r, g, b);
       }
-  
+
+      // clear sections 2 and 4
+      for (int i = 0; i < m_LedSection2.getLength(); i++) {
+        m_LedSection2.setRGB(i, 0, 0, 0);
+      }
+      for (int i = 0; i < m_LedSection4.getLength(); i++) {
+        m_LedSection4.setRGB(i, 0, 0, 0);
+      }
+
       flashCount++;
       return;
     }
@@ -162,7 +223,6 @@ public class BumperAddressableLED extends SubsystemBase {
   }
   
 
-
   private void updateSharedVisorState(int maxLen) {
     visorPos += visorDir * kStep;
   
@@ -176,31 +236,24 @@ public class BumperAddressableLED extends SubsystemBase {
   }
 
   @Override
-public void periodic() {
+  public void periodic() {
 
-  switch (currentMode) {
+    switch (currentMode) {
 
-    case VISOR_SWEEP:
-      int maxLen = Math.max(m_LedSection1.getLength(), m_LedSection3.getLength());
-      updateSharedVisorState(maxLen);
-      drawVisor(m_LedSection3, 1, visorPos);
-      drawVisor(m_LedSection1, 0, visorPos);
-      break;
+      case VISOR_SWEEP:
+        int maxLen = Math.max(m_LedSection1.getLength(), m_LedSection3.getLength());
+        updateSharedVisorState(maxLen);
+        drawVisor(m_LedSection3, 1, visorPos);
+        drawVisor(m_LedSection1, 0, visorPos);
+        break;
 
-    case SWEEP_AND_FLASH:
-      runSweepAndFlash();
-      break;
+      case SWEEP_AND_FLASH:
+        runSweepAndFlash();
+        break;
+    }
+
+    m_led.setData(m_ledBuffer);
   }
-
-  for (int i = 0; i < m_LedSection2.getLength(); i++) {
-    m_LedSection2.setRGB(i, 0, 0, 0);
-  }
-  for (int i = 0; i < m_LedSection4.getLength(); i++) {
-    m_LedSection4.setRGB(i, 0, 0, 0);
-  }
-
-  m_led.setData(m_ledBuffer);
-}
 
 
   
