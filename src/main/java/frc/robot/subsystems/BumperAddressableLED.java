@@ -3,7 +3,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.AddressableLEDBufferView;
-import edu.wpi.first.wpilibj.util.Color;
+//import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -31,18 +31,29 @@ public class BumperAddressableLED extends SubsystemBase {
 
   //public static LEDPattern m_visor1 = LEDPattern.
   public static LEDPattern m_off = LEDPattern.kOff;
-
   // one shared position and direction for both visors
-    private int visorPos = 0;
-    private int visorDir = 1;
+  private int visorPos = 0;
+  private int visorDir = 1;
+  // how many LEDs the white bar uses
+  private static final int kBarSize = 8;
+  private static final int kStep = 8;   // how many LEDs it moves per tick
 
-    // how many LEDs the white bar uses
-    private static final int kBarSize = 6;
+  private int sweepCount = 0;
+  private int flashCount = 0;
+  private boolean flashOn = false;
+  private long waitUntil = 0;
 
-    private static final int kStep = 8;   // how many LEDs it moves per tick
 
-    /** Creates a new WhiteLED subsystem. */
-    public BumperAddressableLED() {
+  public enum PatternMode {
+    VISOR_SWEEP,
+    SWEEP_AND_FLASH
+  }  
+
+  private PatternMode currentMode = PatternMode.VISOR_SWEEP;
+
+  /** Creates a new WhiteLED subsystem. */
+  public BumperAddressableLED() {
+    setPatternMode(PatternMode.SWEEP_AND_FLASH); //Can be changed
     m_led = new AddressableLED(kLedPort);
 
     // Create a buffer for the LED data.
@@ -61,22 +72,8 @@ public class BumperAddressableLED extends SubsystemBase {
     // setDefaultCommand(runPattern(LEDPattern.solid(Color.kBlack)).withName("Off"));
   }
 
-  /**
-   * Sets the entire LED strip to a solid white color.
-   */
-  public void pattern1() {
- 
-    //m_visor1.applyTo(m_LedSection1);
-    //m_visor1.applyTo(m_LedSection3);
-
-    m_off.applyTo(m_LedSection2);
-    m_off.applyTo(m_LedSection4);
-  }
-
-  public Command setWhiteCommand() {
-    return run(() -> {
-      pattern1();
-    });
+  public void setPatternMode(PatternMode mode) {
+    currentMode = mode;
   }
 
   private void drawVisor(AddressableLEDBufferView view, int startSide, int sharedPos) {
@@ -101,6 +98,71 @@ public class BumperAddressableLED extends SubsystemBase {
     }
   }
 
+  private void runSweepAndFlash() {
+    int maxLen = Math.max(m_LedSection1.getLength(), m_LedSection3.getLength());
+  
+    // playing the 5 sweeps
+    if (sweepCount < 5) {
+      updateSharedVisorState(maxLen);
+      drawVisor(m_LedSection3, 1, visorPos);
+      drawVisor(m_LedSection1, 0, visorPos);
+  
+      if (visorPos == 0 || visorPos == maxLen - kBarSize) {
+        sweepCount++;
+      }
+      return;
+    }
+  
+    // flash 8 times (on/off)
+    if (flashCount < 16) {   // on/off pairs
+      flashOn = !flashOn;
+  
+      int r = flashOn ? 255 : 0;
+      int g = flashOn ? 255 : 0;
+      int b = flashOn ? 255 : 0;
+  
+      for (int i = 0; i < m_LedSection1.getLength(); i++) {
+        m_LedSection1.setRGB(i, r, g, b);
+      }
+      for (int i = 0; i < m_LedSection3.getLength(); i++) {
+        m_LedSection3.setRGB(i, r, g, b);
+      }
+  
+      flashCount++;
+      return;
+    }
+  
+    // reset and wait 5 seconds
+    if (waitUntil == 0) {
+      waitUntil = System.currentTimeMillis() + 5000;
+      return;
+    }
+
+    // fill ALL FOUR sections with orange while waiting
+    for (int i = 0; i < m_LedSection1.getLength(); i++) {
+      m_LedSection1.setRGB(i, 255, 80, 0);
+    }
+    for (int i = 0; i < m_LedSection2.getLength(); i++) {
+      m_LedSection2.setRGB(i, 255, 80, 0);
+    }
+    for (int i = 0; i < m_LedSection3.getLength(); i++) {
+      m_LedSection3.setRGB(i, 255, 80, 0);
+    }
+    for (int i = 0; i < m_LedSection4.getLength(); i++) {
+      m_LedSection4.setRGB(i, 255, 80, 0);
+    }
+  
+    if (System.currentTimeMillis() >= waitUntil) {
+      sweepCount = 0;
+      flashCount = 0;
+      waitUntil = 0;
+      visorPos = 0;
+      visorDir = 1;
+    }
+  }
+  
+
+
   private void updateSharedVisorState(int maxLen) {
     visorPos += visorDir * kStep;
   
@@ -114,20 +176,32 @@ public class BumperAddressableLED extends SubsystemBase {
   }
 
   @Override
-  public void periodic() {
+public void periodic() {
 
-    // pick the longest section since sharedPos must fit both
-    int maxLen = Math.max(m_LedSection1.getLength(),
-    m_LedSection3.getLength());
+  switch (currentMode) {
 
-    updateSharedVisorState(maxLen);
+    case VISOR_SWEEP:
+      int maxLen = Math.max(m_LedSection1.getLength(), m_LedSection3.getLength());
+      updateSharedVisorState(maxLen);
+      drawVisor(m_LedSection3, 1, visorPos);
+      drawVisor(m_LedSection1, 0, visorPos);
+      break;
 
-    drawVisor(m_LedSection3, 1, visorPos);  // reversed
-    drawVisor(m_LedSection1, 0, visorPos);  // forward
-    // This method will be called once per scheduler run.
-    // Continuously send the buffer data to the LEDs.
-    m_led.setData(m_ledBuffer);
+    case SWEEP_AND_FLASH:
+      runSweepAndFlash();
+      break;
   }
+
+  for (int i = 0; i < m_LedSection2.getLength(); i++) {
+    m_LedSection2.setRGB(i, 0, 0, 0);
+  }
+  for (int i = 0; i < m_LedSection4.getLength(); i++) {
+    m_LedSection4.setRGB(i, 0, 0, 0);
+  }
+
+  m_led.setData(m_ledBuffer);
+}
+
 
   
   public Command runPattern(LEDPattern pattern) {
