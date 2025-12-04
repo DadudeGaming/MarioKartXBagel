@@ -146,11 +146,18 @@ private static final int FLASH_DELAY = 2; // increase for slower flashes
       // draw pulse
       for (int i = 0; i < kBarSize; i++) {
         int idx = visorPos + i;
+
+        // section 1 goes forward (normal)
         if (idx >= 0 && idx < m_LedSection1.getLength()) {
           m_LedSection1.setRGB(idx, 255, 255, 255);
         }
+
+        // section 3 is reversed, flip the index
         if (idx >= 0 && idx < m_LedSection3.getLength()) {
-          m_LedSection3.setRGB(idx, 255, 255, 255);
+          int flip = m_LedSection3.getLength() - 1 - idx;
+          if (flip >= 0 && flip < m_LedSection3.getLength()) {
+            m_LedSection3.setRGB(flip, 255, 255, 255);
+          }
         }
       }
 
@@ -232,7 +239,7 @@ private static final int FLASH_DELAY = 2; // increase for slower flashes
   public void periodic() {
 
     double maxSpeed = 1.0;
-    double minSpeed = 0.95;
+    double minSpeed = 0.5;
 
     // switch patterns based on speed
     if (currentMode != PatternMode.SWEEP_AND_FLASH && RobotContainer.currentSpeed >= maxSpeed) {
