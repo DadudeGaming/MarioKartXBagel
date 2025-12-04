@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.AddressableLEDBufferView;
 import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
 
 /**
  * A simple subsystem to control an addressable LED strip.
@@ -41,7 +42,7 @@ public class BumperAddressableLED extends SubsystemBase {
   private int sweepCount = 0;
   private int flashCount = 0;
   private boolean flashOn = false;
-  private long waitUntil = 0;
+  private int teleportOnce = 0;
 
   // add this at the top of your class
 private int flashDelayCounter = 0;
@@ -192,14 +193,8 @@ private static final int FLASH_DELAY = 2; // increase for slower flashes
       flashCount++;
       return;
     }
-  
-    // reset and wait 5 seconds
-    if (waitUntil == 0) {
-      waitUntil = System.currentTimeMillis() + 5000;
-      return;
-    }
 
-    // fill ALL FOUR sections with orange while waiting
+    // fill ALL FOUR sections with orange
     for (int i = 0; i < m_LedSection1.getLength(); i++) {
       m_LedSection1.setRGB(i, 255, 80, 0);
     }
@@ -212,14 +207,12 @@ private static final int FLASH_DELAY = 2; // increase for slower flashes
     for (int i = 0; i < m_LedSection4.getLength(); i++) {
       m_LedSection4.setRGB(i, 255, 80, 0);
     }
-  
-    if (System.currentTimeMillis() >= waitUntil) {
-      sweepCount = 0;
-      flashCount = 0;
-      waitUntil = 0;
-      visorPos = 0;
-      visorDir = 1;
-    }
+
+    teleportOnce = 1;
+    sweepCount = 0;
+    flashCount = 0;
+    visorPos = 0;
+    visorDir = 1;
   }
   
 
@@ -238,27 +231,42 @@ private static final int FLASH_DELAY = 2; // increase for slower flashes
   @Override
   public void periodic() {
 
+    double maxSpeed = 1.0;
+    double minSpeed = 0.95;
+
+    // switch patterns based on speed
+    if (currentMode != PatternMode.SWEEP_AND_FLASH && RobotContainer.currentSpeed >= maxSpeed) {
+        // start sweep-and-flash
+        setPatternMode(PatternMode.SWEEP_AND_FLASH);
+        sweepCount = 0;
+        flashCount = 0;
+        visorPos = 0;
+        visorDir = 1;
+        teleportOnce = 0;
+    } 
+    else if (currentMode == PatternMode.SWEEP_AND_FLASH && RobotContainer.currentSpeed < minSpeed) {
+        setPatternMode(PatternMode.VISOR_SWEEP);
+    }
+
+    // run current pattern
     switch (currentMode) {
+        case VISOR_SWEEP:
+            int maxLen = Math.max(m_LedSection1.getLength(), m_LedSection3.getLength());
+            updateSharedVisorState(maxLen);
+            drawVisor(m_LedSection3, 1, visorPos);
+            drawVisor(m_LedSection1, 0, visorPos);
+            // clear 2 & 4
+            for (int i = 0; i < m_LedSection2.getLength(); i++) m_LedSection2.setRGB(i, 0,0,0);
+            for (int i = 0; i < m_LedSection4.getLength(); i++) m_LedSection4.setRGB(i, 0,0,0);
+            break;
 
-      case VISOR_SWEEP:
-        int maxLen = Math.max(m_LedSection1.getLength(), m_LedSection3.getLength());
-        updateSharedVisorState(maxLen);
-        drawVisor(m_LedSection3, 1, visorPos);
-        drawVisor(m_LedSection1, 0, visorPos);
-        break;
-
-      case SWEEP_AND_FLASH:
-        runSweepAndFlash();
-        break;
+        case SWEEP_AND_FLASH:
+            if (teleportOnce == 0) {
+              runSweepAndFlash();
+            }
+            break;
     }
 
     m_led.setData(m_ledBuffer);
   }
-
-
-  
-  public Command runPattern(LEDPattern pattern) {
-    return run(() -> pattern.applyTo(m_ledBuffer));
-  }
 }
-

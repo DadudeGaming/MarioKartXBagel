@@ -61,8 +61,8 @@ public class RobotContainer {
   public static double currentSpeed = 0.0;
 
   // Define constants for acceleration, deceleration, and decay
-  private static final double ACCELERATION_RATE = 0.05; // Rate of increase when "b" is pressed
-  private static final double DECELERATION_RATE = 0.05; // Rate of decrease when "a" is pressed
+  private static final double ACCELERATION_RATE = 0.025; // Rate of increase when "b" is pressed
+  private static final double DECELERATION_RATE = 0.025; // Rate of decrease when "a" is pressed
   private static final double DECAY_RATE = 0.02;        // Rate of decay when no button is pressed
   
 
