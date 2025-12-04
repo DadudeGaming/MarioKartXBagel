@@ -18,6 +18,10 @@ public class LEDs extends SubsystemBase {
     // Our LED strip has a density of 120 LEDs per meter
     private static final Distance kLedSpacing = Meters.of(1 / 60.0);
 
+    int timer = 51;
+    boolean goldGroup = true;
+    boolean greenGroup = false;
+
     public LEDs() {
         // PWM port 0
         // Must be a PWM header, not MXP or DIO
@@ -30,19 +34,21 @@ public class LEDs extends SubsystemBase {
         m_led.setLength(m_ledBuffer.getLength());
 
         // m_rainbow.applyTo(m_ledBuffer);
-        funnyPattern();
-
-        // Set the data
-        m_led.setData(m_ledBuffer);
-
-        m_led.start();
     }
 
     public void funnyPattern() {
         int length = m_ledBuffer.getLength();
-        boolean goldGroup = true;
-        boolean greenGroup = false;
         int ledGroupCounter = 0;
+
+        if (timer > 50) {
+            timer = 0;
+            // greenGroup = !greenGroup;
+            // goldGroup = !goldGroup;
+        } else {
+            timer++;
+            return;
+        }
+
         for (int i = 0; i < length; i++) {
             // if (i > 0) {
             // m_ledBuffer.setLED(i - 1, Color.kBlack);
@@ -69,11 +75,21 @@ public class LEDs extends SubsystemBase {
                     ledGroupCounter = 0;
                 }
             }
+
+            if (ledGroupCounter == 4) {
+                ledGroupCounter = 0;
+                goldGroup = !goldGroup;
+                greenGroup = !greenGroup;
+            }
         }
     }
 
     @Override
     public void periodic() {
+        funnyPattern();
 
+        // Set the data
+        m_led.setData(m_ledBuffer);
+        m_led.start();
     }
 }
