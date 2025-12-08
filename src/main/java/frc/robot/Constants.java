@@ -27,7 +27,7 @@ public final class Constants {
     public static final double  ROTATION_SCALE     = 1;
 
     // if we want field centric control or not (is forwards on the controller always away from  the driver station or is it forwards for the robot)
-    public static final boolean FIELD_CENTRIC      = true;
+    public static final boolean FIELD_CENTRIC      = false;
 
     public static final String AUTO_SHUFFLEBOARD = "AUTO";
     public static final String DRIVER_SHUFFLEBOARD = "DRIVE";
