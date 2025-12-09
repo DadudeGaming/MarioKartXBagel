@@ -6,6 +6,7 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.LEDs;
+import frc.robot.subsystems.Music;
 
 // import frc.robot.subsystems.SwerveSubsystem;
 
@@ -59,6 +60,7 @@ public class RobotContainer {
   private final SwerveSubsystem drivebase = new SwerveSubsystem();
 
   private final LEDs leds = new LEDs();
+  public final Music music = new Music(drivebase);
   
   
 
