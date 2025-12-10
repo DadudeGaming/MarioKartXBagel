@@ -133,13 +133,13 @@ public static final DriveTrainSimulationConfig driveTrainSimulationConfig = Driv
 
   // Methods for actually moving the motors, gets the velocity from the swerve input streams
   public void driveFieldOriented(ChassisSpeeds velcocity) {
-    swerveDrive.driveFieldOriented(velcocity);
+    swerveDrive.drive(velcocity);
   }
 
   // A command that just runs the function above
   public Command driveFieldOriented(Supplier<ChassisSpeeds> Velocity){
     return run(()-> {
-      swerveDrive.driveFieldOriented(Velocity.get());
+      swerveDrive.drive(Velocity.get());
     });
   }
 

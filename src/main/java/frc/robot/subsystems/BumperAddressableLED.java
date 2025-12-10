@@ -51,14 +51,15 @@ private static final int FLASH_DELAY = 2; // increase for slower flashes
 
   public enum PatternMode {
     VISOR_SWEEP,
-    SWEEP_AND_FLASH
+    SWEEP_AND_FLASH,
+    RED
   }  
 
   private PatternMode currentMode = PatternMode.VISOR_SWEEP;
 
   /** Creates a new WhiteLED subsystem. */
   public BumperAddressableLED() {
-    setPatternMode(PatternMode.SWEEP_AND_FLASH); //Can be changed
+    setPatternMode(PatternMode.RED); //Can be changed
     m_led = new AddressableLED(kLedPort);
 
     // Create a buffer for the LED data.
@@ -252,7 +253,7 @@ private static final int FLASH_DELAY = 2; // increase for slower flashes
         teleportOnce = 0;
     } 
     else if (currentMode == PatternMode.SWEEP_AND_FLASH && RobotContainer.currentSpeed < minSpeed) {
-        setPatternMode(PatternMode.VISOR_SWEEP);
+        setPatternMode(PatternMode.RED); //was visor
     }
 
     // run current pattern
@@ -272,6 +273,9 @@ private static final int FLASH_DELAY = 2; // increase for slower flashes
               runSweepAndFlash();
             }
             break;
+
+        case RED:
+          for (int i = 0; i < m_ledBuffer.getLength(); i++) m_ledBuffer.setRGB(i, 255,0,0);
     }
 
     m_led.setData(m_ledBuffer);

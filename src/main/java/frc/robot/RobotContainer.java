@@ -79,12 +79,12 @@ public class RobotContainer {
     configureBindings();
 
     // Increase speed while "b" is pressed
-  driverController.b().whileTrue(Commands.run(() -> {
+  driverController.a().whileTrue(Commands.run(() -> {
     currentSpeed = Math.min(currentSpeed + ACCELERATION_RATE, 1.0); // Cap speed at 1.0
   }));
 
   // Decrease speed while "a" is pressed
-  driverController.a().whileTrue(Commands.run(() -> {
+  driverController.b().whileTrue(Commands.run(() -> {
     currentSpeed = Math.max(currentSpeed - DECELERATION_RATE, -0.4); // Cap speed at -1.0
   }));  
 
