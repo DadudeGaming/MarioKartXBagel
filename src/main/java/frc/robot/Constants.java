@@ -107,7 +107,7 @@ public final class Constants {
     public static final int CANID = 14;
   }
   // max speed of the robot in m/s use Units.feetToMeters to use feet
-  public static final   double  MAX_SPEED = 4.5;
+  public static final double MAX_SPEED = 4.5;
 
 
   public static final class WristConstants {

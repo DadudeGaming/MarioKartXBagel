@@ -85,16 +85,16 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-    m_robotContainer.music.m_orchestra.play();
+    m_robotContainer.music.loadPlayMusic(m_robotContainer.music.musicFile);
   }
 
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    if (!m_robotContainer.music.m_orchestra.isPlaying()) {
-      System.out.println("restarting music");
-      m_robotContainer.music.loadPlayMusic(m_robotContainer.music.musicFile);
-    }
+    // if (!m_robotContainer.music.m_orchestra.isPlaying()) {
+    //   System.out.println("restarting music");
+    //   m_robotContainer.music.loadPlayMusic(m_robotContainer.music.musicFile);
+    // }
   }
 
   @Override
