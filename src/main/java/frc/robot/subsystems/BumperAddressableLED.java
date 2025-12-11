@@ -3,9 +3,8 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.AddressableLEDBufferView;
-//import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.LEDPattern;
-import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 
@@ -44,22 +43,39 @@ public class BumperAddressableLED extends SubsystemBase {
   private boolean flashOn = false;
   private int teleportOnce = 0;
 
-  // add this at the top of your class
-private int flashDelayCounter = 0;
-private static final int FLASH_DELAY = 2; // increase for slower flashes
+  private int flashDelayCounter = 0;
+  private static final int FLASH_DELAY = 2; // increase for slower flashes
+
+  public int driftPos = 0;
+  public int driftStage = 0; // 0 blue, 1 orange, 2 purple
+  public boolean driftActive = false;
+
+  public boolean fireActive = false;
+  public double fireStartTime = 0.0; // when the glow started
+  public double fireDuration = 0.0;  // how long it should last
+
 
 
   public enum PatternMode {
     VISOR_SWEEP,
     SWEEP_AND_FLASH,
-    RED
+    RED,
+    DRIFT,
+    OFF
   }  
+
+  private final int[][] driftColors = {
+    {0, 0, 255},     // blue
+    {255, 120, 0},   // orange
+    {180, 0, 255}    // purple
+  };
+  
 
   private PatternMode currentMode = PatternMode.VISOR_SWEEP;
 
   /** Creates a new WhiteLED subsystem. */
   public BumperAddressableLED() {
-    setPatternMode(PatternMode.RED); //Can be changed
+    setPatternMode(PatternMode.DRIFT); //Can be changed
     m_led = new AddressableLED(kLedPort);
 
     // Create a buffer for the LED data.
@@ -236,11 +252,57 @@ private static final int FLASH_DELAY = 2; // increase for slower flashes
     }
   }
 
+  private void runDrift() {
+    int len = m_LedSection1.getLength();
+    int speed = 20;   // fast fill
+  
+    // advance
+    driftPos += speed;
+  
+    // clear both rails
+    for (int i = 0; i < len; i++) {
+      m_LedSection1.setRGB(i, 0, 0, 0);
+      m_LedSection3.setRGB(i, 0, 0, 0);
+    }
+  
+    // current color
+    int r = driftColors[driftStage][0];
+    int g = driftColors[driftStage][1];
+    int b = driftColors[driftStage][2];
+  
+    // draw fill
+    for (int i = 0; i < driftPos && i < len; i++) {
+      m_LedSection1.setRGB(i, r, g, b);
+      int flip = len - 1 - i;
+      m_LedSection3.setRGB(flip, r, g, b);
+    }
+  
+    // reached end of strip
+    if (driftPos >= len) {
+      driftPos = 0;
+      driftStage++;
+      if (driftStage >= 3) driftActive = false;
+    }
+  
+    // clear sections 2 and 4
+    for (int i = 0; i < m_LedSection2.getLength(); i++) m_LedSection2.setRGB(i, 0, 0, 0);
+    for (int i = 0; i < m_LedSection4.getLength(); i++) m_LedSection4.setRGB(i, 0, 0, 0);
+  }
+
+  private void driftEndGlow() {
+    for (int i = 0; i < m_LedSection1.getLength(); i++) m_LedSection1.setRGB(i, 255, 80, 0);
+    for (int i = 0; i < m_LedSection2.getLength(); i++) m_LedSection2.setRGB(i, 255, 80, 0);
+    for (int i = 0; i < m_LedSection3.getLength(); i++) m_LedSection3.setRGB(i, 255, 80, 0);
+    for (int i = 0; i < m_LedSection4.getLength(); i++) m_LedSection4.setRGB(i, 255, 80, 0);
+  }
+  
+
   @Override
   public void periodic() {
+    double now = Timer.getFPGATimestamp();
 
-    double maxSpeed = 1.0;
-    double minSpeed = 0.5;
+    double maxSpeed = 0.5;
+    double minSpeed = 0.2;
 
     // switch patterns based on speed
     if (currentMode != PatternMode.SWEEP_AND_FLASH && RobotContainer.currentSpeed >= maxSpeed) {
@@ -253,7 +315,7 @@ private static final int FLASH_DELAY = 2; // increase for slower flashes
         teleportOnce = 0;
     } 
     else if (currentMode == PatternMode.SWEEP_AND_FLASH && RobotContainer.currentSpeed < minSpeed) {
-        setPatternMode(PatternMode.RED); //was visor
+        setPatternMode(PatternMode.VISOR_SWEEP);
     }
 
     // run current pattern
@@ -275,7 +337,27 @@ private static final int FLASH_DELAY = 2; // increase for slower flashes
             break;
 
         case RED:
-          for (int i = 0; i < m_ledBuffer.getLength(); i++) m_ledBuffer.setRGB(i, 255,0,0);
+            for (int i = 0; i < m_ledBuffer.getLength(); i++) m_ledBuffer.setRGB(i, 255,0,0);
+            break;
+
+        case DRIFT:
+            if (driftActive) {
+                runDrift();
+            } else if (fireActive) {
+                double elapsed = Timer.getFPGATimestamp() - fireStartTime;
+        
+                if (elapsed < fireDuration) {
+                    driftEndGlow();  // keep glowing fire
+                } else {
+                    fireActive = false;   // stop fire/glow
+                    setPatternMode(PatternMode.OFF);
+                }
+            }
+            break;
+
+        case OFF:
+            for (int i = 0; i < m_ledBuffer.getLength(); i++) m_ledBuffer.setRGB(i, 0,0,0);
+            break;
     }
 
     m_led.setData(m_ledBuffer);

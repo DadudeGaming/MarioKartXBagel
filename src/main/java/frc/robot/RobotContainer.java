@@ -61,9 +61,9 @@ public class RobotContainer {
   public static double currentSpeed = 0.0;
 
   // Define constants for acceleration, deceleration, and decay
-  private static final double ACCELERATION_RATE = 0.025; // Rate of increase when "b" is pressed
-  private static final double DECELERATION_RATE = 0.025; // Rate of decrease when "a" is pressed
-  private static final double DECAY_RATE = 0.02;        // Rate of decay when no button is pressed
+  private static final double ACCELERATION_RATE = 0.015; // Rate of increase
+  private static final double DECELERATION_RATE = 0.03; // Rate of decrease
+  private static final double DECAY_RATE = 0.01;        // Rate of decay when no button is pressed
   
 
   // Build an auto chooser. This will use Commands.none() as the default option.
@@ -78,14 +78,24 @@ public class RobotContainer {
     // Configure the trigger bindings
     configureBindings();
 
-    // Increase speed while "b" is pressed
-  driverController.a().whileTrue(Commands.run(() -> {
-    currentSpeed = Math.min(currentSpeed + ACCELERATION_RATE, 1.0); // Cap speed at 1.0
+    // Increase speed while "a" is pressed
+    driverController.a().whileTrue(Commands.run(() -> {
+      if (currentSpeed >= 0) {
+        currentSpeed = Math.min(currentSpeed + ACCELERATION_RATE, 0.5); // Cap speed at 0.5
+      }
+      else {
+        currentSpeed = Math.min(currentSpeed + DECELERATION_RATE, 0.5);
+      }
   }));
 
-  // Decrease speed while "a" is pressed
-  driverController.b().whileTrue(Commands.run(() -> {
-    currentSpeed = Math.max(currentSpeed - DECELERATION_RATE, -0.4); // Cap speed at -1.0
+    // Decrease speed while "b" is pressed
+    driverController.b().whileTrue(Commands.run(() -> {
+      if (currentSpeed <= 0) {
+        currentSpeed = Math.max(currentSpeed - ACCELERATION_RATE, -0.2); // Cap speed at -0.2
+      }
+      else {
+        currentSpeed = Math.max(currentSpeed - DECELERATION_RATE, -0.2); // Cap speed at -0.2
+      }
   }));  
 
     // Shut up
@@ -141,6 +151,20 @@ public class RobotContainer {
 
     // Deceleration logic and SmartDashboard updates
     Commands.run(() -> {
+
+      double now = Timer.getFPGATimestamp();
+
+      if (m_BumperAddressableLED.fireActive) {
+        double elapsed = now - m_BumperAddressableLED.fireStartTime;
+    
+        if (elapsed < m_BumperAddressableLED.fireDuration) {
+            currentSpeed = Math.copySign(0.7, currentSpeed);
+        } else {
+            m_BumperAddressableLED.fireActive = false;
+        }
+      }
+    
+
         // Decay speed slowly when neither button is pressed
         if (!driverController.b().getAsBoolean() && !driverController.a().getAsBoolean()) {
             if (currentSpeed > 0) {
@@ -161,6 +185,36 @@ public class RobotContainer {
     // /** Set up the commands to change the pivot position */
 
     //driverController.x().onTrue(m_BumperAddressableLED.setWhiteCommand()); //Setwhitecommand is not a thing now
+
+    driverController.rightBumper().whileTrue(Commands.runOnce(() -> {
+            m_BumperAddressableLED.setPatternMode(BumperAddressableLED.PatternMode.DRIFT);
+            m_BumperAddressableLED.driftActive = true;
+            m_BumperAddressableLED.driftPos = 0;
+            m_BumperAddressableLED.driftStage = 0;
+        }, m_BumperAddressableLED)
+        .andThen(Commands.run(() -> {}, m_BumperAddressableLED))
+    )
+    .onFalse(
+        Commands.run(() -> {
+            m_BumperAddressableLED.driftActive = false;
+        })
+        .andThen(
+            Commands.runOnce(() -> {
+                int stage = m_BumperAddressableLED.driftStage;
+
+                double fireTime;
+                if (stage == 0) fireTime = 0.2;       // blue short
+                else if (stage == 1) fireTime = 0.4;  // orange medium
+                else fireTime = 0.6;                  // purple long
+
+                m_BumperAddressableLED.fireDuration = fireTime;
+                m_BumperAddressableLED.fireStartTime = Timer.getFPGATimestamp();
+                m_BumperAddressableLED.fireActive = true;
+            })
+        )
+    );
+
+
 
     // driverController.R1().and(() -> stateManager.robotState != "STOWED").onTrue(new TelescopeCommand(telescope, 0)
     //                                 // .alongWith(new WristCommand(wrist, 6).andThen(new WristCommand(wrist, 0)))
