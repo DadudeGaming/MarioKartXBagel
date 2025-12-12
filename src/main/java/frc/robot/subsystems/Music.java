@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.lang.ArrayIndexOutOfBoundsException;
 
 import javax.sound.midi.Instrument;
 
@@ -46,12 +47,12 @@ public class Music extends SubsystemBase {
         // Autofill the music list with files from the deploy folder
         Path musicDir = Filesystem.getDeployDirectory().toPath().resolve("music");
 
-    try (Stream<Path> paths = Files.list(musicDir)) {
-        musicFiles = paths
-                .filter(p -> p.toString().endsWith(".chrp"))
-                .map(p -> p.getFileName().toString()) // "song.chrp"
-                .sorted()
-                .toArray(String[]::new);
+        try (Stream<Path> paths = Files.list(musicDir)) {
+            musicFiles = paths
+                    .filter(p -> p.toString().endsWith(".chrp"))
+                    .map(p -> p.getFileName().toString()) // "song.chrp"
+                    .sorted()
+                    .toArray(String[]::new);
         } catch (IOException e) {
             System.out.println("Error loading music files: " + e.getMessage());
             musicFiles = new String[] {};
@@ -73,16 +74,20 @@ public class Music extends SubsystemBase {
             }
         }
 
-        songChooser = new SendableChooser<>();
-        songChooser.setDefaultOption(musicFiles[0], musicFiles[0]);
-        for (int i = 1; i < musicFiles.length; i++) {
-            songChooser.addOption(musicFiles[i], musicFiles[i]);
+        try {
+            songChooser = new SendableChooser<>();
+            songChooser.setDefaultOption("Disable Music", "disable");
+            for (int i = 0; i < musicFiles.length; i++) {
+                songChooser.addOption(musicFiles[i], musicFiles[i]);
+            }
+            SmartDashboard.putData("Song Chooser", songChooser);
+            songChooser.onChange(selectedSong -> {
+                musicFile = selectedSong;
+                loadPlayMusic(musicFile);
+            });
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
-        SmartDashboard.putData("Song Chooser", songChooser);
-        songChooser.onChange(selectedSong -> {
-            musicFile = selectedSong;
-            loadPlayMusic(musicFile);
-        });
 
         // Attempt to load the chrp
         // var status = m_orchestra.loadMusic(musicFile);
@@ -96,16 +101,19 @@ public class Music extends SubsystemBase {
 
     public void loadPlayMusic(String file) {
         m_orchestra.stop();
+        System.out.println("Music stopped");
 
-        // Attempt to load the chrp
-        var status = m_orchestra.loadMusic(file);
+        if (!file.equalsIgnoreCase("disable")) {
+            // Attempt to load the chrp
+            var status = m_orchestra.loadMusic(file);
 
-        if (!status.isOK()) {
-            // log error
+            if (!status.isOK()) {
+                // log error
+            }
+
+            m_orchestra.play();
+
+            System.out.println("Playing music: " + file);
         }
-
-        m_orchestra.play();
-
-        System.out.println("Playing music: " + file);
     }
 }
