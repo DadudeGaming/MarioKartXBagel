@@ -53,7 +53,7 @@ public class BumperAddressableLED extends SubsystemBase {
   public boolean fireActive = false;
   public double fireStartTime = 0.0; // when the glow started
   public double fireDuration = 0.0;  // how long it should last
-  private static final double STAGE_DELAY = 0.5; // seconds between colors
+  private static final double STAGE_DELAY = 2; // seconds between colors
 
 
   public enum PatternMode {
@@ -263,12 +263,6 @@ public class BumperAddressableLED extends SubsystemBase {
         // advance
         driftPos += speed;
 
-        // clear both rails
-        for (int i = 0; i < len; i++) {
-            m_LedSection1.setRGB(i, 0, 0, 0);
-            m_LedSection3.setRGB(i, 0, 0, 0);
-        }
-
         // current color
         int r = driftColors[driftStage][0];
         int g = driftColors[driftStage][1];
@@ -321,7 +315,7 @@ public class BumperAddressableLED extends SubsystemBase {
     double minSpeed = 0.2;
 
     // switch patterns based on speed
-    if (currentMode != PatternMode.SWEEP_AND_FLASH && RobotContainer.currentSpeed >= maxSpeed) {
+    if (currentMode == PatternMode.VISOR_SWEEP && RobotContainer.currentSpeed >= maxSpeed) {
         // start sweep-and-flash
         setPatternMode(PatternMode.SWEEP_AND_FLASH);
         sweepCount = 0;

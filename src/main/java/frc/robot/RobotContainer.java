@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import java.util.function.BooleanSupplier;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.reduxrobotics.canand.CanandEventLoop;
@@ -16,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.BumperAddressableLED;
 
@@ -56,9 +59,26 @@ public class RobotContainer {
 
   private final SendableChooser<Command> autoChooser;
 
+  Trigger driftTrigger = new Trigger(new BooleanSupplier() {
+    private boolean active = false;
+
+    @Override
+    public boolean getAsBoolean() {
+        double val = driverController.getRightTriggerAxis();
+
+        if (!active && val > 0.25) {
+            active = true;
+        } else if (active && val < 0.15) {
+            active = false;
+        }
+
+        return active;
+    }
+});
 
   // Declare a variable to track the current speed
   public static double currentSpeed = 0.0;
+  public static double speedCap = 0.5;
 
   // Define constants for acceleration, deceleration, and decay
   private static final double ACCELERATION_RATE = 0.015; // Rate of increase
@@ -79,22 +99,22 @@ public class RobotContainer {
     configureBindings();
 
     // Increase speed while "a" is pressed
-    driverController.b().whileTrue(Commands.run(() -> {
+    driverController.a().whileTrue(Commands.run(() -> {
       if (currentSpeed >= 0) {
-        currentSpeed = Math.min(currentSpeed + ACCELERATION_RATE, 0.5); // Cap speed at 0.5
+        currentSpeed = Math.min(currentSpeed + ACCELERATION_RATE, 0.2); // Cap speed at 0.5
       }
       else {
-        currentSpeed = Math.min(currentSpeed + DECELERATION_RATE, 0.5);
+        currentSpeed = Math.min(currentSpeed + DECELERATION_RATE, 0.2);
       }
   }));
 
     // Decrease speed while "b" is pressed
-    driverController.a().whileTrue(Commands.run(() -> {
+    driverController.b().whileTrue(Commands.run(() -> {
       if (currentSpeed <= 0) {
-        currentSpeed = Math.max(currentSpeed - ACCELERATION_RATE, -0.2); // Cap speed at -0.2
+        currentSpeed = Math.max(currentSpeed - ACCELERATION_RATE, -speedCap); // Cap speed at -0.2
       }
       else {
-        currentSpeed = Math.max(currentSpeed - DECELERATION_RATE, -0.2); // Cap speed at -0.2
+        currentSpeed = Math.max(currentSpeed - DECELERATION_RATE, -speedCap); // Cap speed at -0.2
       }
   }));  
 
@@ -158,9 +178,10 @@ public class RobotContainer {
         double elapsed = now - m_BumperAddressableLED.fireStartTime;
     
         if (elapsed < m_BumperAddressableLED.fireDuration) {
-            currentSpeed = Math.copySign(0.7, currentSpeed);
+            speedCap = 0.7;
         } else {
             m_BumperAddressableLED.fireActive = false;
+            speedCap = 0.5;
         }
       }
     
@@ -173,9 +194,6 @@ public class RobotContainer {
                 currentSpeed = Math.min(currentSpeed + DECAY_RATE, 0); // Decay toward 0
             }
         }
-
-        // Update SmartDashboard with the current speed
-        SmartDashboard.putNumber("Current Speed", currentSpeed);
     })
   );
   
@@ -186,35 +204,30 @@ public class RobotContainer {
 
     //driverController.x().onTrue(m_BumperAddressableLED.setWhiteCommand()); //Setwhitecommand is not a thing now
 
-    driverController.rightBumper().whileTrue(Commands.runOnce(() -> {
-            m_BumperAddressableLED.setPatternMode(BumperAddressableLED.PatternMode.DRIFT);
-            m_BumperAddressableLED.driftActive = true;
-            m_BumperAddressableLED.driftPos = 0;
-            m_BumperAddressableLED.driftStage = 0;
-        }, m_BumperAddressableLED)
-        .andThen(Commands.run(() -> {}, m_BumperAddressableLED))
-    )
-    .onFalse(
-        Commands.run(() -> {
-            m_BumperAddressableLED.driftActive = false;
-        })
-        .andThen(
-            Commands.runOnce(() -> {
-                int stage = m_BumperAddressableLED.driftStage;
+    driftTrigger
+      .onTrue(
+          Commands.run(() -> m_BumperAddressableLED.driftActive = true, m_BumperAddressableLED)
+      )
+      .onFalse(
+          Commands.runOnce(() -> {
 
-                double fireTime;
-                if (stage == 0) fireTime = 0.2;       // blue short
-                else if (stage == 1) fireTime = 0.4;  // orange medium
-                else fireTime = 0.6;                  // purple long
+              m_BumperAddressableLED.driftActive = false;
 
-                m_BumperAddressableLED.fireDuration = fireTime;
-                m_BumperAddressableLED.fireStartTime = Timer.getFPGATimestamp();
-                m_BumperAddressableLED.fireActive = true;
-            })
-        )
-    );
+              int stage = m_BumperAddressableLED.driftStage;
 
+              double fireTime;
+              if (stage == 0) fireTime = 0.2;
+              else if (stage == 1) fireTime = 0.4;
+              else fireTime = 0.6;
 
+              m_BumperAddressableLED.fireDuration = fireTime;
+              m_BumperAddressableLED.fireStartTime = Timer.getFPGATimestamp();
+              m_BumperAddressableLED.fireActive = true;
+
+              m_BumperAddressableLED.driftStage = 0;
+              m_BumperAddressableLED.driftPos = 0;
+          })
+      );
 
     // driverController.R1().and(() -> stateManager.robotState != "STOWED").onTrue(new TelescopeCommand(telescope, 0)
     //                                 // .alongWith(new WristCommand(wrist, 6).andThen(new WristCommand(wrist, 0)))
