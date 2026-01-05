@@ -13,10 +13,9 @@ import com.reduxrobotics.canand.CanandEventLoop;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
+//import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
@@ -54,7 +53,7 @@ public class RobotContainer {
   // create an object for our driver controller
   private final CommandXboxController driverController = new CommandXboxController(Constants.OperatorConstants.kDriverControllerPort);
   
-  private final CommandPS5Controller operatorController = new CommandPS5Controller(Constants.OperatorConstants.kOperatorControllerPort);
+  //private final CommandPS5Controller operatorController = new CommandPS5Controller(Constants.OperatorConstants.kOperatorControllerPort);
 
 
   private final SendableChooser<Command> autoChooser;
@@ -206,7 +205,7 @@ public class RobotContainer {
 
     driftTrigger
       .onTrue(
-          Commands.run(() -> m_BumperAddressableLED.driftActive = true, m_BumperAddressableLED)
+          Commands.runOnce(() -> m_BumperAddressableLED.driftActive = true, m_BumperAddressableLED)
       )
       .onFalse(
           Commands.runOnce(() -> {

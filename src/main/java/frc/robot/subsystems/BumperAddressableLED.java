@@ -47,7 +47,7 @@ public class BumperAddressableLED extends SubsystemBase {
   private static final int FLASH_DELAY = 2; // increase for slower flashes
 
   public int driftPos = 0;
-  public int driftStage = 0; // 0 blue, 1 orange, 2 purple
+  public int driftStage = 0; // 0 off, 1 blue, 2 orange, 3 purple
   public boolean driftActive = false;
 
   public boolean fireActive = false;
@@ -65,6 +65,7 @@ public class BumperAddressableLED extends SubsystemBase {
   }  
 
   private final int[][] driftColors = {
+    {0, 0, 0},       // off
     {0, 0, 255},     // blue
     {255, 120, 0},   // orange
     {180, 0, 255}    // purple
@@ -280,7 +281,7 @@ public class BumperAddressableLED extends SubsystemBase {
             driftPos = 0;
             driftStage++;
             fireStartTime = now; // mark time for next stage delay
-            if (driftStage >= 3) {
+            if (driftStage >= 4) {
                 driftStage = 0; // reset for next run
                 driftActive = false;
             }
@@ -293,10 +294,14 @@ public class BumperAddressableLED extends SubsystemBase {
 }
 
   private void driftEndGlow() {
-    for (int i = 0; i < m_LedSection1.getLength(); i++) m_LedSection1.setRGB(i, 255, 80, 0);
-    for (int i = 0; i < m_LedSection2.getLength(); i++) m_LedSection2.setRGB(i, 255, 80, 0);
-    for (int i = 0; i < m_LedSection3.getLength(); i++) m_LedSection3.setRGB(i, 255, 80, 0);
-    for (int i = 0; i < m_LedSection4.getLength(); i++) m_LedSection4.setRGB(i, 255, 80, 0);
+    //for (int i = 0; i < m_LedSection1.getLength(); i++) m_LedSection1.setRGB(i, 255, 80, 0);
+    for (int i = 0; i < m_LedSection2.getLength(); i++) m_LedSection2.setRGB(i, 210, 80, 0);
+    //for (int i = 0; i < m_LedSection3.getLength(); i++) m_LedSection3.setRGB(i, 255, 80, 0);
+    //for (int i = 0; i < m_LedSection4.getLength(); i++) m_LedSection4.setRGB(i, 255, 80, 0);
+
+    for (int i = 0; i < m_LedSection1.getLength(); i++) m_LedSection1.setRGB(i, 0, 0, 0);
+    for (int i = 0; i < m_LedSection3.getLength(); i++) m_LedSection3.setRGB(i, 0, 0, 0);
+    for (int i = 0; i < m_LedSection4.getLength(); i++) m_LedSection4.setRGB(i, 0, 0, 0);
   }
 
   public void startDrift() {
@@ -309,7 +314,6 @@ public class BumperAddressableLED extends SubsystemBase {
 
   @Override
   public void periodic() {
-    double now = Timer.getFPGATimestamp();
 
     double maxSpeed = 0.5;
     double minSpeed = 0.2;
