@@ -295,7 +295,7 @@ public class BumperAddressableLED extends SubsystemBase {
 
   private void driftEndGlow() {
     //for (int i = 0; i < m_LedSection1.getLength(); i++) m_LedSection1.setRGB(i, 255, 80, 0);
-    for (int i = 0; i < m_LedSection2.getLength(); i++) m_LedSection2.setRGB(i, 210, 80, 0);
+    for (int i = 0; i < m_LedSection2.getLength(); i++) m_LedSection2.setRGB(i, 255, 80, 0);
     //for (int i = 0; i < m_LedSection3.getLength(); i++) m_LedSection3.setRGB(i, 255, 80, 0);
     //for (int i = 0; i < m_LedSection4.getLength(); i++) m_LedSection4.setRGB(i, 255, 80, 0);
 
@@ -365,6 +365,10 @@ public class BumperAddressableLED extends SubsystemBase {
                 } else {
                     fireActive = false;   // stop fire/glow
                     //setPatternMode(PatternMode.OFF);
+                    for (int i = 0; i < m_LedSection1.getLength(); i++) m_LedSection1.setRGB(i, 0, 0, 0);
+                    for (int i = 0; i < m_LedSection2.getLength(); i++) m_LedSection2.setRGB(i, 0, 0, 0);
+                    for (int i = 0; i < m_LedSection3.getLength(); i++) m_LedSection3.setRGB(i, 0, 0, 0);
+                    for (int i = 0; i < m_LedSection4.getLength(); i++) m_LedSection4.setRGB(i, 0, 0, 0);
                 }
             }
             break;
