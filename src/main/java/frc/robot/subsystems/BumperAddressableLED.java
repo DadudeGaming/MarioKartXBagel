@@ -52,7 +52,7 @@ public class BumperAddressableLED extends SubsystemBase {
 
   public boolean fireActive = false;
   public double fireStartTime = 0.0; // when the glow started
-  public double fireDuration = 0.0;  // how long it should last
+  public int fireDuration = 0;  // how long it should last
   private static final double STAGE_DELAY = 2; // seconds between colors
 
 
@@ -358,9 +358,10 @@ public class BumperAddressableLED extends SubsystemBase {
             if (driftActive) {
                 runDrift();
             } else if (fireActive) {
-                double elapsed = Timer.getFPGATimestamp() - fireStartTime;
-        
-                if (elapsed < fireDuration) {
+                //double elapsed = Timer.getFPGATimestamp() - fireStartTime;
+                fireDuration--;
+
+                if (fireDuration > 0) {
                     driftEndGlow();  // keep glowing fire
                 } else {
                     fireActive = false;   // stop fire/glow
