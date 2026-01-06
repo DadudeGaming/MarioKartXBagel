@@ -281,16 +281,15 @@ public class BumperAddressableLED extends SubsystemBase {
             driftPos = 0;
             driftStage++;
             fireStartTime = now; // mark time for next stage delay
-            if (driftStage >= 4) {
-                driftStage = 0; // reset for next run
-                driftActive = false;
-            }
-        }
+            if (driftStage > 3) {
+              driftStage = 3;
+          }
 
         // clear sections 2 and 4
         for (int i = 0; i < m_LedSection2.getLength(); i++) m_LedSection2.setRGB(i, 0, 0, 0);
         for (int i = 0; i < m_LedSection4.getLength(); i++) m_LedSection4.setRGB(i, 0, 0, 0);
     }
+  }
 }
 
   private void driftEndGlow() {

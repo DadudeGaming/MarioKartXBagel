@@ -211,14 +211,15 @@ public class RobotContainer {
           Commands.runOnce(() -> {
 
               m_BumperAddressableLED.driftActive = false;
+              m_BumperAddressableLED.driftStage = 0;
 
               int stage = m_BumperAddressableLED.driftStage;
 
               int fireTime;
               if (stage == 0) fireTime = 0;
-              else if (stage == 1) fireTime = 4;
-              else if (stage == 2) fireTime = 8;
-              else fireTime = 16;
+              else if (stage == 1) fireTime = 16;
+              else if (stage == 2) fireTime = 32;
+              else fireTime = 128;
 
               m_BumperAddressableLED.fireDuration = fireTime;
               m_BumperAddressableLED.fireStartTime = Timer.getFPGATimestamp();
