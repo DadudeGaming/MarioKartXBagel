@@ -211,9 +211,9 @@ public class RobotContainer {
           Commands.runOnce(() -> {
 
               m_BumperAddressableLED.driftActive = false;
-              m_BumperAddressableLED.driftStage = 0;
 
               int stage = m_BumperAddressableLED.driftStage;
+              m_BumperAddressableLED.driftStage = 0;
 
               int fireTime;
               if (stage == 0) fireTime = 0;
