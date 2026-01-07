@@ -114,6 +114,7 @@ public class RobotContainer {
       }
       else {
         currentSpeed = Math.max(currentSpeed - DECELERATION_RATE, -speedCap); // Cap speed at -0.2
+        System.out.println(speedCap);
       }
   }));  
 
@@ -177,10 +178,9 @@ public class RobotContainer {
         double elapsed = now - m_BumperAddressableLED.fireStartTime;
     
         if (elapsed < m_BumperAddressableLED.fireDuration) {
-            speedCap = 0.7;
+            speedCap = 0.8;
         } else {
-            m_BumperAddressableLED.fireActive = false;
-            speedCap = 0.5;
+            speedCap = 0.6;
         }
       }
     
@@ -215,17 +215,17 @@ public class RobotContainer {
               int stage = m_BumperAddressableLED.driftStage;
               m_BumperAddressableLED.driftStage = 0;
 
-              int fireTime;
-              if (stage == 0) fireTime = 0;
-              else if (stage == 1) fireTime = 16;
-              else if (stage == 2) fireTime = 32;
-              else fireTime = 128;
+              stage--;
+
+              Double fireTime;
+              if (stage == 0) fireTime = 0.0;
+              else if (stage == 1) fireTime = 1.0;
+              else if (stage == 2) fireTime = 3.0;
+              else fireTime = 5.0;
 
               m_BumperAddressableLED.fireDuration = fireTime;
               m_BumperAddressableLED.fireStartTime = Timer.getFPGATimestamp();
               m_BumperAddressableLED.fireActive = true;
-
-              m_BumperAddressableLED.driftStage = 0;
               m_BumperAddressableLED.driftPos = 0;
           })
       );

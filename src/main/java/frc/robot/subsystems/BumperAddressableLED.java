@@ -52,7 +52,7 @@ public class BumperAddressableLED extends SubsystemBase {
 
   public boolean fireActive = false;
   public double fireStartTime = 0.0; // when the glow started
-  public int fireDuration = 0;  // how long it should last
+  public double fireDuration = 0.0;  // how long it should last
   private static final double STAGE_DELAY = 2; // seconds between colors
 
 
@@ -72,7 +72,7 @@ public class BumperAddressableLED extends SubsystemBase {
   };
   
 
-  private PatternMode currentMode = PatternMode.VISOR_SWEEP;
+  private PatternMode currentMode = PatternMode.DRIFT;
 
   /** Creates a new WhiteLED subsystem. */
   public BumperAddressableLED() {
@@ -357,10 +357,9 @@ public class BumperAddressableLED extends SubsystemBase {
             if (driftActive) {
                 runDrift();
             } else if (fireActive) {
-                //double elapsed = Timer.getFPGATimestamp() - fireStartTime;
-                fireDuration--;
+                double elapsed = Timer.getFPGATimestamp() - fireStartTime;
 
-                if (fireDuration > 0) {
+                if (fireDuration > elapsed) {
                     driftEndGlow();  // keep glowing fire
                 } else {
                     fireActive = false;   // stop fire/glow
