@@ -95,8 +95,8 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   // Methods for actually moving the motors, gets the velocity from the swerve input streams
-  public void driveFieldOriented(ChassisSpeeds velcocity) {
-    swerveDrive.driveFieldOriented(velcocity);
+  public void driveFieldOriented(ChassisSpeeds velocity) {
+    swerveDrive.driveFieldOriented(velocity);
   }
 
   // A command that just runs the function above
