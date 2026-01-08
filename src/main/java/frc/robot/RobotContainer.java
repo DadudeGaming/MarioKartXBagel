@@ -114,7 +114,6 @@ public class RobotContainer {
       }
       else {
         currentSpeed = Math.max(currentSpeed - DECELERATION_RATE, -speedCap); // Cap speed at -0.2
-        System.out.println(speedCap);
       }
   }));  
 
@@ -180,7 +179,7 @@ public class RobotContainer {
         if (elapsed < m_BumperAddressableLED.fireDuration) {
             speedCap = 0.8;
         } else {
-            speedCap = 0.6;
+            speedCap = 0.5;
         }
       }
     
