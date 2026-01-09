@@ -22,6 +22,19 @@ public class LEDs extends SubsystemBase {
     boolean goldGroup = true;
     boolean greenGroup = false;
 
+    private int m_fillRadius = 0; // distance expanded from the center
+    private int m_fillCenter = 0; // starting point
+    private int m_fillSpeedCounter = 0;
+    private int m_fillSpeed = 1; // calls per radius step (higher = slower)
+
+    boolean doneFilling = false;
+    int currentColour = 1;
+
+    public Color blue = new Color(0, 0, 255);
+    public Color orange = new Color(255, 120, 0);
+    public Color purple = new Color(180, 0, 255);
+    public Color[] driftColors = { Color.kBlack, blue, orange, purple };
+
     public LEDs() {
         // PWM port 0
         // Must be a PWM header, not MXP or DIO
@@ -84,9 +97,55 @@ public class LEDs extends SubsystemBase {
         }
     }
 
+    public void driftPattern(Color fillColor, int centerIndex, boolean reset, Color background) {
+        int length = m_ledBuffer.getLength();
+        centerIndex = ((centerIndex % length) + length) % length; // safe wrap
+
+        if (reset || centerIndex != m_fillCenter) {
+            m_fillCenter = centerIndex;
+            m_fillRadius = 0;
+            m_fillSpeedCounter = 0;
+            // doneFilling = true;
+            // currentColour++;
+        }
+
+        // advance radius based on speed
+        m_fillSpeedCounter++;
+        if (m_fillSpeedCounter >= m_fillSpeed) {
+            m_fillSpeedCounter = 0;
+            if (m_fillRadius < length / 2 + (length % 2)) { // enough to cover entire ring
+                m_fillRadius++;
+            }
+        }
+
+        // draw
+        for (int i = 0; i < length; i++) {
+            int d = Math.abs(i - m_fillCenter);
+            d = Math.min(d, length - d); // circular distance
+
+            if (d <= m_fillRadius) {
+                m_ledBuffer.setLED(i, fillColor);
+            } else {
+                m_ledBuffer.setLED(i, background);
+            }
+        }
+    }
+
+    int driftTimer = 0;
+
     @Override
     public void periodic() {
-        funnyPattern();
+        // funnyPattern();
+        driftPattern(driftColors[currentColour], 0, false, driftColors[currentColour - 1]);
+
+        if (driftTimer >= 150) {
+            if (!(currentColour >= driftColors.length - 1)) {
+                currentColour++;
+                driftTimer = 0;
+                driftPattern(driftColors[currentColour], 0, true, driftColors[currentColour]);
+            }
+        }
+        driftTimer++;
 
         // Set the data
         m_led.setData(m_ledBuffer);
