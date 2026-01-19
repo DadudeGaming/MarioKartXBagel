@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
 
-public class EndEffectorSubsystem extends SubsystemBase {
+public class IntakeSubsystem extends SubsystemBase {
 
   // declare variables up here, you can either set their value here, or later in the code, it mostly just depends on what you're doing
 
@@ -26,7 +26,7 @@ public class EndEffectorSubsystem extends SubsystemBase {
   public final TalonFX intakeMotor = new TalonFX(IntakeConstants.CANID);
 
   /** Creates a new ExampleMotorSubsystem. */
-  public EndEffectorSubsystem() {
+  public IntakeSubsystem() {
     intakeMode = false; // default to ourtake first (we have a preloaded game piece)
     // start with factory-default configs
     var currentConfigs = new MotorOutputConfigs();
