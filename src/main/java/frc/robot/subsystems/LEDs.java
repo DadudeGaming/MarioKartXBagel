@@ -55,17 +55,12 @@ public class LEDs extends SubsystemBase {
 
         if (timer > 50) {
             timer = 0;
-            // greenGroup = !greenGroup;
-            // goldGroup = !goldGroup;
         } else {
             timer++;
             return;
         }
 
         for (int i = 0; i < length; i++) {
-            // if (i > 0) {
-            // m_ledBuffer.setLED(i - 1, Color.kBlack);
-            // }
 
             if (greenGroup) {
                 if (ledGroupCounter <= 4) {
@@ -135,17 +130,17 @@ public class LEDs extends SubsystemBase {
 
     @Override
     public void periodic() {
-        // funnyPattern();
-        driftPattern(driftColors[currentColour], 0, false, driftColors[currentColour - 1]);
+        funnyPattern();
+        // driftPattern(driftColors[currentColour], 0, false, driftColors[currentColour - 1]);
 
-        if (driftTimer >= 150) {
-            if (!(currentColour >= driftColors.length - 1)) {
-                currentColour++;
-                driftTimer = 0;
-                driftPattern(driftColors[currentColour], 0, true, driftColors[currentColour]);
-            }
-        }
-        driftTimer++;
+        // if (driftTimer >= 150) {
+        //     if (!(currentColour >= driftColors.length - 1)) {
+        //         currentColour++;
+        //         driftTimer = 0;
+        //         driftPattern(driftColors[currentColour], 0, true, driftColors[currentColour]);
+        //     }
+        // }
+        // driftTimer++;
 
         // Set the data
         m_led.setData(m_ledBuffer);
